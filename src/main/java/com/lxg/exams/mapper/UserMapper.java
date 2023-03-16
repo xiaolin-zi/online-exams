@@ -2,6 +2,7 @@ package com.lxg.exams.mapper;
 
 import com.lxg.exams.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author xiaolin
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2023-03-16 19:34:47
 * @Entity com.lxg.exams.domain.User
 */
+@Mapper
 public interface UserMapper extends BaseMapper<User> {
 
 }
