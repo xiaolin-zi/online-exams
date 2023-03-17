@@ -1,5 +1,5 @@
 spring:
-  #配置数据源(固定配置不要该）
+  #配置数据源(固定配置不要改）
   datasource:
     #配置数据源类型（可有）
     type: com.zaxxer.hikari.HikariDataSource
