@@ -1,10 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style type="text/css">
+		body{
+			background-image: url('/img/login_bg.jpg');
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center center;
+			height: 100%;
+			font-family: Arial, sans-serif;
+		}
+		.container{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+		}
+		form{
+			background-color: rgba(255, 255, 255, 0.7);
+			padding: 30px 50px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0,0,0,0.3);
+			max-width: 400px;
+			width: 100%;
+			text-align: center;
+		}
+		h1{
+			font-size: 30px;
+		}
+		input[type=text], input[type=password]{
+			width: 80%;
+			padding: 12px 20px;
+			margin: 8px 0;
+			display: inline-block;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+		button{
+			background-color: #4CAF50;
+			color: white;
+			padding: 14px 20px;
+			/* margin: 8px 0; */
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+		button:hover{
+			background-color: #45a049;
+		}
+
+		#login_regist{
+			margin-left: 65px;
+			display: flex;
+			width: 320px;
+			justify-content: space-between;
+		}
+
+
+
+
+
+	</style>
 </head>
 <body>
-$END$
+
+<div class="container">
+	<form th:action="@{/adminLoginSuccess}" method="post">
+		<h1>登录界面</h1>
+		<label><b>用户名</b></label>
+		<input type="text" placeholder="请输入用户名" name="username" required><br>
+		<label id="passwordLabel"><b>密&nbsp;&nbsp;&nbsp;码</b></label>
+		<input type="password" placeholder="请输入密码" name="password" required>
+		<div id="login_regist">
+			<button type="submit" id="login_bt">登录</button>
+			<button type="button" id="regist_bt">去注册</button>
+		</div>
+	</form>
+</div>
+
 </body>
 </html>

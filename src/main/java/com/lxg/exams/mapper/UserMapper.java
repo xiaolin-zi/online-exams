@@ -3,6 +3,7 @@ package com.lxg.exams.mapper;
 import com.lxg.exams.domain.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
 * @author xiaolin
@@ -13,6 +14,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
+
+    @Select("select * from t_user where username=#{username} and password=#{password}")
+    public User getUser(String username,String password);
 }
 
 
