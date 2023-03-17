@@ -1,7 +1,6 @@
 package com.lxg.exams.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lxg.exams.domain.User;
 import com.lxg.exams.service.UserService;
 import com.lxg.exams.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;

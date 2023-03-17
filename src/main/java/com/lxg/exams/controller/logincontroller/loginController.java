@@ -1,6 +1,5 @@
 package com.lxg.exams.controller.logincontroller;
 
-import com.lxg.exams.domain.User;
 import com.lxg.exams.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

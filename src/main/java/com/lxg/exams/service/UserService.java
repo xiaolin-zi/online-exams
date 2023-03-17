@@ -1,6 +1,5 @@
 package com.lxg.exams.service;
 
-import com.lxg.exams.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
