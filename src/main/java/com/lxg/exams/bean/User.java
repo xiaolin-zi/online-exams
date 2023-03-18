@@ -1,4 +1,4 @@
-package com.lxg.exams.domain;
+package com.lxg.exams.bean;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

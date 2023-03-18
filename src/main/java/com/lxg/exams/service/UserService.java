@@ -1,6 +1,6 @@
 package com.lxg.exams.service;
 
-import com.lxg.exams.domain.User;
+import com.lxg.exams.bean.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +13,6 @@ public interface UserService extends IService<User> {
     User getUser(String username, String password);
 
     int addUser(String username,String password);
+
+    User getUserByUsername(String username);
 }

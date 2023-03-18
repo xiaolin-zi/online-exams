@@ -6,22 +6,142 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
 	<link rel="stylesheet" th:href="@{/css/index.css}">
+	<script th:src="@{/js/jquery.js}"></script>
 	<script th:src="@{/js/axios.js}"></script>
 
+	<script type="text/javascript">
+
+		//页面加载完成之后
+		$(function() {
+
+			//判断是注册还是登录
+
+			var flag = "[[${flag}]]"
+
+			if(flag=="true"){
+				login.style.opacity = 0;
+				setTimeout(function () {
+					login.style.display = "none";
+				}, 1000);//这里要等待过渡的1s，然后才消失
+
+				regist.style.opacity = 1;
+				setTimeout(function () {
+					regist.style.display = "block";
+				}, 1000);
+			}else{
+				regist.style.opacity = 0;
+				setTimeout(function () {
+					regist.style.display = "none";
+				}, 1000);
+
+				login.style.opacity = 1;
+				setTimeout(function () {
+					login.style.display = "block";
+				}, 1000);//这里要等待过渡的1s，然后才消失
+			}
+
+
+			//给验证码图片绑定单击事件
+			$("#code_img").click(function () {
+				//alert("1");
+				//在事件响应的function函数中有一个this对象，是当前正在响应事件的dom对象
+				//src属性表示验证码的img标签的图片路径，可读可写
+				this.src = "http://localhost:8888/kaptcha?d=" + new Date();
+			});
+
+			//给登录绑定单击事件
+			$("#login_bt").click(function () {
+				var userName = $("#login-username").val();
+				if (userName == "") {
+					//提示用户结果
+					$(".login-errorMsg").text("用户名不能为空！");
+					return false;
+				}
+				// 验证用户名：必须由字母，数字下划线组成，并且长度在5-12位
+				//创建正则表达式
+				const Patt = /^[0-9]*$/;
+				var usernamePatt = /^\w{5,12}$/;
+				//使用test方法验证
+				if (!usernamePatt.test(userName)) {
+					//提示用户结果
+					$(".login-errorMsg").text("用户名不合法！");
+					return false;
+				}
+			});
+
+			//给注册绑定单击事件
+			$("#regist_bt").click(function () {
+				var userName = $("#regist-username").val();
+				if (userName == "") {
+					//提示用户结果
+					$(".regist-errorMsg").text("用户名不能为空！");
+					return false;
+				}
+				// 验证用户名：必须由字母，数字下划线组成，并且长度在5-12位
+				//创建正则表达式
+				const Patt = /^[0-9]*$/;
+				var usernamePatt = /^\w{5,12}$/;
+				//使用test方法验证
+				if (!usernamePatt.test(userName)) {
+					//提示用户结果
+					$(".regist-errorMsg").text("用户名不合法！");
+					return false;
+				}
+
+				// 验证密码：必须由字母，数字下划线组成，并且长度为5-12位
+				//1、获取密码输入框里的内容
+				var passwordText = $("#regist-password").val();
+				//2、创建正则表达式对象
+				var passwordPatt = /^\w{5,12}$/;
+				//3、使用test方法验证
+				if (!passwordPatt.test(passwordText)) {
+					//4、提示用户结果
+					$("span.regist-errorMsg").text("密码不合法！");
+					return false;
+				}
+				// 验证确认密码：和密码相同
+				//1、获取确认密码的内容
+				var repwdText = $("#repwd").val();
+				//2、和密码比较
+				if (repwdText != passwordText) {
+					//3、提示用户
+					$(".regist-errorMsg").text("确认密码和密码不一致！")
+					return false;
+				}
+
+
+				// 验证码：现在只需要验证用户已输入，因为还没将到服务器，验证码生成。
+				var codeText = $("#code").val();
+				//去掉验证码前后空格
+				codeText = $.trim(codeText);
+				if(codeText==null ||codeText=="" ){
+					$("span.regist-errorMsg").text("验证码不能为空！")
+					return false;
+				}
+				$("span.regist-errorMsg").text("");
+
+			});
+		});
+	</script>
 </head>
 <body>
 
+
 <div class="container">
+
 	<div id="login">
 		<h1>在线考试系统</h1>
 		<div class="model">
-			<div class="model_text">
+			<span class="model_text">
 				用户登录
-			</div>
+            </span>
+			<span class="login-errorMsg">
+                [[${login_msg}]]
+            </span>
 		</div>
 		<form th:action="@{/userLoginSuccess}" method="post">
-			<input type="text" placeholder="请输入用户名" name="username" required><br>
-			<input type="password" placeholder="请输入密码" name="password" required>
+			<input type="text" placeholder="请输入用户名" name="username" id="login-username" class="username" >
+			<input type="password" placeholder="请输入密码" name="password" id="login-password" class="password" >
 			<button type="submit" id="login_bt">登录</button><br>
 		</form>
 		<div id="toRegist">
@@ -33,14 +153,20 @@
 	<div id="regist">
 		<h1>在线考试系统</h1>
 		<div class="model">
-			<div class="model_text">
+			<span class="model_text">
 				用户注册
-			</div>
+            </span>
+			<span class="regist-errorMsg">
+                [[${regist_msg}]]
+            </span>
 		</div>
 		<form th:action="@{/userRegistSuccess}" method="post">
-			<input type="text" placeholder="请输入用户名" name="username" required><br>
-			<input type="password" placeholder="请输入密码" name="password" required>
-			<button type="submit" id="regist_bt">注册</button><br>
+			<input type="text" placeholder="请输入用户名" id="regist-username" name="username" class="username" >
+			<input type="password" placeholder="请输入密码" id="regist-password" name="password" class="password" >
+			<input type="password" placeholder="确认密码"  name="repwd" id="repwd">
+			<input class="yzm" type="text" placeholder="验证码" autocomplete="off" name="code" id="code">
+			<img id="code_img" alt="" th:src="@{/kaptcha}">
+			<button type="submit" id="regist_bt" >注册</button><br>
 		</form>
 		<div id="toLogin">
 			<a id="login_button">已有账号？</a>
@@ -56,14 +182,32 @@
 	var login = document.getElementById('login');
 	var regist = document.getElementById('regist');
 
+
 	registButton.addEventListener('click',()=>{
-		login.style.display = "none";
-		regist.style.display = "block";
+
+		login.style.opacity = 0;
+		setTimeout(function () {
+			login.style.display = "none";
+		}, 1000);//这里要等待过渡的1s，然后才消失
+
+		regist.style.opacity = 1;
+		setTimeout(function () {
+			regist.style.display = "block";
+		}, 1000);
+
 	});
 
 	loginButton.addEventListener('click',()=>{
-		regist.style.display = "none";
-		login.style.display = "block";
+		regist.style.opacity = 0;
+		setTimeout(function () {
+			regist.style.display = "none";
+		}, 1000);
+
+		login.style.opacity = 1;
+		setTimeout(function () {
+			login.style.display = "block";
+		}, 1000);//这里要等待过渡的1s，然后才消失
+
 
 	});
 

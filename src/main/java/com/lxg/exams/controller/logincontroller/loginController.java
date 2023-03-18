@@ -1,12 +1,13 @@
 package com.lxg.exams.controller.logincontroller;
 
-import com.lxg.exams.domain.User;
+import com.lxg.exams.bean.User;
 import com.lxg.exams.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @auther xiaolin
@@ -20,34 +21,53 @@ public class loginController {
     private UserService userService;
 
     @PostMapping("/userLoginSuccess")
-    public String adminLoginSuccess(String username,String password){
+    public String adminLoginSuccess(String username,String password,HttpServletRequest request){
 
         User user = userService.getUser(username, password);
         if(user != null){
             return "user/adminindex";
         }else{
+            request.setAttribute("flag", false);
+            request.setAttribute("login_msg", "账号或密码错误！");
             return "index";
         }
     }
 
     @PostMapping("/userRegistSuccess")
-    public String adminRegistSuccess(String username, String password, HttpServletRequest request){
+    public String adminRegistSuccess(String username, String password, String code,HttpServletRequest request, HttpSession session) {
 
-        User user = userService.getUser(username, password);
-        if(user!=null){
-            //已被注册
-            //设置消息提醒
-            request.setAttribute("msg","用户名已注册！");
-            return "index";
-        }else{
-            int i = userService.addUser(username, password);
-            if(i>0){
-                request.setAttribute("msg","注册成功！");
+
+        String token = (String) session.getAttribute("verifyCode");
+        session.removeAttribute("verifyCode");
+
+
+        if (token != null && token.equalsIgnoreCase(code)) {
+
+            User user = userService.getUserByUsername(username);
+            if (user != null) {
+                //已被注册
+                //设置消息提醒
+                request.setAttribute("regist_msg", "用户名已注册！");
+                request.setAttribute("flag", true);
                 return "index";
-            }else{
-                request.setAttribute("msg","注册失败！");
-                return "index";
+            } else {
+                int i = userService.addUser(username, password);
+                if (i > 0) {
+                    request.setAttribute("regist_msg", "注册成功！");
+                    request.setAttribute("flag", true);
+                    return "index";
+                } else {
+                    request.setAttribute("regist_msg", "注册失败！");
+                    request.setAttribute("flag", true);
+                    return "index";
+                }
             }
+        }else{
+            // 把回显信息，保存到Request域中
+            request.setAttribute("regist_msg", "验证码错误！！");
+            request.setAttribute("username", username);
+            request.setAttribute("flag",true);
+            return "index";
         }
     }
 
