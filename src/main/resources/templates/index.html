@@ -1,14 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
+
+
+	<link rel="icon" th:href="@{/img/favicon.ico}" type="image/x-icon"/>
+
 	<link rel="stylesheet" th:href="@{/css/index.css}">
 	<script th:src="@{/js/jquery.js}"></script>
 	<script th:src="@{/js/axios.js}"></script>
-
 	<script type="text/javascript">
 
 		//页面加载完成之后
@@ -128,7 +131,6 @@
 
 
 <div class="container">
-
 	<div id="login">
 		<h1>在线考试系统</h1>
 		<div class="model">

@@ -1,5 +1,6 @@
 body{
     background-image: url('/img/login_bg.jpg');
+    /*background-color: #211f1f;*/
     background-repeat: no-repeat;
     background-size: cover;
     height: 100%;
