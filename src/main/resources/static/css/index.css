@@ -44,6 +44,7 @@ h1{
 }
 
 .model_text{
+    display: inline-block;
     color: #4CAF50;
     font-size: 14px;
     line-height: 40px;
