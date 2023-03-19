@@ -28,7 +28,7 @@ public class loginController {
             request.setAttribute("login_msg", "登录成功！");
             return "user/adminindex";
         }else{
-            request.setAttribute("flag", false);
+            request.setAttribute("flag", false);//登录页标志
             request.setAttribute("login_msg", "账号或密码错误！");
             return "index";
         }
@@ -49,17 +49,17 @@ public class loginController {
                 //已被注册
                 //设置消息提醒
                 request.setAttribute("regist_msg", "用户名已注册！");
-                request.setAttribute("flag", true);
+                request.setAttribute("flag", true);//注册页标志
                 return "index";
             } else {
                 int i = userService.addUser(username, password);
                 if (i > 0) {
                     request.setAttribute("regist_msg", "注册成功！");
-                    request.setAttribute("flag", true);
+                    request.setAttribute("flag", true);//注册页标志
                     return "index";
                 } else {
                     request.setAttribute("regist_msg", "注册失败！");
-                    request.setAttribute("flag", true);
+                    request.setAttribute("flag", true);//注册页标志
                     return "index";
                 }
             }
@@ -67,7 +67,8 @@ public class loginController {
             // 把回显信息，保存到Request域中
             request.setAttribute("regist_msg", "验证码错误！！");
             request.setAttribute("username", username);
-            request.setAttribute("flag",true);
+            request.setAttribute("password", password);
+            request.setAttribute("flag",true);//注册页标志
             return "index";
         }
     }

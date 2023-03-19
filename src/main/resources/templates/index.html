@@ -18,9 +18,7 @@
 		$(function() {
 
 			//判断是注册还是登录
-
 			var flag = "[[${flag}]]"
-
 			if(flag=="true"){
 				login.style.opacity = 0;
 				setTimeout(function () {
@@ -142,7 +140,7 @@
             </span>
 		</div>
 		<form th:action="@{/userLoginSuccess}" method="post">
-			<input type="text" placeholder="请输入用户名" name="username" id="login-username" class="username" >
+			<input type="text"  placeholder="请输入用户名" name="username" id="login-username" class="username" >
 			<input type="password" placeholder="请输入密码" name="password" id="login-password" class="password" >
 			<button type="submit" id="login_bt">登录</button><br>
 		</form>
@@ -163,9 +161,9 @@
             </span>
 		</div>
 		<form th:action="@{/userRegistSuccess}" method="post">
-			<input type="text" placeholder="请输入用户名" id="regist-username" name="username" class="username" >
-			<input type="password" placeholder="请输入密码" id="regist-password" name="password" class="password" >
-			<input type="password" placeholder="确认密码"  name="repwd" id="repwd">
+			<input type="text" placeholder="请输入用户名" th:value="${username}" id="regist-username" name="username" class="username" >
+			<input type="password" placeholder="请输入密码" th:value="${password}" id="regist-password" name="password" class="password" >
+			<input type="password" placeholder="确认密码" th:value="${password}"  name="repwd" id="repwd">
 			<input class="yzm" type="text" placeholder="验证码" autocomplete="off" name="code" id="code">
 			<img id="code_img" alt="" th:src="@{/kaptcha}">
 			<button type="submit" id="regist_bt" >注册</button><br>
@@ -185,7 +183,7 @@
 	var regist = document.getElementById('regist');
 
 	registButton.addEventListener('click',()=>{
-		$("span.regist-errorMsg").text("");
+		$("span.regist-errorMsg").text("");//清空错误信息
 		login.style.opacity = 0;
 		setTimeout(function () {
 			login.style.display = "none";
