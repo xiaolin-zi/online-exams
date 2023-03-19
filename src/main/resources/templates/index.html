@@ -21,24 +21,14 @@
 			var flag = "[[${flag}]]"
 			if(flag=="true"){
 				login.style.opacity = 0;
-				setTimeout(function () {
-					login.style.display = "none";
-				}, 1000);//这里要等待过渡的1s，然后才消失
-
+				login.style.display = "none";
 				regist.style.opacity = 1;
-				setTimeout(function () {
-					regist.style.display = "block";
-				}, 1000);
+				regist.style.display = "block";
 			}else{
 				regist.style.opacity = 0;
-				setTimeout(function () {
-					regist.style.display = "none";
-				}, 1000);
-
+				regist.style.display = "none";
 				login.style.opacity = 1;
-				setTimeout(function () {
-					login.style.display = "block";
-				}, 1000);//这里要等待过渡的1s，然后才消失
+				login.style.display = "block";
 			}
 
 
