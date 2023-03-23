@@ -7,7 +7,7 @@
 	<title>Document</title>
 
 
-	<link rel="icon" th:href="@{/img/favicon.ico}" type="image/x-icon"/>
+	<link rel="icon" th:href="@{/img/hczy3.png}" type="image/x-icon"/>
 
 	<link rel="stylesheet" th:href="@{/css/index.css}">
 	<script th:src="@{/js/jquery.js}"></script>
@@ -117,10 +117,32 @@
 </head>
 <body>
 
+<header class="header-container header-container-primary">
+	<div class="header-body">
+		<a th:href="@{/img/hczy3.png}" target="_blank"><img th:src="@{/img/hczy3.png}" id="header-img"></a>
+
+		<div class="header-menu header-menu-open">
+			<ul>
+				<li class="menu-item menu-item-primary">
+					<a th:href="@{/}">首页</a>
+				</li>
+				<li class="menu-item menu-item-primary">
+					<a th:href="@{/md-note/测试.html}" target="_blank" >文档</a>
+				</li>
+				<li class="menu-item menu-item-primary">
+					<a href="https://github.com/linXiao01/online-exams" target="_blank" >Github</a>
+				</li>
+				<li class="menu-item menu-item-primary">
+					<a href="https://gitee.com/lin-xugeng/online-exams" target="_blank" >Gitee</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</header>
 
 <div class="container">
 	<div id="login">
-		<h1>在线考试系统</h1>
+		<h1>在线错题系统</h1>
 		<div class="model">
 			<span class="model_text">
 				用户登录
@@ -164,6 +186,8 @@
 	</div>
 
 </div>
+
+
 <script>
 
 	var registButton = document.getElementById('regist_button');
