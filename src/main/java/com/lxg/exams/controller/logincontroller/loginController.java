@@ -26,7 +26,7 @@ public class loginController {
         User user = userService.getUser(username, password);
         if(user != null){
             request.setAttribute("login_msg", "登录成功！");
-            return "user/adminindex";
+            return "/user/userindex";
         }else{
             request.setAttribute("flag", false);//登录页标志
             request.setAttribute("login_msg", "账号或密码错误！");
