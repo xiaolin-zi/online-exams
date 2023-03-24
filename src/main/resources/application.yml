@@ -6,11 +6,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/online_exams?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://106.55.228.118:3306/online_exams?characterEncoding=utf-8&useSSL=false
 
 
 server:
-  port: 8888
+  port: 80
 
 
 #mybatis-plus配置
