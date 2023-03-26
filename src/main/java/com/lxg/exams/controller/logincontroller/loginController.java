@@ -22,11 +22,12 @@ public class loginController {
     private UserService userService;
 
     @PostMapping("/userLoginSuccess")
-    public String adminLoginSuccess(String username,String password,HttpServletRequest request){
+    public String adminLoginSuccess(String username,String password,HttpServletRequest request,HttpSession session){
 
         User user = userService.getUser(username, password);
         if(user != null){
             request.setAttribute("login_msg", "登录成功！");
+            session.setAttribute("uid",user.getId());
             return "user/userindex";
         }else{
             request.setAttribute("flag", false);//登录页标志

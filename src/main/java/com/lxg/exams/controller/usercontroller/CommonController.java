@@ -15,9 +15,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 
-/**
- * @Author:薛思暖
- */
+
+
 @RestController
 @RequestMapping("/common")
 public class CommonController {
@@ -29,8 +28,6 @@ public class CommonController {
      * 文件上传
      * @param file
      * @return
-     * 这里的参数名字必须与upload.html网页发送的负载携带的数据中的name一致
-     * 或者参数加个注解@RequestPart("file")就可以了
      */
     @PostMapping("/upload")
         public String upload(MultipartFile file) throws IOException {
@@ -64,7 +61,7 @@ public class CommonController {
         //输入流，通过输入流读取文件内容
         FileInputStream fileInputStream = new FileInputStream(basePath+name);
 
-        //response响应对象获取输出流，通过输出流将文件写会浏览器，在浏览器展示图片
+        //response响应对象获取输出流，通过输出流将文件写回浏览器，在浏览器展示图片
         ServletOutputStream outputStream = response.getOutputStream();
 
         //设置响应的文件类型(图片文件)
