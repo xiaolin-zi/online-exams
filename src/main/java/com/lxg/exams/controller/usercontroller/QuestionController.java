@@ -42,9 +42,11 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     //删除错题
-    public void deleteQue(Integer id){
+    public Boolean deleteQue(@PathVariable Integer id){
         Question question = questionService.getById(id);
         question.setIsdeleted(1);
+        boolean b = questionService.updateById(question);
+        return b;
     }
 }
 
