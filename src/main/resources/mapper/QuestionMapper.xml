@@ -7,10 +7,10 @@
     <resultMap id="BaseResultMap" type="com.lxg.exams.bean.Question">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="title" column="title" jdbcType="CHAR"/>
-            <result property="optiona" column="optionA" jdbcType="CHAR"/>
-            <result property="optionb" column="optionB" jdbcType="CHAR"/>
-            <result property="optionc" column="optionC" jdbcType="CHAR"/>
-            <result property="optiond" column="optionD" jdbcType="CHAR"/>
+            <result property="optionA" column="optionA" jdbcType="CHAR"/>
+            <result property="optionB" column="optionB" jdbcType="CHAR"/>
+            <result property="optionC" column="optionC" jdbcType="CHAR"/>
+            <result property="optionD" column="optionD" jdbcType="CHAR"/>
             <result property="answer" column="answer" jdbcType="VARCHAR"/>
             <result property="types" column="types" jdbcType="INTEGER"/>
             <result property="image" column="image" jdbcType="VARCHAR"/>
@@ -25,4 +25,5 @@
         answer,types,image,
         remark,uid,isDeleted
     </sql>
+    <select id="getAllByIdQuestion" resultType="com.lxg.exams.bean.Question"></select>
 </mapper>
