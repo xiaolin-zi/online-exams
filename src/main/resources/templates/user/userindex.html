@@ -10,256 +10,186 @@
     <script th:src="@{/js/elementui/index.js}"></script>
     <link rel="stylesheet" th:href="@{/css/elementui/index.css}">
     <script th:src="@{/js/axios.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/userindex-topbar.css}">
     <style>
-        .el-header{
-            background-color: #ffffff;
-            color: #000000;
-            line-height: 60px;
-        }
+
 
         .el-aside {
             background-color: #ffffff;
             color: #000000;
-            height:685px;
+            height: 685px;
+            font-family: '宋体';
         }
 
         .el-main {
-            background-color: rgb(125, 232, 191);
+            background-color: rgb(93, 228, 93);
             color: #000000;
-            height:685px;
+            height: 685px;
         }
 
         * {
             margin: 0;
-           /* padding: 0;*/
+            /* padding: 0;*/
         }
 
-        .topBar {
-            border-bottom: 1px rgb(0, 204, 126) solid;
-        }
 
-        .topBar .pic1 {
-            float: left;
-            width: 70px;
-            height: 50px;
-        }
-
-        img {
-            width: 100%;
-            height: 100%;
-        }
-
-        .topBar ul {
-            list-style: none;
-        }
-
-        a {
-            text-decoration: none;
-            text-align: center;
-            display: block;
-            color: black;
-        }
-
-        .btn:hover {
-            text-decoration: underline;
-            color: rgb(0, 204, 126);
-        }
-
-        .topBarBtn ul .index {
-            float: left;
-            margin-left: 40px;
-        }
-
-        .topBarBtn .btn {
-            line-height: 50px;
-        }
-
-        .topBarBtn .login {
-            float: right;
-            color: #ffffff;
-            margin-right: 30px;
-            margin-top: 8px;
-            width: 70px;
-            height: 30px;
-            border-radius: 50px;
-            border: 2px solid rgb(0, 204, 126);
-            /*background-color: rgb(0, 204, 126);*/
-        }
-
-        .topBarBtn .lr {
-            line-height: 30px;
-        }
-
-        .login:hover {
-            background-color: rgb(0, 204, 126);
-        }
-        .c_iframe{
+        .c_iframe {
             background-color: white;
             height: 685px;
             color: black;
         }
-        .menu{
+
+        .menu {
             height: 685px;
             color: black;
         }
-        .topBarBtn ul li{
-            /* 设置一级菜单内容的位置 */
-            position: relative;
-        }
-        .topBarBtn ul li div{
-            overflow: hidden;/*元素溢出裁剪必须要用在li下的div中，后面会详细介绍原因*/
-            width: 80px;
-            height: 0;
-            background-color: rgb(0, 204, 126);
 
-        }
-        .topBarBtn ul li div ul{
-            width: 80px;
-            height: 160px;
-            background-color: rgb(0, 204, 126);
-            display: none;
-            /* 设置初始为不显示 */
-            position: absolute;
-        }
-        .topBarBtn ul li div ul li {
-            margin: 10px 100px 0 3px;
-            width: 80px;
-            height: 30px;
-            line-height: 30px;
-        }
-        .topBarBtn ul li div ul li a{
-            display: block;     /*填充li*/
-            color: #ffffff;
-        }
-        /*一级菜单悬停时二级菜单可见*/
-        .topBarBtn ul li:hover div ul{
-            height: 130px;
-            border: 1px solid rgb(255, 255, 255);
-            display: block;
-        }
-        .el-menu-item .title2{
-            color: black;
-        }
-        .el-menu-item-group__title {
-            padding: 7px 0 7px 20px;
-            line-height: normal;
-            font-size: 12px;
-            color: rgb(0, 204, 126);
-        }
     </style>
 
 </head>
 
 <body>
-<div id="app" >
-    <el-container>
-        <el-header class="topBar">
-            <div class="pic1"><img th:src="@{/img/错题图标1.png}" alt="图标"></div>
-            <div class="topBarBtn" style="z-index: 100; position: relative;">
-                <ul>
-                    <li class="index"><a class="btn" href="#">新建题库</a></li>
-                    <li class="index"><a class="btn" href="#">个人中心</a>
-                        <div>
-                        <ul>
-                            <li><a href="password">修改密码</a></li>
-                            <li><a href="userdata">个人资料</a></li>
-                            <li><a href="upload">上传头像</a></li>
-                        </ul>
-                        </div>
-                    </li>
-                    <li class="index"><a class="btn" href="teamdata">小组信息</a></li>
-                </ul>
-                <div class="login"><a class="lr" th:href="@{/index}">注册</a></div>
-                <div class="login"><a class="lr" href="index">登录</a></div>
+<div id="app">
+    <div class="header">
+        <nav class="nav-container">
+            <div class="nav-left">
+                <img class="logo" th:src="@{/img/logo.png}"/>
             </div>
-            </el-header>
-        <el-container>
+            <ul class="nav-main">
+                <li class="main-item">
+                    <a href="#">首页</a>
+                </li>
+                <li class="main-item item-menu">
+                    <a href="#">个人中心</a>
+                    <div class="division"></div>
+                    <!--弹出层-->
+                    <ul class="article secondaryMenu">
+                        <li>
+                            <a href="#"><i class="iconfont icon-biaoqian"></i></i>修改密码</a>
+                        </li>
+                        <li>
+                            <a href="#"></i><i class="iconfont icon-boke"></i>个人资料</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="iconfont icon-icon-test"></i>上传头像</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="main-item item-menu">
+                    <a href="#">新建题库</a>
 
-            <el-aside width="200px" >
-                <el-menu
-                        :default-active="defAct"
-                        :unique-opened="false"
-                        :collapse-transition="false"
-                        class="menu"
-                        background-color="#ffffff"
-                        color="black"
-                        active-text-color="rgb(0, 204, 126)"
-                >
-                    <div v-for="item in menuList" :key="item.id" >
-                    <el-submenu  :index="item.id"  v-if="item.lists&&item.lists.length>0" @click="menuHandle(title,false)">
-                           <template slot="title">
+                </li>
+                <li class="main-item item-menu">
+                    <a href="#">小组信息</a>
+                </li>
+                <li class="main-item">
+                    <a href="#">Github</a>
+                </li>
+                <li class="main-item">
+                    <a href="#">Gitee</a>
+                </li>
+            </ul>
+
+            <div class="nav-right" th:if="${session.user}==null">
+                <li class="main-item">
+                    <a href="#">登录/注册</a>
+                </li>
+            </div>
+
+            <div class="nav-right" th:if="${session.user}!=null">
+                <li class="user-avatar">
+                    <img class="avatar" th:src="@{/img/avatar.jpg}"/>
+                </li>
+            </div>
+        </nav>
+    </div>
+    <el-container>
+        <el-aside width="200px">
+            <el-menu
+                    :default-active="defAct"
+                    :unique-opened="false"
+                    :collapse-transition="false"
+                    class="menu"
+                    background-color="#ffffff"
+                    color="black"
+                    active-text-color="rgb(0, 204, 126)"
+            >
+                <div v-for="item in menuList" :key="item.id">
+                    <el-submenu :index="item.id" v-if="item.lists&&item.lists.length>0"
+                                @click="menuHandle(title,false)">
+                        <template slot="title">
                             <span>{{ item.name }}</span>
-                           </template>
-                        <el-menu-item class="title2" v-for="list in item.lists" :key="list.id" :index="list.id" @click="menuHandle(list,false)">
+                        </template>
+                        <el-menu-item class="title2" v-for="list in item.lists" :key="list.id" :index="list.id"
+                                      @click="menuHandle(list,false)">
                             <span slot="title">{{ list.title }}</span>
                         </el-menu-item>
                     </el-submenu>
-                        <el-menu-item v-else :index="item.id"  @click="menuHandle(item,false)">
-                            <span slot="title">{{ item.name }}</span>
-                        </el-menu-item>
-                    </div>
-                </el-menu>
-            </el-aside>
-            <el-main>
-                <div class="main-container" style="z-index: 10; position: relative;">
-                    <div class="app-main" v-loading="loading">
-                        <div class="divTmp" v-show="loading"></div>
-                        <iframe
-                                id="cIframe"
-                                class="c_iframe"
-                                name="cIframe"
-                                :src="iframeUrl"
-                                width="100%"
-                                height="100%"
-                                v-show="!loading"
-                        ></iframe>
-                    </div>
+                    <el-menu-item v-else :index="item.id" @click="menuHandle(item,false)">
+                        <span slot="title">{{ item.name }}</span>
+                    </el-menu-item>
                 </div>
-            </el-main>
-        </el-container>
+            </el-menu>
+        </el-aside>
+        <el-main>
+            <div class="main-container" style="z-index: 10; position: relative;">
+                <div class="app-main" v-loading="loading">
+                    <div class="divTmp" v-show="loading"></div>
+                    <iframe
+                            id="cIframe"
+                            class="c_iframe"
+                            name="cIframe"
+                            :src="iframeUrl"
+                            width="100%"
+                            height="100%"
+                            v-show="!loading"
+                    ></iframe>
+                </div>
+            </div>
+        </el-main>
     </el-container>
 </div>
 <script>
     new Vue({
-        el:'#app',
-        data(){
-            return{
+        el: '#app',
+        data() {
+            return {
                 defAct: '1',
                 menuActived: '1',
                 menuList: [
                     {
-                        id:'1',
+                        id: '1',
                         name: '错题上传',
-                        lists:[
+                        lists: [
                             {
-                                id:'1-1',
+                                id: '1-1',
                                 title: '图片上传',
                                 url: 'form',
                             },
                             {
-                                id:'1-2',
+                                id: '1-2',
                                 title: '语音输入',
                                 url: 'page/food/list.html',
                             }
                         ]
                     },
                     {
-                        id:'2',
+                        id: '2',
                         name: '重做错题',
                         url: '',
                     },
                     {
-                        id:'3',
+                        id: '3',
                         name: '错题测试',
                         url: 'test',
                     },
                     {
-                        id:'4',
+                        id: '4',
                         name: '错题查看',
                         url: 'page',
                     },
                     {
-                        id:'5',
+                        id: '5',
                         name: '退出登录',
                         url: 'logout',
                     }
@@ -273,15 +203,15 @@
         mounted() {
             window.menuHandle = this.menuHandle
         },
-        methods:{
+        methods: {
             logout() {
-                axios.post("logout").then((res)=>{
-                        window.location.href = 'userLoginSuccess'
+                axios.post("logout").then((res) => {
+                    window.location.href = 'userLoginSuccess'
                 })
             },
             goBack() {
-                const menu = this.menuList.find(item=>item.id===this.menuActived)
-                this.menuHandle(menu,false)
+                const menu = this.menuList.find(item => item.id === this.menuActived)
+                this.menuHandle(menu, false)
             },
             menuHandle(item, goBackFlag) {
                 this.loading = true
@@ -290,11 +220,11 @@
                 this.goBackFlag = goBackFlag
                 this.closeLoading()
             },
-            closeLoading(){
+            closeLoading() {
                 this.timer = null
-                this.timer = setTimeout(()=>{
+                this.timer = setTimeout(() => {
                     this.loading = false
-                },1000)
+                }, 1000)
             }
         }
     })
