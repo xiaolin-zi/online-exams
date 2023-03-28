@@ -1,0 +1,139 @@
+
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            /* background-image: url(../img/fj6.jpg); */
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        
+
+        .header {
+            color: white;
+            font-family: '宋体';
+            background-color:white;
+            box-shadow:rgb(93, 228, 93) 2px 2px 2px;
+            /* border-bottom: 1px solid black; */
+        }
+
+        .nav-container {
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            height: 60px;
+            /* background-color: black; */
+            align-items: center;
+
+        }
+
+        .avatar {
+            height: 50px;
+            border-radius: 15px;
+        }
+        .logo {
+            height: 80px;
+            border-radius: 15px;
+        }
+
+
+
+
+        a {
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+            /* font-family: '隶书'; */
+        }
+
+        .nav-main {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+            width: 80%;
+            height: 100%;
+            /* background-color: yellowgreen; */
+            align-items: center;
+            padding-left: 0;
+        }
+
+        .main-item {
+            width: 100px;
+            height: 50px;
+            margin-left: 30px;
+
+        }
+
+        .main-item:hover {
+            background-color: rgb(93, 228, 93);
+            border-radius: 10px;
+        }
+
+
+
+        .item-menu:hover .secondaryMenu {
+            height: 50px;
+            border: 1px solid black;
+        }
+
+        .main-item a {
+            width: 100%;
+            display: block;
+            text-align: center;
+            line-height: 50px;
+        }
+
+        .division {
+            height: 5px;
+        }
+
+
+        .secondaryMenu {
+            display: flex;
+            /* background-color: rgb(228, 217, 197); */
+            background-color: white;
+            list-style: none;
+            /* text-align: center; */
+            justify-content: space-around;
+            width: 300px;
+            font-size: 18px;
+            position: relative;
+            left: -82px;
+            height: 0px;
+            overflow: hidden;
+            padding-left: 0px;
+            /*去掉点占的位置*/
+            border-radius: 10px;
+            z-index: 9999;
+        }
+
+
+        .secondaryMenu li {
+            width: 100px;
+        }
+
+        .secondaryMenu a {
+            color: black;
+        }
+
+
+        .secondaryMenu li:hover {
+            background-color: rgb(93, 228, 93);
+            border-radius: 10px;
+        }
+
+
+        .nav-right {
+            list-style: none;
+        }
+
+       
+
+        

@@ -7,7 +7,7 @@
 	<title>Document</title>
 
 
-	<link rel="icon" th:href="@{/img/hczy3.png}" type="image/x-icon"/>
+	<link rel="icon" th:href="@{/img/logo.png}" type="image/x-icon"/>
 
 	<link rel="stylesheet" th:href="@{/css/index.css}">
 	<script th:src="@{/js/jquery.js}"></script>
@@ -119,7 +119,7 @@
 
 <header class="header-container header-container-primary">
 	<div class="header-body">
-		<a th:href="@{/img/hczy3.png}" target="_blank"><img th:src="@{/img/hczy3.png}" id="header-img"></a>
+		<a th:href="@{/img/logo.png}" target="_blank"><img th:src="@{/img/logo.png}" id="header-img"></a>
 
 		<div class="header-menu header-menu-open">
 			<ul>
@@ -187,7 +187,21 @@
 
 </div>
 
-
+<!--下雪-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="http://www.lmlblog.com/winter/templets/xq/js/snowy.js"></script>
+<style type="text/css">
+	.snow-container {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		z-index: 100001;
+	}
+</style>
+<div class="snow-container"></div>
 <script>
 
 	var registButton = document.getElementById('regist_button');
