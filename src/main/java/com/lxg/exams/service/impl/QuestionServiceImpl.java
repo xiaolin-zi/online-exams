@@ -20,6 +20,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @Autowired
     public QuestionMapper questionMapper;
 
+
+
+
     //增加题目
     @Override
     public int addQuestion(String title, String optionA, String optionB, String optionC, String optionD, String answer, int types, String image, String remark, int uid) {
@@ -33,6 +36,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     //根据id删除题目
     @Override
     public int deleteQuestionById(int id) {
+
         int i = questionMapper.deleteById(id);
         return i;
     }
@@ -51,6 +55,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         Question question = questionMapper.selectById(id);
         return question;
     }
+
 
 }
 

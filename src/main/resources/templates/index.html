@@ -151,7 +151,7 @@
                 [[${login_msg}]]
             </span>
 		</div>
-		<form th:action="@{/userLoginSuccess}" method="post">
+		<form th:action="@{/user/login}" method="post">
 			<input type="text"  placeholder="请输入用户名" name="username" id="login-username" class="username" >
 			<input type="password" placeholder="请输入密码" name="password" id="login-password" class="password" >
 			<button type="submit" id="login_bt">登录</button><br>
