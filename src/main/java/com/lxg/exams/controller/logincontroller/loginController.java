@@ -75,11 +75,44 @@ public class loginController {
         }
     }
 
-
+    /**
+     * 退出
+     * @param request
+     * @return
+     */
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request){
+        //清理Session中保存的当前登录员工的id
+        request.getSession().removeAttribute("uid");
+    }
     //跳转到添加错题表单
     @GetMapping("form")
     public String getForm(){
         return "form";
     }
-
+    @GetMapping("password")
+    public String updatePwd() {
+        return "password";
+    }
+    @GetMapping("upload")
+    public String uploadAva(){
+        return "upload";
+    }
+    @GetMapping("userdata")
+    public String listData(){
+        return "userdata";
+    }
+    //跳转到添加错题表单
+    @GetMapping("page")
+    public String page(){
+        return "list";
+    }
+    @GetMapping("teamdata")
+    public String teamdata(){
+        return "teamdata";
+    }
+    @GetMapping("index")
+    public String index(){
+        return "index";
+    }
 }

@@ -24,8 +24,8 @@ public class QuestionController {
     }
 
     //分页查询错题
-    @GetMapping("/page")
-    public Page page(int page, int pageSize, String title){
+    @GetMapping("{page}/{pageSize}")
+    public Page page(@PathVariable int page, @PathVariable int pageSize, String title){
         Page<Question> quePage=new Page<>(page,pageSize);
         LambdaQueryWrapper<Question> lqw=new LambdaQueryWrapper<>();
         lqw.like(title!=null,Question::getTitle,title);

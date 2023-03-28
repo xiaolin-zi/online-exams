@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<div id="app">
+    <!--<el-button type="text" v-model="exam.optionA">文字按钮</el-button>
+    <el-button type="text" v-model="exam.optionB">文字按钮</el-button>
+    <el-button type="text" v-model="exam.optionC">文字按钮</el-button>
+    <el-button type="text" v-model="exam.optionD">文字按钮</el-button>-->
+    <el-table
+            :data="tableData"
+            stripe
+            class="tableBox"
+    >
+        <el-table-column
+                prop="title"
+                label="题目"
+        /></el-table-column>
+        <el-table-column
+                prop="image"
+                label="图片"
+                align="center"
+        >
+            <template slot-scope="{ row }">
+                <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
+                          :src="getImage(row.image)"
+                          :preview-src-list="[ `/common/download?name=${row.image}` ]" >
+                      <div slot="error" class="image-slot">
+                          <img th:src="@{/img/img.png}"  style="width: 00px; height: 100px; border:none;" >
+                      </div>
+                </el-image>
+            </template></el-table-column>
+        <el-table-column
+                prop="optionA"
+                label="选项A"
+        ></el-table-column>
+        <el-table-column
+                prop="optionB"
+                label="选项B"
+        /></el-table-column>
+        <el-table-column
+                prop="optionC"
+                label="选项C"
+        ></el-table-column>
+        <el-table-column
+                prop="optionD"
+                label="选项D"
+        ></el-table-column>
+        <el-table-column
+                label="操作"
+                width="160"
+                align="center"
+        >
+            <template slot-scope="scope">
+                <el-button
+                        type="text"
+                        size="small"
+                        class="blueBug"
+                        @click="editHandle(scope.row)"
+                >
+                    修改
+                </el-button>
+                <el-button
+                        type="text"
+                        size="small"
+                        class="delBut non"
+                        @click="deleteHandle(scope.row.id)"
+                >
+                    删除
+                </el-button>
+            </template>
+        </el-table-column>
+    </el-table>
+    <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="page"
+            :page-sizes="[30, 50, 100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="counts">
+    </el-pagination>
+</div>
+<script th:src="@{/js/vue.js}"></script>
+<script th:src="@{/js/elementui/index.js}"></script>
+<link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+<script th:src="@{/js/axios.js}"></script>
+<script>
+    new Vue({
+        el:"#app",
+        data(){
+            return{
+                tableData:[],
+                exam:{
+                    id:"",
+                    title:"",
+                    optionA:"",
+                    optionB:"",
+                    optionC:"",
+                    optionD:"",
+                    answer:"",
+                    types:"",
+                    image:""
+                },
+                pageSize:30,
+                page:2,
+                counts:2
+            };
+        },
+        created(){
+            this.getAll()
+        },
+        methods:{
+            getAll(){
+                var param="?title="+this.exam.title;
+                axios.get("/question/"+this.page+"/"+this.pageSize+param).then(res=>{
+                    console.log(res);
+                    this.tableData=res.data.records;
+                    this.counts=res.data.total;
+                });
+            },
+            getImage (image) {
+                return `/common/download?name=${image}`
+            },
+            //处理页码大小和当前页变动时候触发的事件
+            handleSizeChange(val) {
+                this.pageSize=val;
+                this.getAll();
+            },
+            handleCurrentChange(val) {
+                this.page=val;
+                this.getAll();
+            }
+        }
+    })
+</script>
+</body>
+</html>
