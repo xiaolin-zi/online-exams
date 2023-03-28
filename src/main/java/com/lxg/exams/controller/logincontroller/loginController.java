@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,18 +16,22 @@ import javax.servlet.http.HttpSession;
  * @creatr 2023/3/13 13:14
  */
 @Controller
+@RequestMapping("/user")
 public class loginController {
 
 
     @Autowired
     private UserService userService;
 
-    @PostMapping("/userLoginSuccess")
+
+
+    @PostMapping("/login")
     public String adminLoginSuccess(String username,String password,HttpServletRequest request,HttpSession session){
 
         User user = userService.getUser(username, password);
         if(user != null){
             request.setAttribute("login_msg", "登录成功！");
+            session.setAttribute("user",user);
             session.setAttribute("uid",user.getId());
             return "user/userindex";
         }else{
@@ -34,9 +39,12 @@ public class loginController {
             request.setAttribute("login_msg", "账号或密码错误！");
             return "index";
         }
+
+
+
     }
 
-    @PostMapping("/userRegistSuccess")
+    @PostMapping("/regist")
     public String adminRegistSuccess(String username, String password, String code,HttpServletRequest request, HttpSession session) {
 
 

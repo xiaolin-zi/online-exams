@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.util.UUID;
 
 
-
+/**
+ * Author: xuesinuan
+ */
 
 @RestController
 @RequestMapping("/common")

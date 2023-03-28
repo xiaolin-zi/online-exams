@@ -10,4 +10,20 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface QuestionService extends IService<Question> {
 
+    //增加题目
+    int addQuestion(String title, String optionA, String optionB, String optionC, String optionD,  String answer,int types,String image, String remark,int uid);
+
+
+
+    //根据id删除题目
+    int deleteQuestionById(int id);
+
+    //根据id修改题目
+    int updateQuestion(String title, String optionA, String optionB, String optionC, String optionD,  String answer,int types,String image, String remark,int uid);
+
+    //根据id查询题目
+    Question getQuestionById(int id);
+
+
+
 }
