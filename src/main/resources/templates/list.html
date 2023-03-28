@@ -28,13 +28,17 @@
                 align="center"
         >
             <template slot-scope="{ row }">
+                <div v-if="row.image">
                 <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
                           :src="getImage(row.image)"
                           :preview-src-list="[ `/common/download?name=${row.image}` ]" >
-                      <div slot="error" class="image-slot">
+                     <!-- <div slot="error" class="image-slot">
                           <img th:src="@{/img/img.png}"  style="width: 00px; height: 100px; border:none;" >
-                      </div>
-                </el-image>
+                      </div>-->
+                </el-image></div>
+                <div v-else>
+                    <img th:src="@{/img/img.png}"  style="width: 00px; height: 100px; border:none;" >
+                </div>
             </template></el-table-column>
         <el-table-column
                 prop="optionA"
@@ -51,6 +55,25 @@
         <el-table-column
                 prop="optionD"
                 label="选项D"
+        ></el-table-column>
+        <el-table-column
+                prop="answer"
+                label="答案"
+        ></el-table-column>
+        <el-table-column
+                prop="types"
+                label="科目"
+        >
+            <template slot-scope="scope">
+                <span v-if="scope.row.types == 1">计算机网络</span>
+                <span v-if="scope.row.types == 2">操作系统</span>
+                <span v-if="scope.row.types == 3">计算机组成原理</span>
+                <span v-if="scope.row.types == 4">数据结构</span>
+            </template>
+        </el-table-column>
+        <el-table-column
+                prop="remark"
+                label="备注"
         ></el-table-column>
         <el-table-column
                 label="操作"

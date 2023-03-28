@@ -25,10 +25,13 @@ public class QuestionController {
 
     //分页查询错题
     @GetMapping("{page}/{pageSize}")
-    public Page page(@PathVariable int page, @PathVariable int pageSize, String title){
+    public Page page(@PathVariable int page, @PathVariable int pageSize, Question question,HttpSession session){
+        Integer uid = (Integer) session.getAttribute("uid");
         Page<Question> quePage=new Page<>(page,pageSize);
         LambdaQueryWrapper<Question> lqw=new LambdaQueryWrapper<>();
-        lqw.like(title!=null,Question::getTitle,title);
+        lqw.eq(question.getUid()!=null,Question::getUid,uid);
+        lqw.eq(question.getTypes()!=null,Question::getTypes,question.getTypes());
+        lqw.like(question.getTitle()!=null,Question::getTitle,question.getTitle());
         questionService.page(quePage,lqw);
         return quePage;
     }
