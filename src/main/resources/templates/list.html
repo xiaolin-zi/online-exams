@@ -47,6 +47,11 @@
             height: 100px;
             display: block;
         }
+
+        .additionalfigures{
+            width: 100px;
+            height: 100px;
+        }
     </style>
 </head>
 <body>
@@ -214,14 +219,14 @@
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                    <img v-else th:src="@{/img/img.png}">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar additional figures" >
+                    <img v-else th:src="@{/img/img.png}" class="additionalfigures">
                 </el-upload>
             </el-form-item>
 
             <el-form-item>
                 <el-button type="success" @click="updateQue">提交</el-button>
-                <el-button @click="dialogEdit = false,exam={},imageUrl=''">取消</el-button>
+                <el-button @click="dialogEdit = false">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -281,7 +286,7 @@
 
             <el-form-item>
                 <el-button type="success" @click="addQue">提交</el-button>
-                <el-button @click="dialogUpdate1 = false,exam={},imageUrl='',imageUrl2=''">取消</el-button>
+                <el-button @click="dialogUpdate1 = false">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -331,7 +336,7 @@
 
             <el-form-item>
                 <el-button type="success" @click="addQue">提交</el-button>
-                <el-button @click="dialogUpdate2 = false,exam={},imageUrl=''">取消</el-button>
+                <el-button @click="dialogUpdate2 = false">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -407,8 +412,10 @@
                 axios.put("/question", this.exam).then((resp) => {
                     if (resp) {
                         this.dialogEdit = false;
-                        this.exam={};
-                        this.imageUrl='';
+                        // this.exam={};
+                        // this.imageUrl='';
+                        this.exam.title='';
+                        this.exam.types='';
                         this.getAll();
 
                     }
@@ -476,10 +483,11 @@
                     if (resp){
                         this.dialogUpdate1=false;
                         this.dialogUpdate2=false;
-                        this.exam={};
-                        this.imageUrl='';
-                        this.imageUrl2='';
-
+                        // this.exam={};
+                        // this.imageUrl='';
+                        // this.imageUrl2='';
+                        this.exam.title='';
+                        this.exam.types='';
                     } this.getAll();
                 })
             },

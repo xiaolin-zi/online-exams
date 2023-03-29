@@ -25,6 +25,9 @@ public class UserController {
 
 
 
+
+
+    //登录
     @PostMapping("/login")
     public String adminLoginSuccess(String username,String password,HttpServletRequest request,HttpSession session){
 
@@ -45,6 +48,7 @@ public class UserController {
 
     }
 
+    //注册
     @PostMapping("/regist")
     public String adminRegistSuccess(String username, String password, String code,HttpServletRequest request, HttpSession session) {
 
@@ -84,6 +88,7 @@ public class UserController {
         }
     }
 
+
     /**
      * 退出
      * @param request
@@ -95,21 +100,39 @@ public class UserController {
         request.getSession().removeAttribute("uid");
         return "index";
     }
+
+    //跳转到添加错题表单
+    @GetMapping("/form")
+    public String getForm(){
+        return "/form";
+    }
+    //跳转到添加错题表单
+    @GetMapping("/form2")
+    public String getForm2(){
+        return "/form2";
+    }
+
+
+
+    //跳转到修改密码
     @GetMapping("/password")
     public String updatePwd() {
         return "password";
     }
 
 
+    //跳转到修改头像
     @GetMapping("/upload")
     public String uploadAva(){
         return "upload";
     }
 
+    //跳转到查看个人资料
     @GetMapping("/userdata")
     public String listData(){
         return "userdata";
     }
+
 
     //跳转到查看错题
     @GetMapping("/page")
@@ -117,31 +140,41 @@ public class UserController {
         return "list";
     }
 
+    //跳转到查看团队信息
     @GetMapping("/teamdata")
     public String teamdata(){
         return "teamdata";
     }
 
+    //用户首页
     @GetMapping("/index")
     public String index(){
         return "/user/userindex";
     }
 
+    //用户首页展示内容
     @GetMapping("/note")
     public String note(){
         return "/user/note";
     }
 
 
+    //错题测试
     @GetMapping("/test")
     public String getTest(){
         return "/user/test";
     }
 
 
+    //跳转到登录页面
     @GetMapping("/tologin")
     public String toLogin(){
         return "index";
     }
 
+
+    @GetMapping("/updatepassword")
+    public String updatePassword(){
+        return "updatepassword";
+    }
 }
