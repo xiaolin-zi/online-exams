@@ -75,8 +75,10 @@
         <el-form-item>
             <el-button type="success" @click="onSubmit">查询</el-button>
         </el-form-item>
-            <el-button type="success" plain @click="dialogUpdate1=true">图片上传</el-button>
-        <el-button type="success" plain @click="dialogUpdate2=true">语音输入</el-button>
+            <el-row style="float: right">
+            <el-button type="success" plain @click="exam={},dialogUpdate1=true" >图片上传</el-button>
+            <el-button type="success" plain @click="exam={},dialogUpdate2=true" >语音输入</el-button>
+            </el-row>
         </el-form>
     </el-row>
     <el-table
@@ -230,6 +232,7 @@
             </el-form-item>
         </el-form>
     </el-dialog>
+    <!--添加数据对话框表单-->
     <el-dialog
             title="图片上传错题"
             :visible.sync="dialogUpdate1"
@@ -412,12 +415,14 @@
                 axios.put("/question", this.exam).then((resp) => {
                     if (resp) {
                         this.dialogEdit = false;
-                        // this.exam={};
-                        // this.imageUrl='';
+                        this.imageUrl='';
                         this.exam.title='';
                         this.exam.types='';
                         this.getAll();
-
+                        this.$message({
+                            type: 'success',
+                            message: '修改成功!'
+                        });
                     }
                 });
             },
@@ -430,6 +435,10 @@
                     axios.delete("/question/"+id).then(resp=>{
                         if (resp){
                             this.getAll();
+                            this.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
                         }
                     });
                 }).catch(()=>{
@@ -483,9 +492,8 @@
                     if (resp){
                         this.dialogUpdate1=false;
                         this.dialogUpdate2=false;
-                        // this.exam={};
-                        // this.imageUrl='';
-                        // this.imageUrl2='';
+                        this.imageUrl='';
+                        this.imageUrl2='';
                         this.exam.title='';
                         this.exam.types='';
                     } this.getAll();
