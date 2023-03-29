@@ -290,7 +290,7 @@
 
             <el-form-item>
                 <el-button type="success" @click="addQue">提交</el-button>
-                <el-button @click="dialogUpdate1 = false">取消</el-button>
+                <el-button @click="dialogUpdate1 = false,exam.title='',exam.types=''">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -340,7 +340,7 @@
 
             <el-form-item>
                 <el-button type="success" @click="addQue">提交</el-button>
-                <el-button @click="dialogUpdate2 = false">取消</el-button>
+                <el-button @click="dialogUpdate2 = false,exam.title='',exam.types=''">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
