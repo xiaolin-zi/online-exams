@@ -245,11 +245,19 @@
         },
         methods: {
             logout() {
-                    if(confirm("确定退出登录吗？")) {
-                        window.location.href = 'http://localhost/user/logout';
-                    }else{
-                        return false;
-                    }
+                this.$confirm('确定退出登录吗', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    window.location.href = 'http://localhost/user/logout';
+                }).catch(()=>{
+                    //用户点击取消按钮
+                    this.$message({
+                        type: 'info',
+                        message: '已取消退出'
+                    });
+                });
             },
             goBack() {
                 const menu = this.menuList.find(item => item.id === this.menuActived)
