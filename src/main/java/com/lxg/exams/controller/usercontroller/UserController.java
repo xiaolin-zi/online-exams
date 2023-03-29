@@ -29,10 +29,11 @@ public class UserController {
     public String adminLoginSuccess(String username,String password,HttpServletRequest request,HttpSession session){
 
         User user = userService.getUser(username, password);
+        System.out.println(user);
         if(user != null){
             request.setAttribute("login_msg", "登录成功！");
             session.setAttribute("user",user);
-            session.setAttribute("uid",user.getId());
+            session.setAttribute("uid",user.getUid());
             return "user/userindex";
         }else{
             request.setAttribute("flag", false);//登录页标志

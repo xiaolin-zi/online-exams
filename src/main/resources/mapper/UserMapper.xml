@@ -5,7 +5,7 @@
 <mapper namespace="com.lxg.exams.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="com.lxg.exams.bean.User">
-            <id property="id" column="id" jdbcType="INTEGER"/>
+            <id property="uid" column="id" jdbcType="INTEGER"/>
             <result property="username" column="username" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
     </resultMap>

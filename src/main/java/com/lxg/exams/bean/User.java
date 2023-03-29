@@ -23,7 +23,7 @@ public class User implements Serializable {
      * 
      */
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Integer uid;
 
     /**
      * 
@@ -50,7 +50,7 @@ public class User implements Serializable {
             return false;
         }
         User other = (User) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+        return (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
             && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
             && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()));
     }
@@ -59,7 +59,7 @@ public class User implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
         result = prime * result + ((getUsername() == null) ? 0 : getUsername().hashCode());
         result = prime * result + ((getPassword() == null) ? 0 : getPassword().hashCode());
         return result;
@@ -71,7 +71,7 @@ public class User implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
+        sb.append(", id=").append(uid);
         sb.append(", username=").append(username);
         sb.append(", password=").append(password);
         sb.append(", serialVersionUID=").append(serialVersionUID);
