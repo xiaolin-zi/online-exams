@@ -4,18 +4,33 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+        }
         .avatar {
-            height: 50px;
-            border-radius: 15px;
+            width: 100px;
+            height: 100px;
+            display: block;
         }
     </style>
 </head>
 <body>
 <div id="app">
-    <!--<el-button type="text" v-model="exam.optionA">文字按钮</el-button>
-    <el-button type="text" v-model="exam.optionB">文字按钮</el-button>
-    <el-button type="text" v-model="exam.optionC">文字按钮</el-button>
-    <el-button type="text" v-model="exam.optionD">文字按钮</el-button>-->
     <!--表单-->
     <el-row>
         <el-form :inline="true" :model="exam" class="demo-form-inline">
@@ -33,7 +48,7 @@
             </el-select>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
+            <el-button type="success" @click="onSubmit">查询</el-button>
         </el-form-item>
         <el-button type="success" plain @click="">图片上传</el-button>
         <el-button type="success" plain @click="">语音输入</el-button>
@@ -109,6 +124,7 @@
                         type="text"
                         size="small"
                         class="blueBug"
+                        color=" rgb(0, 204, 126)"
                         @click="dialogEdit=true,exam=scope.row"
                 >
                     修改
@@ -118,13 +134,15 @@
                         size="small"
                         class="delBut non"
                         :plain="true"
-                        @click="delete(scope.row.id);"
+                        color=" rgb(0, 204, 126)"
+                        @click="deleteHandle(scope.row.id);"
                 >
                     删除
                 </el-button>
             </template>
         </el-table-column>
     </el-table>
+    <div class="block">
     <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -132,8 +150,11 @@
             :page-sizes="[10, 30, 50]"
             :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            background
            >
     </el-pagination>
+    </div>
     <!--修改对话框-->
     <el-dialog
             title="编辑错题"
@@ -179,7 +200,7 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="updateQue">提交</el-button>
+                <el-button type="success" @click="updateQue">提交</el-button>
                 <el-button @click="dialogEdit = false,exam={}">取消</el-button>
             </el-form-item>
         </el-form>
@@ -209,6 +230,7 @@
                 dialogEdit:false,
                 pageSize:10,
                 page:1,
+                total:0,//总记录数
                 rules:{
                     title:[
                         {required:true,message:"请输入题目",}
@@ -240,6 +262,7 @@
                 param+="&types="+this.exam.types;
                 axios.get("/question/"+this.page+"/"+this.pageSize+param).then(res=>{
                     console.log(res);
+                    this.total=res.data.total;
                     this.tableData=res.data.records;
                 });
             },
@@ -255,17 +278,17 @@
                     }
                 });
             },
-            delete(id){
+            deleteHandle(id){
                 this.$confirm('确定删除题目吗', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.delete("/question/"+id).then((resp)=>{
-                        if (resp){
+                    axios.delete("/question/"+id).then(resp=>{
+                        if (resp.data){
                             this.getAll();
                         }
-                    })
+                    });
                 }).catch(()=>{
                     //用户点击取消按钮
                     this.$message({
