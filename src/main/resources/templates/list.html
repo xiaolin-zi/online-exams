@@ -70,6 +70,7 @@
                 <el-option label="操作系统" value="2"></el-option>
                 <el-option label="计算机组成原理" value="3"></el-option>
                 <el-option label="数据结构" value="4"></el-option>
+                <el-option label="全部" value=""></el-option>
             </el-select>
         </el-form-item>
         <el-form-item>
@@ -148,15 +149,28 @@
                 align="center"
         >
             <template slot-scope="scope">
+                <div v-if="scope.row.image">
                 <el-button
                         type="text"
                         size="small"
                         class="blueBug"
                         color=" rgb(0, 204, 126)"
-                        @click="dialogEdit=true,exam=scope.row"
+                        @click="dialogEdit=true,exam=scope.row,handleAvatarSuccess(scope.row.image)"
                 >
                     修改
                 </el-button>
+                </div>
+                <div v-else>
+                    <el-button
+                            type="text"
+                            size="small"
+                            class="blueBug"
+                            color=" rgb(0, 204, 126)"
+                            @click="dialogEdit=true,exam=scope.row"
+                    >
+                        修改
+                    </el-button>
+                </div>
                 <el-button
                         type="text"
                         size="small"
@@ -229,7 +243,7 @@
             <el-form-item>
                 <el-button type="success" @click="updateQue">提交</el-button>
                 <a th:href="@{/user/page}">
-                <el-button >取消</el-button></a>
+                <el-button type="success" plain >取消</el-button></a>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -276,7 +290,7 @@
                     <el-option label="数据结构" value="4"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="附加图片" prop="image" >
+            <el-form-item label="附加图片" prop="image" v-model="exam.image">
                 <el-upload
                         class="avatar-uploader"
                         action="/common/upload"
@@ -290,7 +304,7 @@
 
             <el-form-item>
                 <el-button type="success" @click="addQue">提交</el-button>
-                <el-button @click="dialogUpdate1 = false,exam.title='',exam.types=''">取消</el-button>
+                <el-button type="success" plain @click="dialogUpdate1 = false,exam.title='',exam.types=''">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -340,7 +354,7 @@
 
             <el-form-item>
                 <el-button type="success" @click="addQue">提交</el-button>
-                <el-button @click="dialogUpdate2 = false,exam.title='',exam.types=''">取消</el-button>
+                <el-button type="success" plain @click="dialogUpdate2 = false,exam.title='',exam.types=''">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
