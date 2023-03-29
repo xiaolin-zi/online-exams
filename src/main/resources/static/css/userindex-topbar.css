@@ -20,8 +20,9 @@
             color: white;
             font-family: '宋体';
             background-color:white;
-            box-shadow:rgb(93, 228, 93) 2px 2px 2px;
-            /* border-bottom: 1px solid black; */
+            /*box-shadow:rgb(0, 204, 126) 2px 2px 2px;*/
+            /*margin-bottom: 2px;*/
+             border-bottom: 2px solid rgb(0, 204, 126);
         }
 
         .nav-container {
@@ -72,7 +73,7 @@
         }
 
         .main-item:hover {
-            background-color: rgb(93, 228, 93);
+            background-color: rgb(0, 204, 126);
             border-radius: 10px;
         }
 
@@ -125,7 +126,7 @@
 
 
         .secondaryMenu li:hover {
-            background-color: rgb(93, 228, 93);
+            background-color: rgb(0, 204, 126);
             border-radius: 10px;
         }
 

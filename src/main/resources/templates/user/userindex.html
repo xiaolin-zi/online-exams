@@ -10,6 +10,7 @@
     <script th:src="@{/js/elementui/index.js}"></script>
     <link rel="stylesheet" th:href="@{/css/elementui/index.css}">
     <script th:src="@{/js/axios.js}"></script>
+    <link rel="stylesheet" href="//at.alicdn.com/t/c/font_3976993_tchrl6iqwv.css">
     <link rel="stylesheet" th:href="@{/css/userindex-topbar.css}">
     <style>
 
@@ -22,7 +23,7 @@
         }
 
         .el-main {
-            background-color: #f3f4f7;
+            background-color: rgb(0, 204, 126);
             color: #000000;
             height: 685px;
         }
@@ -118,14 +119,17 @@
                     <el-submenu :index="item.id" v-if="item.lists&&item.lists.length>0"
                                 @click="menuHandle(title,false)">
                         <template slot="title">
+                            <i :class="item.class"></i>
                             <span>{{ item.name }}</span>
                         </template>
                         <el-menu-item class="title2" v-for="list in item.lists" :key="list.id" :index="list.id"
                                       @click="menuHandle(list,false)">
+                            <i :class="list.class"></i>
                             <span slot="title">{{ list.title }}</span>
                         </el-menu-item>
                     </el-submenu>
                     <el-menu-item v-else :index="item.id" @click="menuHandle(item,false)">
+                        <i :class="item.class"></i>
                         <span slot="title">{{ item.name }}</span>
                     </el-menu-item>
                 </div>
@@ -175,15 +179,18 @@
                     {
                         id: '1',
                         name: '错题上传',
+                        class: 'icon-shangchuan1 iconfont',
                         lists: [
                             {
                                 id: '1-1',
                                 title: '图片上传',
+                                class: 'icon-xiangce iconfont',
                                 url: 'form',
                             },
                             {
                                 id: '1-2',
                                 title: '语音输入',
+                                class: 'icon-yuyin iconfont',
                                 url: 'page/food/list.html',
                             }
                         ]
@@ -191,21 +198,25 @@
                     {
                         id: '2',
                         name: '重做错题',
+                        class: 'icon-zhongxinpingjuan iconfont',
                         url: '',
                     },
                     {
                         id: '3',
                         name: '错题测试',
+                        class: 'icon-ceshi iconfont',
                         url: 'test',
                     },
                     {
                         id: '4',
                         name: '错题查看',
+                        class: 'icon-chakan iconfont',
                         url: 'page',
                     },
                     {
                         id: '5',
                         name: '退出登录',
+                        class: 'icon-tuichudenglu1 iconfont',
                         url: 'logout',
                     }
                 ],
