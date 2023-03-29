@@ -236,6 +236,10 @@
                     type: 'warning'
                 }).then(() => {
                     window.location.href = 'http://localhost/user/logout';
+                    this.$message({
+                        type: 'success',
+                        message: '已退出登录!'
+                    });
                 }).catch(() => {
                     //用户点击取消按钮
                     this.$message({

@@ -70,8 +70,8 @@
         <el-form-item>
             <el-button type="success" @click="onSubmit">查询</el-button>
         </el-form-item>
-            <el-button type="success" plain @click="dialogUpdate1=true">图片上传</el-button>
-        <el-button type="success" plain @click="dialogUpdate2=true">语音输入</el-button>
+            <el-button type="success" plain @click="exam={},dialogUpdate1=true">图片上传</el-button>
+        <el-button type="success" plain @click="exam={},dialogUpdate2=true">语音输入</el-button>
         </el-form>
     </el-row>
     <el-table
@@ -410,7 +410,10 @@
                         this.exam={};
                         this.imageUrl='';
                         this.getAll();
-
+                        this.$message({
+                            type: 'success',
+                            message: '修改成功!'
+                        });
                     }
                 });
             },
@@ -424,6 +427,10 @@
                         if (resp){
                             this.getAll();
                         }
+                    });
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
                     });
                 }).catch(()=>{
                     //用户点击取消按钮
@@ -479,8 +486,12 @@
                         this.exam={};
                         this.imageUrl='';
                         this.imageUrl2='';
-
-                    } this.getAll();
+                        this.getAll();
+                        this.$message({
+                            type: 'success',
+                            message: '上传成功!'
+                        });
+                    }
                 })
             },
         }
