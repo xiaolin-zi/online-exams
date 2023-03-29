@@ -15,32 +15,24 @@
     <style>
 
 
-        #app{
-            height: 100%;
-        }
 
-        .el-container{
-            height: calc(100% - 60px);
-        }
 
         .el-aside {
             background-color: #ffffff;
             color: #000000;
-            /*height: 685px;*/
-            height: 100%;
+            height: 685px;
             font-family: '宋体';
             /*border: #3a8ee6 1px solid;*/
         }
 
-        .el-submenu__title,.el-dropdown-menu__item, .el-menu-item  {
+        .el-submenu__title, .el-dropdown-menu__item, .el-menu-item {
             font-size: 18px;
         }
 
         .el-main {
             background-color: #f3f4f7;;
             color: #000000;
-            /*height: 685px;*/
-            height: 100%;
+            height: 685px;
             overflow: hidden;
         }
 
@@ -49,37 +41,23 @@
             /* padding: 0;*/
         }
 
-        .el-scrollbar{
-            height: 100%;
-        }
 
-        .el-scrollbar__view{
-            height: 100%;
-        }
-
-        .main-container{
-            height: 100%;
-        }
-
-        .app-main{
-            height: 100%;
-        }
         .c_iframe {
             background-color: white;
-            /*height: 685px;*/
-            height: 100%;
+            height: 685px;
             color: black;
         }
 
         .menu {
-            /*height: 685px;*/
-            height: 100%;
+            height: 685px;
             color: black;
         }
-        .pageScroll{
+
+        .pageScroll {
             height: 100%;
             width: 100%;
         }
+
         .page-scroll .el-scrollbar__wrap {
             overflow-x: hidden;
         }
@@ -172,30 +150,31 @@
                         <span slot="title">{{ item.name }}</span>
                     </el-menu-item>
                 </div>
-                <el-menu-item >
+                <el-menu-item>
                     <i class="icon-tuichudenglu1 iconfont"></i>
-                    <a  @click="logout()" id="logout" slot="title">退出登录</a>
+                    <a @click="logout()" id="logout" slot="title">退出登录</a>
                 </el-menu-item>
             </el-menu>
         </el-aside>
         <el-scrollbar class="pageScroll">
-        <el-main>
-            <div class="main-container" style="z-index: 10; position: relative;">
-                <div class="app-main" v-loading="loading">
-                    <div class="divTmp" v-show="loading"></div>
-                    <iframe
-                            id="cIframe"
-                            class="c_iframe"
-                            name="cIframe"
-                            :src="iframeUrl"
-                            width="100%"
-                            height="100%"
-                            v-show="!loading"
+            <el-main>
+                <div class="main-container" style="z-index: 10; position: relative;">
+                    <div class="app-main" v-loading="loading">
+                        <div class="divTmp" v-show="loading"></div>
+                        <iframe
+                                id="cIframe"
+                                class="c_iframe"
+                                name="cIframe"
+                                :src="iframeUrl"
+                                width="100%"
+                                height="100%"
+                                v-show="!loading"
 
-                    ></iframe>
+                        ></iframe>
+                    </div>
                 </div>
-            </div>
-        </el-main></el-scrollbar>
+            </el-main>
+        </el-scrollbar>
     </el-container>
 </div>
 <!--下雪-->
@@ -257,7 +236,7 @@
                     type: 'warning'
                 }).then(() => {
                     window.location.href = 'http://localhost/user/logout';
-                }).catch(()=>{
+                }).catch(() => {
                     //用户点击取消按钮
                     this.$message({
                         type: 'info',
