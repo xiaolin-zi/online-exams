@@ -95,19 +95,6 @@ public class UserController {
         request.getSession().removeAttribute("uid");
         return "index";
     }
-    //跳转到添加错题表单
-    @GetMapping("/form")
-    public String getForm(){
-        return "/form";
-    }
-    //跳转到添加错题表单
-    @GetMapping("/form2")
-    public String getForm2(){
-        return "/form2";
-    }
-
-
-
     @GetMapping("/password")
     public String updatePwd() {
         return "password";

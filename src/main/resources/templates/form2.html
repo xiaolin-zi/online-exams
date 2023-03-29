@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Title</title>
     <style>
         .avatar-uploader .el-upload {
@@ -33,6 +35,10 @@
 <div id="app">
 
     <!--添加数据对话框表单-->
+    <el-dialog
+            title="编辑品牌"
+            :visible.sync="dialogVisible"
+            width="30%">
         <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
             <el-form-item label="题目" prop="title">
                 <el-input v-model="exam.title"></el-input>
@@ -73,10 +79,11 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="success" @click="addQue">提交</el-button>
-                <el-button @click="exam={},imageUrl=''">取消</el-button>
+                <el-button type="primary" @click="addQue">提交</el-button>
+                <el-button @click="dialogVisible = false,exam={},imageUrl=''">取消</el-button>
             </el-form-item>
         </el-form>
+    </el-dialog>
 </div>
 <script th:src="@{/js/vue.js}"></script>
 <script th:src="@{/js/elementui/index.js}"></script>
@@ -100,6 +107,7 @@
                     image:""
                 },
                 imageUrl: '',
+                dialogVisible:false,
                 rules:{
                     title:[
                         {required:true,message:"请输入题目",}
@@ -109,6 +117,16 @@
             };
         },
         methods:{
+            addQue(){
+                axios.post("/question",this.exam).then((resp)=>{
+                    console.log(resp);
+                    if (resp){
+                        this.dialogVisible=false;
+                        this.exam={};
+                        this.imageUrl='';
+                    }
+                })
+            },
             beforeAvatarUpload(file) {
                 const isJPG = file.type ===
                     'image/jpeg'

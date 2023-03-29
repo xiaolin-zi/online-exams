@@ -26,6 +26,27 @@
             height: 100px;
             display: block;
         }
+        .avatar-uploader2 .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .avatar-uploader2 .el-upload:hover {
+            border-color: rgb(0, 204, 126);
+        }
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+        }
+        .avatar2 {
+            width: 100px;
+            height: 100px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -49,8 +70,8 @@
         <el-form-item>
             <el-button type="success" @click="onSubmit">查询</el-button>
         </el-form-item>
-            <el-button type="success" plain ><a th:href="@{/user/form}">图片上传</a></el-button>
-        <el-button type="success" plain><a th:href="@{/user/form2}">语音输入</a></el-button>
+            <el-button type="success" plain @click="dialogUpdate1=true">图片上传</el-button>
+        <el-button type="success" plain @click="dialogUpdate2=true">语音输入</el-button>
         </el-form>
     </el-row>
     <el-table
@@ -204,6 +225,116 @@
             </el-form-item>
         </el-form>
     </el-dialog>
+    <el-dialog
+            title="图片上传错题"
+            :visible.sync="dialogUpdate1"
+            width="30%">
+        <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
+            <el-form-item label="附加图片" prop="image2" >
+                <el-upload
+                        class="avatar-uploader2"
+                        action="/common/upload"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess2"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="imageUrl2" :src="imageUrl2" class="avatar2">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="题目" prop="title">
+                <el-input v-model="exam.title"></el-input>
+            </el-form-item>
+            <el-form-item label="选项A" prop="optionA">
+                <el-input v-model="exam.optionA"></el-input>
+            </el-form-item>
+            <el-form-item label="选项B" prop="optionB">
+                <el-input v-model="exam.optionB"></el-input>
+            </el-form-item>
+            <el-form-item label="选项C" prop="optionC">
+                <el-input v-model="exam.optionC"></el-input>
+            </el-form-item>
+            <el-form-item label="选项D" prop="optionD">
+                <el-input v-model="exam.optionD"></el-input>
+            </el-form-item>
+            <el-form-item label="答案" prop="answer">
+                <el-input v-model="exam.answer"></el-input>
+            </el-form-item>
+            <el-form-item label="科目类型" prop="types">
+                <el-select   v-model="exam.types" placeholder="请选择科目类型">
+                    <el-option label="计算机网络" value="1"></el-option>
+                    <el-option label="操作系统" value="2"></el-option>
+                    <el-option label="计算机组成原理" value="3"></el-option>
+                    <el-option label="数据结构" value="4"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="附加图片" prop="image" >
+                <el-upload
+                        class="avatar-uploader"
+                        action="/common/upload"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="success" @click="addQue">提交</el-button>
+                <el-button @click="dialogUpdate1 = false,exam={},imageUrl='',imageUrl2=''">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+    <!--添加数据对话框表单-->
+    <el-dialog
+            title="语音上传错题"
+            :visible.sync="dialogUpdate2"
+            width="30%">
+        <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
+            <el-form-item label="题目" prop="title">
+                <el-input v-model="exam.title"></el-input>
+            </el-form-item>
+            <el-form-item label="选项A" prop="optionA">
+                <el-input v-model="exam.optionA"></el-input>
+            </el-form-item>
+            <el-form-item label="选项B" prop="optionB">
+                <el-input v-model="exam.optionB"></el-input>
+            </el-form-item>
+            <el-form-item label="选项C" prop="optionC">
+                <el-input v-model="exam.optionC"></el-input>
+            </el-form-item>
+            <el-form-item label="选项D" prop="optionD">
+                <el-input v-model="exam.optionD"></el-input>
+            </el-form-item>
+            <el-form-item label="答案" prop="answer">
+                <el-input v-model="exam.answer"></el-input>
+            </el-form-item>
+            <el-form-item label="科目类型" prop="types">
+                <el-select   v-model="exam.types" placeholder="请选择科目类型">
+                    <el-option label="计算机网络" value="1"></el-option>
+                    <el-option label="操作系统" value="2"></el-option>
+                    <el-option label="计算机组成原理" value="3"></el-option>
+                    <el-option label="数据结构" value="4"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="附加图片" prop="image" >
+                <el-upload
+                        class="avatar-uploader"
+                        action="/common/upload"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="success" @click="addQue">提交</el-button>
+                <el-button @click="dialogUpdate2 = false,exam={},imageUrl=''">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
 </div>
 <script th:src="@{/js/vue.js}"></script>
 <script th:src="@{/js/elementui/index.js}"></script>
@@ -224,9 +355,12 @@
                     optionD:"",
                     answer:"",
                     types:"",
-                    image:""
+                    image:"",
+                    image2:""
                 },
                 dialogEdit:false,
+                dialogUpdate1:false,
+                dialogUpdate2:false,
                 pageSize:10,
                 page:1,
                 total:0,//总记录数
@@ -236,6 +370,7 @@
                     ]
                 },
                 imageUrl: '',
+                imageUrl2: '',
                 fileList:[]
             };
         },
@@ -328,8 +463,26 @@
             handleAvatarSuccess(res) {
                 this.exam.image=res;
                 console.log(res)
-                this.imageUrl = `/common/download?name=${res}`
-            }
+                this.imageUrl = `/common/download?name=${res}`;
+            },
+            handleAvatarSuccess2(res) {
+                this.exam.image=res;
+                console.log(res)
+                this.imageUrl2 = `/common/download?name=${res}`;
+            },
+            addQue(){
+                axios.post("/question",this.exam).then((resp)=>{
+                    console.log(resp);
+                    if (resp){
+                        this.dialogUpdate1=false;
+                        this.dialogUpdate2=false;
+                        this.exam={};
+                        this.imageUrl='';
+                        this.imageUrl2='';
+
+                    } this.getAll();
+                })
+            },
         }
     })
 </script>
