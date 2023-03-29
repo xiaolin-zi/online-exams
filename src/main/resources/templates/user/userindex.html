@@ -31,6 +31,7 @@
             background-color: #f3f4f7;;
             color: #000000;
             height: 685px;
+            overflow: hidden;
         }
 
         * {
@@ -48,6 +49,14 @@
         .menu {
             height: 685px;
             color: black;
+            overflow: auto;
+        }
+        .pageScroll{
+            height: 100%;
+            width: 100%;
+        }
+        .page-scroll .el-scrollbar__wrap {
+            overflow-x: hidden;
         }
 
     </style>
@@ -144,6 +153,7 @@
                 </el-menu-item>
             </el-menu>
         </el-aside>
+        <el-scrollbar class="pageScroll">
         <el-main>
             <div class="main-container" style="z-index: 10; position: relative;">
                 <div class="app-main" v-loading="loading">
@@ -160,7 +170,7 @@
                     ></iframe>
                 </div>
             </div>
-        </el-main>
+        </el-main></el-scrollbar>
     </el-container>
 </div>
 <!--下雪-->
