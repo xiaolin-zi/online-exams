@@ -105,7 +105,7 @@
                           :preview-src-list="[ `/common/download?name=${row.image}` ]" >
                 </el-image></div>
                 <div v-else>
-                    <img th:src="@{/img/img.png}"  style="width: 00px; height: 100px; border:none;" >
+                    <img th:src="@{/img/img.png}"  style="width: 100px; height: 100px; border:none;" >
                 </div>
             </template></el-table-column>
         <el-table-column
@@ -253,7 +253,7 @@
             :visible.sync="dialogUpdate1"
             width="30%">
         <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
-            <el-form-item label="附加图片" prop="image2" >
+            <el-form-item label="图片识别" prop="image2" >
                 <el-upload
                         class="avatar-uploader2"
                         action="/common/upload"
@@ -265,7 +265,7 @@
                 </el-upload>
             </el-form-item>
             <el-form-item label="题目" prop="title">
-                <el-input v-model="exam.title"></el-input>
+                <el-input v-model="exam.title" id="exam-title"></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optionA">
                 <el-input v-model="exam.optionA"></el-input>
@@ -363,6 +363,7 @@
 <script th:src="@{/js/elementui/index.js}"></script>
 <link rel="stylesheet" th:href="@{/css/elementui/index.css}">
 <script th:src="@{/js/axios.js}"></script>
+<script th:src="@{/js/jquery.js}"></script>
 <script>
     new Vue({
         el:"#app",
@@ -496,10 +497,46 @@
                 console.log(res)
                 this.imageUrl = `/common/download?name=${res}`;
             },
-            handleAvatarSuccess2(res) {
+            handleAvatarSuccess2(res,file,fileList) {
                 this.exam.image=res;
                 console.log(res)
                 this.imageUrl2 = `/common/download?name=${res}`;
+                //图片识别
+                //获取上传的图片用于展示
+                var img = fileList[0].raw;
+                console.log(img);
+                //这里做图片大小限制
+                if(img.size/1024>1024*10){
+                    alert('上传图片不能大于10M');
+                    //调用函数,对图片进行压缩
+                    // compress(fileObj,function (imgBase64) {
+                    //     base64 = imgBase64;
+                    // })
+                    return;
+                }
+                var formData = new FormData();
+                formData.append("file",img);
+                //调用接口
+                axios({
+                    url: "/eduMap",
+                    method: "post",
+                    data: formData,
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                }).then(function (response) {
+                    console.log(response);
+                    console.log(response.data);
+                    let string = response.data;
+                    var result = document.getElementById("exam-title");
+                    // alert(result);
+                    // 处理成功情况
+                    result.value = string;
+
+                    // this.exam.title = string;
+                }).catch(function (error) {
+                    // 处理失败情况
+                    alert("上传失败！");
+                    console.log(error.message)
+                });
             },
             addQue(){
                 axios.post("/question",this.exam).then((resp)=>{
@@ -513,9 +550,14 @@
                         this.exam.types='';
                     } this.getAll();
                 })
-            },
+            }
         }
-    })
+    });
+
+
+
+
+
 </script>
 </body>
 </html>
