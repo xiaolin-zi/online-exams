@@ -226,7 +226,7 @@
 
             <el-form-item>
                 <el-button type="success" @click="updateQue">提交</el-button>
-                <el-button @click="dialogEdit = false">取消</el-button>
+                <el-button @click="dialogEdit = false, exam.title='', exam.types=''">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
