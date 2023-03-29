@@ -100,6 +100,11 @@ public class UserController {
     public String getForm(){
         return "/form";
     }
+    //跳转到添加错题表单
+    @GetMapping("/form2")
+    public String getForm2(){
+        return "/form2";
+    }
 
 
 

@@ -31,19 +31,9 @@
 </head>
 <body>
 <div id="app">
+
     <!--添加数据对话框表单-->
         <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
-            <el-form-item label="附加图片" prop="image2" >
-                <el-upload
-                        class="avatar-uploader"
-                        action="/common/upload"
-                        :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </el-form-item>
             <el-form-item label="题目" prop="title">
                 <el-input v-model="exam.title"></el-input>
             </el-form-item>

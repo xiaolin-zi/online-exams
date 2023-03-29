@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .avatar-uploader .el-upload:hover {
+            border-color: rgb(0, 204, 126);
+        }
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -27,8 +48,8 @@
         <el-form-item>
             <el-button type="success" @click="onSubmit">查询</el-button>
         </el-form-item>
-        <el-button type="success" plain @click="">图片上传</el-button>
-        <el-button type="success" plain @click="">语音输入</el-button>
+            <el-button type="success" plain ><a th:href="@{/user/form}">图片上传</a></el-button>
+        <el-button type="success" plain><a th:href="@{/user/form2}">语音输入</a></el-button>
         </el-form>
     </el-row>
     <el-table
@@ -54,7 +75,7 @@
                           :preview-src-list="[ `/common/download?name=${row.image}` ]" >
                 </el-image></div>
                 <div v-else>
-                    <img th:src="@{/img/img.png}"  style="width: 00px; height: 100px; border:none;" >
+                    <img th:src="@{/img/img.png}"  style="width: 100px; height: 100px; border:none;" >
                 </div>
             </template></el-table-column>
         <el-table-column
@@ -164,10 +185,21 @@
                     <el-option label="数据结构" value="4"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="附加图片" prop="image" >
+                <el-upload
+                        class="avatar-uploader"
+                        action="/common/upload"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <img v-else th:src="@{/img/img.png}">
+                </el-upload>
+            </el-form-item>
 
             <el-form-item>
                 <el-button type="success" @click="updateQue">提交</el-button>
-                <el-button @click="dialogEdit = false,exam={}">取消</el-button>
+                <el-button @click="dialogEdit = false,exam={},imageUrl=''">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -240,6 +272,7 @@
                     if (resp) {
                         this.dialogEdit = false;
                         this.exam={};
+                        this.imageUrl='';
                         this.getAll();
 
                     }
@@ -272,6 +305,24 @@
             handleCurrentChange(val) {
                 this.page=val;
                 this.getAll();
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type ===
+                    'image/jpeg'
+                    ||'image/jpeg'
+                    || 'image/png'
+                    ||"image/bmp"
+                    || "image/gif";
+
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
             },
             handleAvatarSuccess(res) {
                 this.exam.image=res;
