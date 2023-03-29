@@ -63,7 +63,7 @@
             </div>
             <ul class="nav-main">
                 <li class="main-item">
-                    <a href="#">首页</a>
+                    <a th:href="@{/user/index}">首页</a>
                 </li>
                 <li class="main-item item-menu">
                     <a href="#">个人中心</a>
@@ -98,7 +98,7 @@
 
             <div class="nav-right" th:if="${session.user}==null">
                 <li class="main-item">
-                    <a href="#">登录/注册</a>
+                    <a th:href="@{/tologin}">登录/注册</a>
                 </li>
             </div>
 
@@ -138,6 +138,10 @@
                         <span slot="title">{{ item.name }}</span>
                     </el-menu-item>
                 </div>
+                <el-menu-item >
+                    <i class="icon-tuichudenglu1 iconfont"></i>
+                    <a  @click="logout()" id="logout" slot="title">退出登录</a>
+                </el-menu-item>
             </el-menu>
         </el-aside>
         <el-main>
@@ -152,6 +156,7 @@
                             width="100%"
                             height="100%"
                             v-show="!loading"
+
                     ></iframe>
                 </div>
             </div>
@@ -190,13 +195,13 @@
                                 id: '1-1',
                                 title: '图片上传',
                                 class: 'icon-xiangce iconfont',
-                                url: 'form',
+                                url: '/user/form',
                             },
                             {
                                 id: '1-2',
                                 title: '语音输入',
                                 class: 'icon-yuyin iconfont',
-                                url: 'page/food/list.html',
+                                url: '/user/page',
                             }
                         ]
                     },
@@ -204,28 +209,22 @@
                         id: '2',
                         name: '重做错题',
                         class: 'icon-zhongxinpingjuan iconfont',
-                        url: '',
+                        url: '/user/page',
                     },
                     {
                         id: '3',
                         name: '错题测试',
                         class: 'icon-ceshi iconfont',
-                        url: 'test',
+                        url: '/user/test',
                     },
                     {
                         id: '4',
                         name: '错题查看',
                         class: 'icon-chakan iconfont',
-                        url: 'page',
-                    },
-                    {
-                        id: '5',
-                        name: '退出登录',
-                        class: 'icon-tuichudenglu1 iconfont',
-                        url: 'logout',
+                        url: '/user/page',
                     }
                 ],
-                iframeUrl: 'page',
+                iframeUrl: '/user/note',
                 goBackFlag: false,
                 loading: true,
                 timer: null
@@ -236,9 +235,11 @@
         },
         methods: {
             logout() {
-                axios.post("logout").then((res) => {
-                    window.location.href = 'userLoginSuccess'
-                })
+                    if(confirm("确定退出登录吗？")) {
+                        window.location.href = 'http://localhost/user/logout';
+                    }else{
+                        return false;
+                    }
             },
             goBack() {
                 const menu = this.menuList.find(item => item.id === this.menuActived)

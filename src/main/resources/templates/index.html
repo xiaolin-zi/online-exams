@@ -172,7 +172,7 @@
                 [[${regist_msg}]]
             </span>
 		</div>
-		<form th:action="@{/userRegistSuccess}" method="post">
+		<form th:action="@{/user/regist}" method="post">
 			<input type="text" placeholder="请输入用户名" th:value="${username}" id="regist-username" name="username" class="username" >
 			<input type="password" placeholder="请输入密码" th:value="${password}" id="regist-password" name="password" class="password" >
 			<input type="password" placeholder="确认密码" th:value="${password}"  name="repwd" id="repwd">
