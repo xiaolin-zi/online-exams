@@ -32,6 +32,11 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+        </dependency>
+
 
 
         <dependency>

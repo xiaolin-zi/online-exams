@@ -198,22 +198,9 @@
                 menuList: [
                     {
                         id: '1',
-                        name: '错题上传',
-                        class: 'icon-shangchuan1 iconfont',
-                        lists: [
-                            {
-                                id: '1-1',
-                                title: '图片上传',
-                                class: 'icon-xiangce iconfont',
-                                url: '/user/form',
-                            },
-                            {
-                                id: '1-2',
-                                title: '语音输入',
-                                class: 'icon-yuyin iconfont',
-                                url: '/user/page',
-                            }
-                        ]
+                        name: '错题集',
+                        class: 'icon-chakan iconfont',
+                        url: '/user/page',
                     },
                     {
                         id: '2',
@@ -226,17 +213,11 @@
                         name: '错题测试',
                         class: 'icon-ceshi iconfont',
                         url: '/user/test',
-                    },
-                    {
-                        id: '4',
-                        name: '错题查看',
-                        class: 'icon-chakan iconfont',
-                        url: '/user/page',
                     }
                 ],
                 iframeUrl: '/user/note',
                 goBackFlag: false,
-                loading: true,
+                loading: false,
                 timer: null
             }
         },
