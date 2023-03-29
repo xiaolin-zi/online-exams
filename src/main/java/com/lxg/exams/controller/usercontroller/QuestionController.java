@@ -27,8 +27,10 @@ public class QuestionController {
     @GetMapping("{page}/{pageSize}")
     public Page page(@PathVariable int page, @PathVariable int pageSize, Question question,HttpSession session){
         Integer uid = (Integer) session.getAttribute("uid");
-        Page<Question> quePage=new Page<>(page,pageSize);
+        System.out.println(uid);
+        Page quePage=new Page(page,pageSize);
         LambdaQueryWrapper<Question> lqw=new LambdaQueryWrapper<>();
+        lqw.eq(question.getIsdeleted()!=null,Question::getIsdeleted,0);
         lqw.eq(question.getUid()!=null,Question::getUid,uid);
         lqw.eq(question.getTypes()!=null,Question::getTypes,question.getTypes());
         lqw.like(question.getTitle()!=null,Question::getTitle,question.getTitle());

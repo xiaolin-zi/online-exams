@@ -89,9 +89,10 @@ public class loginController {
      * @return
      */
     @PostMapping("/logout")
-    public void logout(HttpServletRequest request){
+    public String logout(HttpServletRequest request){
         //清理Session中保存的当前登录员工的id
         request.getSession().removeAttribute("uid");
+        return "index";
     }
     //跳转到添加错题表单
     @GetMapping("form")
