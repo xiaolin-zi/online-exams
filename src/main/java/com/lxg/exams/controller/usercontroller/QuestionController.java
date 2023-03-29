@@ -32,8 +32,8 @@ public class QuestionController {
         LambdaQueryWrapper<Question> lqw = new LambdaQueryWrapper<>();
         lqw.eq(Question::getIsdeleted, 0);
         lqw.eq(Question::getUid, uid);
-        lqw.eq(Question::getTypes, question.getTypes());
-        lqw.like(Question::getTitle, question.getTitle());
+        lqw.eq(question.getTypes()!=null,Question::getTypes, question.getTypes());
+        lqw.like(question.getTitle()!=null,Question::getTitle, question.getTitle());
         questionService.page(quePage, lqw);
         return quePage;
     }
