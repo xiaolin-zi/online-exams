@@ -73,7 +73,7 @@
         }
 
         .main-item:hover {
-            background-color: rgb(0, 204, 126);
+            background-color: #67c23a;
             border-radius: 10px;
         }
 
@@ -126,7 +126,7 @@
 
 
         .secondaryMenu li:hover {
-            background-color: rgb(0, 204, 126);
+            background-color: #67c23a;
             border-radius: 10px;
         }
 

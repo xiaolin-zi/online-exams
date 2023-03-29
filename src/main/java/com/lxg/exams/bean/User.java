@@ -35,6 +35,8 @@ public class User implements Serializable {
      */
     private String password;
 
+    private String avatar;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 

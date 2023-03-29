@@ -5,7 +5,31 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
-
+<style>
+	.avatar-uploader .el-upload {
+		border: 1px dashed #d9d9d9;
+		border-radius: 6px;
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+	}
+	.avatar-uploader .el-upload:hover {
+		border-color: rgb(0, 204, 126);
+	}
+	.avatar-uploader-icon {
+		font-size: 28px;
+		color: #8c939d;
+		width: 100px;
+		height: 100px;
+		line-height: 100px;
+		text-align: center;
+	}
+	.avatar {
+		width: 100px;
+		height: 100px;
+		display: block;
+	}
+</style>
 
 	<link rel="icon" th:href="@{/img/logo.png}" type="image/x-icon"/>
 
@@ -178,6 +202,16 @@
 			<input type="password" placeholder="确认密码" th:value="${password}"  name="repwd" id="repwd">
 			<input class="yzm" type="text" placeholder="验证码" autocomplete="off" name="code" id="code">
 			<img id="code_img" alt="" th:src="@{/kaptcha}">
+			<div id="image" prop="avatar" name="avatar">头像
+			<el-upload
+					class="avatar-uploader"
+					action="/common/upload"
+					:show-file-list="false"
+					:on-success="handleAvatarSuccess"
+					:before-upload="beforeAvatarUpload">
+				<img v-if="imageUrl" :src="imageUrl" class="avatar">
+				<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+			</el-upload></div>
 			<button type="submit" id="regist_bt" >注册</button><br>
 		</form>
 		<div id="toLogin">
@@ -190,6 +224,10 @@
 <!--下雪-->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="http://www.lmlblog.com/winter/templets/xq/js/snowy.js"></script>
+<script th:src="@{/js/vue.js}"></script>
+<script th:src="@{/js/elementui/index.js}"></script>
+<link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+<script th:src="@{/js/axios.js}"></script>
 <style type="text/css">
 	.snow-container {
 		position: fixed;
@@ -238,7 +276,40 @@
 
 
 	});
+	new Vue({
+		el:"#image",
+		data(){
+			return{
+				imageUrl: '',
+				avatar:""
+			};
+		},
+		methods:{
+			beforeAvatarUpload(file) {
+				const isJPG = file.type ===
+						'image/jpeg'
+						||'image/jpeg'
+						|| 'image/png'
+						||"image/bmp"
+						|| "image/gif";
 
+				const isLt2M = file.size / 1024 / 1024 < 2;
+
+				if (!isJPG) {
+					this.$message.error('上传头像图片只能是 JPG 格式!');
+				}
+				if (!isLt2M) {
+					this.$message.error('上传头像图片大小不能超过 2MB!');
+				}
+				return isJPG && isLt2M;
+			},
+			handleAvatarSuccess(res) {
+				this.avatar=res;
+				console.log(res)
+				this.imageUrl = `/common/download?name=${res}`
+			}
+		}
+	})
 </script>
 </body>
 </html>

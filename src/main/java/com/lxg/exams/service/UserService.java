@@ -12,7 +12,7 @@ public interface UserService extends IService<User> {
 
     User getUser(String username, String password);
 
-    int addUser(String username,String password);
+    int addUser(String username,String password,String avatar);
 
     User getUserByUsername(String username);
 }

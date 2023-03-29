@@ -11,7 +11,7 @@
             overflow: hidden;
         }
         .avatar-uploader .el-upload:hover {
-            border-color: rgb(0, 204, 126);
+            border-color:#67c23a;
         }
         .avatar-uploader-icon {
             font-size: 28px;
@@ -32,7 +32,7 @@
             overflow: hidden;
         }
         .avatar-uploader2 .el-upload:hover {
-            border-color: rgb(0, 204, 126);
+            border-color:#67c23a;
         }
         .avatar-uploader-icon {
             font-size: 28px;
@@ -154,7 +154,7 @@
                         type="text"
                         size="small"
                         class="blueBug"
-                        color=" rgb(0, 204, 126)"
+                        color="#67c23a"
                         @click="dialogEdit=true,exam=scope.row,handleAvatarSuccess(scope.row.image)"
                 >
                     修改
@@ -165,7 +165,7 @@
                             type="text"
                             size="small"
                             class="blueBug"
-                            color=" rgb(0, 204, 126)"
+                            color="#67c23a"
                             @click="dialogEdit=true,exam=scope.row"
                     >
                         修改
@@ -176,7 +176,7 @@
                         size="small"
                         class="delBut non"
                         :plain="true"
-                        color=" rgb(0, 204, 126)"
+                        color="#67c23a"
                         @click="deleteHandle(scope.row.id);"
                 >
                     删除
@@ -193,7 +193,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
             background
-            color="rgb(0, 204, 126)"
+            color="#67c23a"
            >
     </el-pagination>
     <!--修改对话框-->
