@@ -122,10 +122,14 @@
             <artifactId>commons-io</artifactId>
             <version>2.11.0</version>
         </dependency>
-
-
-    </dependencies>
-
+<!--
+        &lt;!&ndash; Maven依赖关系以获取Thymeleaf 3 (核心) &ndash;&gt;
+        <dependency>
+        <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>3.0.12.RELEASE</version>
+        </dependency>-->
+</dependencies>
     <build>
         <plugins>
             <plugin>
