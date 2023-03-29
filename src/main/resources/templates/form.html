@@ -121,16 +121,6 @@
             };
         },
         methods:{
-            addQue(){
-                axios.post("/question",this.exam).then((resp)=>{
-                    console.log(resp);
-                    if (resp){
-                        this.dialogVisible=false;
-                        this.exam={};
-                        this.imageUrl='';
-                    }
-                })
-            },
             beforeAvatarUpload(file) {
                 const isJPG = file.type ===
                     'image/jpeg'
