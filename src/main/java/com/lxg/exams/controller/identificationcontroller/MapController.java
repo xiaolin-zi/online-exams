@@ -43,11 +43,9 @@ public class MapController {
 
             // 注意这里仅为了简化编码每一次请求都去获取access_token，线上环境access_token有过期时间， 客户端可自行缓存，过期后重新获取。
             String accessToken = Token.getToken("lWwaEtuBTqFVt0P6KyFC9YCG","zxSxW17DDAK7l2u1PLGSiTgsMjyxa5Zb");
-            System.out.println(accessToken);
 
             String result = HttpUtil.post(url, accessToken, param);
 
-            System.out.println(result);
 
             JSONObject json = new JSONObject(result);//将字符串重新转JSON
             JSONArray str = json.getJSONArray("words_result");//识别都内容都放在键为words_result的数组中
@@ -57,7 +55,6 @@ public class MapController {
             for(int i = 0;i<str.length();i++) {//遍历
                 result0+=((JSONObject)str.get(i)).get("words")+"\n";//必须进行强转，因为str1.get(i)返回的是Object对象，是最顶层的父类。get("words")只返回value值
             }
-            System.out.print(result0);
             return result0;
         } catch (Exception e) {
             e.printStackTrace();

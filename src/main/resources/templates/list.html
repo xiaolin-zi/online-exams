@@ -280,7 +280,6 @@
                         ref="upload"
                         class="avatar-uploader2"
                         action="/common/upload"
-                        :on-success="handleAvatarSuccess2"
                         :show-file-list="false"
                         :on-change="handleupload"
                         :before-upload="beforeAvatarUpload">
@@ -315,7 +314,7 @@
                     <el-option label="数据结构" value="4"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="附加图片" prop="image" v-model="exam.image">
+            <el-form-item label="附加图片"  v-model="exam.image">
                 <el-upload
                         :auto-upload="false"
                         ref="fujiaImg"
@@ -549,7 +548,7 @@
                 var reader = new FileReader();
                 reader.readAsDataURL(img);
                 //改为箭头函数，不然this指向的是reader
-                reader.onload = (e)=> {
+                reader.onload = (e) => {
                     if (reader.readyState == 2) {
                         // console.log(e.target.result);
                         // alert("我运行了")
@@ -596,14 +595,14 @@
 
 
             //附加图片或修改图片的展示change
-            handleFuJiaImgupload(file,fileList){
+            handleFuJiaImgupload(file, fileList) {
                 //获取上传的图片用于展示
                 var img = fileList[0].raw;
                 //展示图片
                 var reader = new FileReader();
                 reader.readAsDataURL(img);
                 //改为箭头函数，不然this指向的是reader
-                reader.onload = (e)=> {
+                reader.onload = (e) => {
                     if (reader.readyState == 2) {
                         // console.log(e.target.result);
                         // alert("我运行了")
@@ -623,29 +622,34 @@
             },
 
             //用于识别的图片上传成功后处理
-            handleAvatarSuccess2(res, file, fileList) {
+           /* handleAvatarSuccess2(res, file, fileList) {
                 this.exam.image = res;
                 console.log(res);
                 console.log("用于识别的图片上传成功！");
                 // this.imageUrl2 = `/common/download?name=${res}`;
                 this.imageUrl2 = `/api/img/${res}`;
-            },
+            },*/
 
             //语音添加
-            speechAddQue(){
+            speechAddQue() {
                 this.$refs.yuyinImg.submit();
-                axios.post("/question", this.exam).then((resp) => {
-                    console.log(resp);
-                    if (resp) {
-                        this.dialogUpdate1 = false;
-                        this.dialogUpdate2 = false;
-                        this.imageUrl = '';
-                        this.imageUrl2 = '';
-                        this.exam.title = '';
-                        this.exam.types = '';
-                    }
-                    this.getAll();
-                })
+
+                setTimeout(()=>{
+                    axios.post("/question", this.exam).then((resp) => {
+                        console.log(resp);
+                        if (resp) {
+                            this.dialogUpdate1 = false;
+                            this.dialogUpdate2 = false;
+                            this.imageUrl = '';
+                            this.imageUrl2 = '';
+                            this.exam.title = '';
+                            this.exam.types = '';
+                        }
+                        this.getAll();
+                    });
+                },1000);
+
+
             },
 
 
@@ -653,39 +657,46 @@
             addQue() {
 
                 //点击提交把图片进行上传
-                this.$refs.upload.submit();
+                // this.$refs.upload.submit();//这个识别的图片不需要上传
                 this.$refs.fujiaImg.submit();
 
-                axios.post("/question", this.exam).then((resp) => {
-                    console.log(resp);
-                    if (resp) {
-                        this.dialogUpdate1 = false;
-                        this.dialogUpdate2 = false;
-                        this.imageUrl = '';
-                        this.imageUrl2 = '';
-                        this.exam.title = '';
-                        this.exam.types = '';
-                    }
-                    this.getAll();
-                })
+                setTimeout(()=>{
+                    axios.post("/question", this.exam).then((resp) => {
+                        console.log(resp);
+                        if (resp) {
+                            this.dialogUpdate1 = false;
+                            this.dialogUpdate2 = false;
+                            this.imageUrl = '';
+                            this.imageUrl2 = '';
+                            this.exam.title = '';
+                            this.exam.types = '';
+                        }
+                        this.getAll();
+                    });
+                },1000);
+
             },
             //图片修改
             updateQue() {
                 //提交修改图片的上传
                 this.$refs.xiugaiImg.submit();
-                axios.put("/question", this.exam).then((resp) => {
-                    if (resp) {
-                        this.dialogEdit = false;
-                        this.imageUrl = '';
-                        this.exam.title = '';
-                        this.exam.types = '';
-                        this.getAll();
-                        this.$message({
-                            type: 'success',
-                            message: '修改成功!'
-                        });
-                    }
-                });
+
+                setTimeout(()=>{
+                    axios.put("/question", this.exam).then((resp) => {
+                        if (resp) {
+                            this.dialogEdit = false;
+                            this.imageUrl = '';
+                            this.exam.title = '';
+                            this.exam.types = '';
+                            this.getAll();
+                            this.$message({
+                                type: 'success',
+                                message: '修改成功!'
+                            });
+                        }
+                    });
+                },1000);
+
             },
             //语音识别
             speech(e) {
