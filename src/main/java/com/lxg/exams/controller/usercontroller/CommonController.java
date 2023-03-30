@@ -24,15 +24,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/common")
 public class CommonController {
-    //window固定基础路径
+    //固定基础路径
     @Value("${image.path}")
     private String basePath;
 
 
-
-    //linux固定基础路径
-    @Value("${image.uploadFolder}")
-    private String uploadFolder;
 
 
     /**

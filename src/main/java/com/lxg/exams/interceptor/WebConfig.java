@@ -23,8 +23,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${image.staticAccessPath}")
     private String staticAccessPath;
 
-    @Value("${image.uploadFolder}")
-    private String uploadFolder;
 
     @Value("${image.path}")
     private String basePath;

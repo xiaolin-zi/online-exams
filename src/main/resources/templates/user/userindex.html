@@ -12,6 +12,7 @@
     <script th:src="@{/js/axios.js}"></script>
     <link rel="stylesheet" href="//at.alicdn.com/t/c/font_3976993_tchrl6iqwv.css">
     <link rel="stylesheet" th:href="@{/css/userindex-topbar.css}">
+
     <style>
         .el-aside {
             background-color: #ffffff;
@@ -226,7 +227,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    window.location.href = 'http://localhost/user/logout';
+                    window.location.href = '/user/logout';
                     this.$message({
                         type: 'success',
                         message: '已退出登录!'

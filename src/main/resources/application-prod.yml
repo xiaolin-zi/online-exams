@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/online_exams?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://106.55.228.118:3306/online_exams?characterEncoding=utf-8&useSSL=false
   servlet:
     multipart:
       max-file-size: 10MB
@@ -25,11 +25,11 @@ mybatis-plus:
 
 
 exam:
-  basePath: http://localhost/
+  basePath: http://106.55.228.118/
 
 image:
   #window系统用
-  path: E:/examsImg/
+#  path: E:/examsImg/
 
   #静态资源对外暴露的访问路径
   staticAccessPath: /api/img/**
@@ -37,3 +37,4 @@ image:
   #linux系统用
   #静态资源实际存储路径
 #  uploadFolder: /examImg/
+  path: /examImg/
