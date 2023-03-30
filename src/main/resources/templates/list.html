@@ -248,13 +248,13 @@
             <el-form-item label="附加图片" prop="image">
                 <el-upload
                         ref="xiugaiImg"
+                        :on-error="handleUploadError1"
                         :auto-upload="false"
                         :on-change="handleFuJiaImgupload"
                         class="avatar-uploader"
                         action="/common/upload"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
+                        :on-success="handleAvatarSuccess">
                     <img v-if="imageUrl" :src="imageUrl" class="avatar additional figures">
                     <img v-else th:src="@{/img/img.png}" class="additionalfigures">
                 </el-upload>
@@ -282,7 +282,7 @@
                         action="/common/upload"
                         :show-file-list="false"
                         :on-change="handleupload"
-                        :before-upload="beforeAvatarUpload">
+                        >
                     <img v-if="imageUrl2" :src="imageUrl2" class="avatar2">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
@@ -323,7 +323,7 @@
                         :on-change="handleFuJiaImgupload"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
+                        >
                     <img v-if="imageUrl" :src="imageUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
@@ -378,7 +378,7 @@
                         action="/common/upload"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
+                        >
                     <img v-if="imageUrl" :src="imageUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
@@ -519,24 +519,8 @@
                 this.page = val;
                 this.getAll();
             },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type ===
-                    'image/jpeg'
-                    || 'image/jpeg'
-                    || 'image/png'
-                    || "image/bmp"
-                    || "image/gif";
 
-                const isLt2M = file.size / 1024 / 1024 < 2;
 
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
-                }
-                return isJPG && isLt2M;
-            },
 
 
             //图片识别的图片展示chanage
@@ -647,7 +631,7 @@
                         }
                         this.getAll();
                     });
-                },500);
+                },1000);
 
 
             },
@@ -673,7 +657,7 @@
                         }
                         this.getAll();
                     });
-                },500);
+                },1000);
 
             },
             //图片修改
@@ -695,7 +679,7 @@
                             });
                         }
                     });
-                },500);
+                },1000);
 
             },
             //语音识别
