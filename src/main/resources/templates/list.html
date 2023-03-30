@@ -59,6 +59,11 @@
             width: 100px;
             height: 100px;
         }
+
+        .el-pager li.active {
+            color: #67c23a;
+            cursor: default;
+        }
     </style>
 </head>
 <body>
@@ -84,8 +89,8 @@
                 <el-button type="success" @click="onSubmit">查询</el-button>
             </el-form-item>
             <el-row style="float: right">
-                <el-button type="success" plain @click="exam={},dialogUpdate1=true">图片上传</el-button>
-                <el-button type="success" plain @click="exam={},dialogUpdate2=true">语音输入</el-button>
+                <el-button type="success" plain @click="exam={},dialogUpdate1=true">图片上传</i></el-button>
+                <el-button type="success" plain @click="exam={},dialogUpdate2=true">语音输入</i></el-button>
             </el-row>
         </el-form>
     </el-row>
