@@ -10,9 +10,11 @@
             border-radius: 6px;
             overflow: hidden;
         }
+
         .avatar-uploader .el-upload:hover {
-            border-color:#67c23a;
+            border-color: #67c23a;
         }
+
         .avatar-uploader-icon {
             font-size: 28px;
             color: #8c939d;
@@ -21,19 +23,23 @@
             line-height: 100px;
             text-align: center;
         }
+
         .avatar {
             width: 100px;
             height: 100px;
             display: block;
         }
+
         .avatar-uploader2 .el-upload {
             border: 1px dashed #d9d9d9;
             border-radius: 6px;
             overflow: hidden;
         }
+
         .avatar-uploader2 .el-upload:hover {
-            border-color:#67c23a;
+            border-color: #67c23a;
         }
+
         .avatar-uploader-icon {
             font-size: 28px;
             color: #8c939d;
@@ -42,13 +48,14 @@
             line-height: 100px;
             text-align: center;
         }
+
         .avatar2 {
             width: 100px;
             height: 100px;
             display: block;
         }
 
-        .additionalfigures{
+        .additionalfigures {
             width: 100px;
             height: 100px;
         }
@@ -60,25 +67,25 @@
     <el-row>
         <el-form :inline="true" :model="exam" class="demo-form-inline">
 
-        <el-form-item label="题目相关词">
-            <el-input v-model="exam.title" placeholder="题目相关词"></el-input>
-        </el-form-item>
+            <el-form-item label="题目相关词">
+                <el-input v-model="exam.title" placeholder="题目相关词"></el-input>
+            </el-form-item>
 
-        <el-form-item label="科目">
-            <el-select v-model="exam.types" placeholder="科目">
-                <el-option label="计算机网络" value="1"></el-option>
-                <el-option label="操作系统" value="2"></el-option>
-                <el-option label="计算机组成原理" value="3"></el-option>
-                <el-option label="数据结构" value="4"></el-option>
-                <el-option label="全部" value=""></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="success" @click="onSubmit">查询</el-button>
-        </el-form-item>
+            <el-form-item label="科目">
+                <el-select v-model="exam.types" placeholder="科目">
+                    <el-option label="计算机网络" value="1"></el-option>
+                    <el-option label="操作系统" value="2"></el-option>
+                    <el-option label="计算机组成原理" value="3"></el-option>
+                    <el-option label="数据结构" value="4"></el-option>
+                    <el-option label="全部" value=""></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="success" @click="onSubmit">查询</el-button>
+            </el-form-item>
             <el-row style="float: right">
-            <el-button type="success" plain @click="exam={},dialogUpdate1=true" >图片上传</el-button>
-            <el-button type="success" plain @click="exam={},dialogUpdate2=true" >语音输入</el-button>
+                <el-button type="success" plain @click="exam={},dialogUpdate1=true">图片上传</el-button>
+                <el-button type="success" plain @click="exam={},dialogUpdate2=true">语音输入</el-button>
             </el-row>
         </el-form>
     </el-row>
@@ -92,7 +99,8 @@
         <el-table-column
                 prop="title"
                 label="题目"
-        /></el-table-column>
+        />
+        </el-table-column>
         <el-table-column
                 prop="image"
                 label="图片"
@@ -100,14 +108,16 @@
         >
             <template slot-scope="{ row }">
                 <div v-if="row.image">
-                <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
-                          :src="getImage(row.image)"
-                          :preview-src-list="[ `/common/download?name=${row.image}` ]" >
-                </el-image></div>
-                <div v-else>
-                    <img th:src="@{/img/img.png}"  style="width: 00px; height: 100px; border:none;" >
+                    <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
+                              :src="getImage(row.image)"
+                              :preview-src-list="[ `/common/download?name=${row.image}` ]">
+                    </el-image>
                 </div>
-            </template></el-table-column>
+                <div v-else>
+                    <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
+                </div>
+            </template>
+        </el-table-column>
         <el-table-column
                 prop="optionA"
                 label="选项A"
@@ -115,7 +125,8 @@
         <el-table-column
                 prop="optionB"
                 label="选项B"
-        /></el-table-column>
+        />
+        </el-table-column>
         <el-table-column
                 prop="optionC"
                 label="选项C"
@@ -150,15 +161,15 @@
         >
             <template slot-scope="scope">
                 <div v-if="scope.row.image">
-                <el-button
-                        type="text"
-                        size="small"
-                        class="blueBug"
-                        color="#67c23a"
-                        @click="dialogEdit=true,exam=scope.row,handleAvatarSuccess(scope.row.image)"
-                >
-                    修改
-                </el-button>
+                    <el-button
+                            type="text"
+                            size="small"
+                            class="blueBug"
+                            color="#67c23a"
+                            @click="dialogEdit=true,exam=scope.row,handleAvatarSuccess(scope.row.image)"
+                    >
+                        修改
+                    </el-button>
                 </div>
                 <div v-else>
                     <el-button
@@ -194,7 +205,7 @@
             :total="total"
             background
             color="#67c23a"
-           >
+    >
     </el-pagination>
     <!--修改对话框-->
     <el-dialog
@@ -203,7 +214,8 @@
             width="30%">
         <el-form ref="form" :model="exam" :rules="rules" label-width="80px">
             <el-form-item label="题目" prop="title">
-                <el-input v-model="exam.title"></el-input>
+                <el-input :autosize="{ minRows: 2, maxRows: 4}"
+                          placeholder="请输入题目" type="textarea" v-model="exam.title"></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optionA">
                 <el-input v-model="exam.optionA"></el-input>
@@ -221,21 +233,21 @@
                 <el-input v-model="exam.answer"></el-input>
             </el-form-item>
             <el-form-item label="科目类型" prop="types">
-                <el-select   v-model="exam.types" placeholder="请选择科目类型">
+                <el-select v-model="exam.types" placeholder="请选择科目类型">
                     <el-option label="计算机网络" value="1"></el-option>
                     <el-option label="操作系统" value="2"></el-option>
                     <el-option label="计算机组成原理" value="3"></el-option>
                     <el-option label="数据结构" value="4"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="附加图片" prop="image" >
+            <el-form-item label="附加图片" prop="image">
                 <el-upload
                         class="avatar-uploader"
                         action="/common/upload"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar additional figures" >
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar additional figures">
                     <img v-else th:src="@{/img/img.png}" class="additionalfigures">
                 </el-upload>
             </el-form-item>
@@ -243,7 +255,8 @@
             <el-form-item>
                 <el-button type="success" @click="updateQue">提交</el-button>
                 <a th:href="@{/user/page}">
-                <el-button type="success" plain >取消</el-button></a>
+                    <el-button type="success" plain>取消</el-button>
+                </a>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -253,7 +266,7 @@
             :visible.sync="dialogUpdate1"
             width="30%">
         <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
-            <el-form-item label="图片识别" prop="image2" >
+            <el-form-item label="图片识别" prop="image2">
                 <el-upload
                         class="avatar-uploader2"
                         action="/common/upload"
@@ -265,7 +278,7 @@
                 </el-upload>
             </el-form-item>
             <el-form-item label="题目" prop="title">
-                <el-input v-model="exam.title" id="exam-title"></el-input>
+                <el-input type="textarea" v-model="exam.title" id="exam-title" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入题目"></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optionA">
                 <el-input v-model="exam.optionA"></el-input>
@@ -283,7 +296,7 @@
                 <el-input v-model="exam.answer"></el-input>
             </el-form-item>
             <el-form-item label="科目类型" prop="types">
-                <el-select   v-model="exam.types" placeholder="请选择科目类型">
+                <el-select v-model="exam.types" placeholder="请选择科目类型">
                     <el-option label="计算机网络" value="1"></el-option>
                     <el-option label="操作系统" value="2"></el-option>
                     <el-option label="计算机组成原理" value="3"></el-option>
@@ -304,7 +317,8 @@
 
             <el-form-item>
                 <el-button type="success" @click="addQue">提交</el-button>
-                <el-button type="success" plain @click="dialogUpdate1 = false,exam.title='',exam.types=''">取消</el-button>
+                <el-button type="success" plain @click="dialogUpdate1 = false,exam.title='',exam.types=''">取消
+                </el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -315,7 +329,8 @@
             width="30%">
         <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
             <el-form-item label="题目" prop="title">
-                <el-input v-model="exam.title"></el-input>
+                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
+                          placeholder="请输入题目" v-model="exam.title" id="speech-exam-title"></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optionA">
                 <el-input v-model="exam.optionA"></el-input>
@@ -333,14 +348,14 @@
                 <el-input v-model="exam.answer"></el-input>
             </el-form-item>
             <el-form-item label="科目类型" prop="types">
-                <el-select   v-model="exam.types" placeholder="请选择科目类型">
+                <el-select v-model="exam.types" placeholder="请选择科目类型">
                     <el-option label="计算机网络" value="1"></el-option>
                     <el-option label="操作系统" value="2"></el-option>
                     <el-option label="计算机组成原理" value="3"></el-option>
                     <el-option label="数据结构" value="4"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="附加图片" prop="image" >
+            <el-form-item label="附加图片" prop="image">
                 <el-upload
                         class="avatar-uploader"
                         action="/common/upload"
@@ -350,11 +365,14 @@
                     <img v-if="imageUrl" :src="imageUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
+                <el-button type="success" @click="speech">开始识别</el-button>
             </el-form-item>
+
 
             <el-form-item>
                 <el-button type="success" @click="addQue">提交</el-button>
-                <el-button type="success" plain @click="dialogUpdate2 = false,exam.title='',exam.types=''">取消</el-button>
+                <el-button type="success" plain @click="dialogUpdate2 = false,exam.title='',exam.types=''">取消
+                </el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -364,44 +382,63 @@
 <link rel="stylesheet" th:href="@{/css/elementui/index.css}">
 <script th:src="@{/js/axios.js}"></script>
 <script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/js/recorder.js}"></script>
+
 <script>
+    var recorder = new Recorder({
+        sampleRate: 16000, //采样频率，默认为44100Hz(标准MP3采样率)
+        bitRate: 16, //比特率，默认为128kbps(标准MP3质量)
+        success: function(){ //成功回调函数
+            // start.disabled = false;
+        },
+        error: function(msg){ //失败回调函数
+            alert(msg);
+        },
+        fix: function(msg){ //不支持H5录音回调函数
+            alert(msg);
+        }
+    });
+
+
     new Vue({
-        el:"#app",
-        data(){
-            return{
-                tableData:[],
-                exam:{
-                    id:"",
-                    title:"",
-                    optionA:"",
-                    optionB:"",
-                    optionC:"",
-                    optionD:"",
-                    answer:"",
-                    types:"",
-                    image:"",
-                    image2:""
+        el: "#app",
+        data() {
+            return {
+                tableData: [],
+                exam: {
+                    id: "",
+                    title: "",
+                    optionA: "",
+                    optionB: "",
+                    optionC: "",
+                    optionD: "",
+                    answer: "",
+                    types: "",
+                    image: "",
+                    image2: ""
                 },
-                dialogEdit:false,
-                dialogUpdate1:false,
-                dialogUpdate2:false,
-                pageSize:10,
-                page:1,
-                total:0,//总记录数
-                rules:{
-                    title:[
-                        {required:true,message:"请输入题目",}
+                dialogEdit: false,
+                dialogUpdate1: false,
+                dialogUpdate2: false,
+                pageSize: 10,
+                page: 1,
+                total: 0,//总记录数
+                rules: {
+                    title: [
+                        {required: true, message: "请输入题目",}
                     ]
                 },
                 imageUrl: '',
                 imageUrl2: '',
-                fileList:[]
+                fileList: [],
+                //语音识别判断当前是否正在录音
+                isRecoding: false
             };
         },
-        created(){
+        created() {
             this.getAll()
         },
-        methods:{
+        methods: {
             //页面展示给予颜色分层
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex === 1) {
@@ -415,25 +452,25 @@
             onSubmit() {
                 this.getAll();
             },
-            getAll(){
-                var param="?title="+this.exam.title;
-                param+="&types="+this.exam.types;
-                axios.get("/question/"+this.page+"/"+this.pageSize+param).then(res=>{
+            getAll() {
+                var param = "?title=" + this.exam.title;
+                param += "&types=" + this.exam.types;
+                axios.get("/question/" + this.page + "/" + this.pageSize + param).then(res => {
                     console.log(res);
-                    this.total=res.data.total;
-                    this.tableData=res.data.records;
+                    this.total = res.data.total;
+                    this.tableData = res.data.records;
                 });
             },
-            getImage (image) {
+            getImage(image) {
                 return `/common/download?name=${image}`
             },
-            updateQue(){
+            updateQue() {
                 axios.put("/question", this.exam).then((resp) => {
                     if (resp) {
                         this.dialogEdit = false;
-                        this.imageUrl='';
-                        this.exam.title='';
-                        this.exam.types='';
+                        this.imageUrl = '';
+                        this.exam.title = '';
+                        this.exam.types = '';
                         this.getAll();
                         this.$message({
                             type: 'success',
@@ -442,14 +479,14 @@
                     }
                 });
             },
-            deleteHandle(id){
+            deleteHandle(id) {
                 this.$confirm('确定删除题目吗', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.delete("/question/"+id).then(resp=>{
-                        if (resp){
+                    axios.delete("/question/" + id).then(resp => {
+                        if (resp) {
                             this.getAll();
                             this.$message({
                                 type: 'success',
@@ -457,7 +494,7 @@
                             });
                         }
                     });
-                }).catch(()=>{
+                }).catch(() => {
                     //用户点击取消按钮
                     this.$message({
                         type: 'info',
@@ -467,19 +504,19 @@
             },
             //处理页码大小和当前页变动时候触发的事件
             handleSizeChange(val) {
-                this.pageSize=val;
+                this.pageSize = val;
                 this.getAll();
             },
             handleCurrentChange(val) {
-                this.page=val;
+                this.page = val;
                 this.getAll();
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type ===
                     'image/jpeg'
-                    ||'image/jpeg'
+                    || 'image/jpeg'
                     || 'image/png'
-                    ||"image/bmp"
+                    || "image/bmp"
                     || "image/gif";
 
                 const isLt2M = file.size / 1024 / 1024 < 2;
@@ -493,12 +530,12 @@
                 return isJPG && isLt2M;
             },
             handleAvatarSuccess(res) {
-                this.exam.image=res;
+                this.exam.image = res;
                 console.log(res)
                 this.imageUrl = `/common/download?name=${res}`;
             },
-            handleAvatarSuccess2(res,file,fileList) {
-                this.exam.image=res;
+            handleAvatarSuccess2(res, file, fileList) {
+                this.exam.image = res;
                 console.log(res)
                 this.imageUrl2 = `/common/download?name=${res}`;
                 //图片识别
@@ -506,22 +543,18 @@
                 var img = fileList[0].raw;
                 console.log(img);
                 //这里做图片大小限制
-                if(img.size/1024>1024*10){
+                if (img.size / 1024 > 1024 * 10) {
                     alert('上传图片不能大于10M');
-                    //调用函数,对图片进行压缩
-                    // compress(fileObj,function (imgBase64) {
-                    //     base64 = imgBase64;
-                    // })
                     return;
                 }
                 var formData = new FormData();
-                formData.append("file",img);
+                formData.append("file", img);
                 //调用接口
                 axios({
                     url: "/eduMap",
                     method: "post",
                     data: formData,
-                    headers: { 'Content-Type': 'multipart/form-data' }
+                    headers: {'Content-Type': 'multipart/form-data'}
                 }).then(function (response) {
                     console.log(response);
                     console.log(response.data);
@@ -530,7 +563,8 @@
                     // alert(result);
                     // 处理成功情况
                     result.value = string;
-
+                    //
+                    result.dispatchEvent(new Event('input'));
                     // this.exam.title = string;
                 }).catch(function (error) {
                     // 处理失败情况
@@ -538,24 +572,71 @@
                     console.log(error.message)
                 });
             },
-            addQue(){
-                axios.post("/question",this.exam).then((resp)=>{
+            addQue() {
+                axios.post("/question", this.exam).then((resp) => {
                     console.log(resp);
-                    if (resp){
-                        this.dialogUpdate1=false;
-                        this.dialogUpdate2=false;
-                        this.imageUrl='';
-                        this.imageUrl2='';
-                        this.exam.title='';
-                        this.exam.types='';
-                    } this.getAll();
+                    if (resp) {
+                        this.dialogUpdate1 = false;
+                        this.dialogUpdate2 = false;
+                        this.imageUrl = '';
+                        this.imageUrl2 = '';
+                        this.exam.title = '';
+                        this.exam.types = '';
+                    }
+                    this.getAll();
                 })
-            }
+            },
+            //语音识别
+            speech(e) {
+                console.log(recorder,"已经初始化");
+                //判断当前是否正在录音
+                if (!this.isRecoding) {
+                    timer = setTimeout(function () {
+                        e.target.innerHTML = "再次点击结束录音";
+                        recorder.start();
+                    }, 100);
+                } else {
+                    console.log("结束录音");
+                    recorder.stop();
+                    recorder.getBlob(function (blob) {
+                        console.log(blob);
+                        // 这么写是因为文件转换是异步任务
+                        transToFile = async(blob, fileName, fileType) => {
+                            return new window.File(blob, fileName, {type: fileType});
+                        }
+                        let textContain = transToFile([blob], ["yuyin.mp3"],[ "auto/mp3"])
+                        // 转换完成后可以将file对象传给接口
+                        textContain.then( (res)=> {
+                            let file = res;
+                            console.log(file);
+                            var formData = new FormData();
+                            formData.append("file", file);
+                            axios({
+                                // 请求方法
+                                method: 'POST',
+                                url: '/speechRecognition',
+                                // url参数
+                                data: formData,
+                                headers: {'Content-Type': 'multipart/form-data'}
+
+                            }).then(function (response) {
+
+                                console.log(response.data);
+                                let string = response.data;
+                                var result = document.getElementById('speech-exam-title');
+                                // 处理成功情况
+                                result.value = string;
+                                result.dispatchEvent(new Event('input'));
+                            });
+                        });
+                    });
+                    e.innerHTML = "开始";
+                    clearTimeout(timer);
+                }
+                this.isRecoding = !this.isRecoding;
+            },
         }
     });
-
-
-
 
 
 </script>
