@@ -8,6 +8,8 @@ class OnlineExamsApplicationTests {
 
     @Test
     void contextLoads() {
-    }
 
-}
+
+        }
+
+    }

@@ -110,7 +110,7 @@
                 <div v-if="row.image">
                     <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
                               :src="getImage(row.image)"
-                              :preview-src-list="[ `/common/download?name=${row.image}` ]">
+                              :preview-src-list="[ `/api/img/${row.image}` ]">
                     </el-image>
                 </div>
                 <div v-else>
@@ -215,7 +215,7 @@
         <el-form ref="form" :model="exam" :rules="rules" label-width="80px">
             <el-form-item label="题目" prop="title">
                 <el-input :autosize="{ minRows: 2, maxRows: 4}"
-                          placeholder="请输入题目" type="textarea" v-model="exam.title"></el-input>
+                          placeholder="请输入题目" type="textarea" v-model="exam.title" resize:none></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optionA">
                 <el-input v-model="exam.optionA"></el-input>
@@ -242,6 +242,9 @@
             </el-form-item>
             <el-form-item label="附加图片" prop="image">
                 <el-upload
+                        ref="xiugaiImg"
+                        :auto-upload="false"
+                        :on-change="handleFuJiaImgupload"
                         class="avatar-uploader"
                         action="/common/upload"
                         :show-file-list="false"
@@ -268,17 +271,21 @@
         <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
             <el-form-item label="图片识别" prop="image2">
                 <el-upload
+                        :auto-upload="false"
+                        ref="upload"
                         class="avatar-uploader2"
                         action="/common/upload"
-                        :show-file-list="false"
                         :on-success="handleAvatarSuccess2"
+                        :show-file-list="false"
+                        :on-change="handleupload"
                         :before-upload="beforeAvatarUpload">
                     <img v-if="imageUrl2" :src="imageUrl2" class="avatar2">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-form-item>
             <el-form-item label="题目" prop="title">
-                <el-input type="textarea" v-model="exam.title" id="exam-title" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入题目"></el-input>
+                <el-input type="textarea" v-model="exam.title" id="exam-title" :autosize="{ minRows: 2, maxRows: 4}"
+                          placeholder="请输入题目"></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optionA">
                 <el-input v-model="exam.optionA"></el-input>
@@ -305,8 +312,11 @@
             </el-form-item>
             <el-form-item label="附加图片" prop="image" v-model="exam.image">
                 <el-upload
+                        :auto-upload="false"
+                        ref="fujiaImg"
                         class="avatar-uploader"
                         action="/common/upload"
+                        :on-change="handleFuJiaImgupload"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
@@ -357,6 +367,9 @@
             </el-form-item>
             <el-form-item label="附加图片" prop="image">
                 <el-upload
+                        :auto-upload="false"
+                        :on-change="handleFuJiaImgupload"
+                        ref="yuyinImg"
                         class="avatar-uploader"
                         action="/common/upload"
                         :show-file-list="false"
@@ -385,16 +398,18 @@
 <script th:src="@{/js/recorder.js}"></script>
 
 <script>
+
+    //录音对象
     var recorder = new Recorder({
         sampleRate: 16000, //采样频率，默认为44100Hz(标准MP3采样率)
         bitRate: 16, //比特率，默认为128kbps(标准MP3质量)
-        success: function(){ //成功回调函数
+        success: function () { //成功回调函数
             // start.disabled = false;
         },
-        error: function(msg){ //失败回调函数
+        error: function (msg) { //失败回调函数
             alert(msg);
         },
-        fix: function(msg){ //不支持H5录音回调函数
+        fix: function (msg) { //不支持H5录音回调函数
             alert(msg);
         }
     });
@@ -432,7 +447,8 @@
                 imageUrl2: '',
                 fileList: [],
                 //语音识别判断当前是否正在录音
-                isRecoding: false
+                isRecoding: false,
+
             };
         },
         created() {
@@ -462,7 +478,8 @@
                 });
             },
             getImage(image) {
-                return `/common/download?name=${image}`
+                // return `/common/download?name=${image}`
+                return `/api/img/${image}`
             },
             updateQue() {
                 axios.put("/question", this.exam).then((resp) => {
@@ -532,14 +549,30 @@
             handleAvatarSuccess(res) {
                 this.exam.image = res;
                 console.log(res)
-                this.imageUrl = `/common/download?name=${res}`;
+                // this.imageUrl = `/common/download?name=${res}`;
+                this.imageUrl = `/api/img/${res}`;
             },
-            handleAvatarSuccess2(res, file, fileList) {
-                this.exam.image = res;
-                console.log(res)
-                this.imageUrl2 = `/common/download?name=${res}`;
-                //图片识别
+
+            //上传图片识别和展示
+            handleupload(file, fileList) {
                 //获取上传的图片用于展示
+                var img = fileList[0].raw;
+                console.log(img);
+                //展示图片
+                var reader = new FileReader();
+                reader.readAsDataURL(img);
+                //改为箭头函数，不然this指向的是reader
+                reader.onload = (e)=> {
+                    if (reader.readyState == 2) {
+                        // console.log(e.target.result);
+                        // alert("我运行了")
+                        // alert(this.imageUrl2)//undefined
+                        // alert(this);
+                        this.imageUrl2 = e.target.result;
+                    }
+                };
+
+                //图片识别
                 var img = fileList[0].raw;
                 console.log(img);
                 //这里做图片大小限制
@@ -556,8 +589,8 @@
                     data: formData,
                     headers: {'Content-Type': 'multipart/form-data'}
                 }).then(function (response) {
-                    console.log(response);
-                    console.log(response.data);
+                    // console.log(response);
+                    // console.log(response.data);
                     let string = response.data;
                     var result = document.getElementById("exam-title");
                     // alert(result);
@@ -571,8 +604,45 @@
                     alert("上传失败！");
                     console.log(error.message)
                 });
+
+            },
+
+
+            //附加图片的展示
+            handleFuJiaImgupload(file,fileList){
+                //获取上传的图片用于展示
+                var img = fileList[0].raw;
+                console.log(img);
+
+
+                //展示图片
+                var reader = new FileReader();
+                reader.readAsDataURL(img);
+                //改为箭头函数，不然this指向的是reader
+                reader.onload = (e)=> {
+                    if (reader.readyState == 2) {
+                        // console.log(e.target.result);
+                        // alert("我运行了")
+                        // alert(this.imageUrl2)//undefined
+                        // alert(this);
+                        this.imageUrl = e.target.result;
+                    }
+                };
+            },
+
+            //上传图片成功后处理
+            handleAvatarSuccess2(res, file, fileList) {
+                this.exam.image = res;
+                console.log(res)
+                // this.imageUrl2 = `/common/download?name=${res}`;
+                this.imageUrl2 = `/api/img/${res}`;
             },
             addQue() {
+                //点击提交把图片进行上传
+                this.$refs.upload.submit();
+                this.$refs.fujiaImg.submit();
+                this.$refs.xiugaiImg.submit();
+                this.$refs.yuyinImg.submit();
                 axios.post("/question", this.exam).then((resp) => {
                     console.log(resp);
                     if (resp) {
@@ -588,7 +658,7 @@
             },
             //语音识别
             speech(e) {
-                console.log(recorder,"已经初始化");
+                console.log(recorder, "已经初始化");
                 //判断当前是否正在录音
                 if (!this.isRecoding) {
                     timer = setTimeout(function () {
@@ -601,12 +671,12 @@
                     recorder.getBlob(function (blob) {
                         console.log(blob);
                         // 这么写是因为文件转换是异步任务
-                        transToFile = async(blob, fileName, fileType) => {
+                        transToFile = async (blob, fileName, fileType) => {
                             return new window.File(blob, fileName, {type: fileType});
                         }
-                        let textContain = transToFile([blob], ["yuyin.mp3"],[ "auto/mp3"])
+                        let textContain = transToFile([blob], ["yuyin.mp3"], ["auto/mp3"])
                         // 转换完成后可以将file对象传给接口
-                        textContain.then( (res)=> {
+                        textContain.then((res) => {
                             let file = res;
                             console.log(file);
                             var formData = new FormData();

@@ -22,9 +22,16 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/common")
 public class CommonController {
-    //固定基础路径
+    //window固定基础路径
     @Value("${image.path}")
     private String basePath;
+
+
+
+    //linux固定基础路径
+    @Value("${image.uploadFolder}")
+    private String uploadFolder;
+
 
     /**
      * 文件上传
@@ -52,13 +59,16 @@ public class CommonController {
         return fileName;
     }
 
+
+
+
     /**
      * 文件下载
      * @param name
      * @param response
      */
     //输出流需要通过response来获得
-    @GetMapping("/download")
+   /* @GetMapping("/download")
     public void download(String name, HttpServletResponse response) throws IOException {
         //输入流，通过输入流读取文件内容
         FileInputStream fileInputStream = new FileInputStream(basePath+name);
@@ -77,5 +87,5 @@ public class CommonController {
         //关闭资源
         outputStream.close();
         fileInputStream.close();
-    }
+    }*/
 }

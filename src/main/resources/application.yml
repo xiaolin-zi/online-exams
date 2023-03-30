@@ -22,4 +22,12 @@ mybatis-plus:
 
 
 image:
+  #window系统用
   path: E:\examsImg\
+
+  #静态资源对外暴露的访问路径
+  staticAccessPath: /api/img/**
+
+  #linux系统用
+  #静态资源实际存储路径
+  uploadFolder: /examImg/
