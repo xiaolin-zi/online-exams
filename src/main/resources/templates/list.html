@@ -59,10 +59,20 @@
             width: 100px;
             height: 100px;
         }
-
-        .el-pager li.active {
-            color: #67c23a;
-            cursor: default;
+/*content中的内容就是伪类要显示的文字或字符串内容*/
+        .btn-prev:before{
+            content: "<";
+        }
+        .btn-next:before{
+            content: ">";
+        }
+        .blueBug{
+            background-color: #67c23a;
+            color: #FFFFFF;
+        }
+        .delBut non{
+            background-color: #67c23a;
+            color: #FFFFFF;
         }
     </style>
 </head>
@@ -168,9 +178,8 @@
                 <div v-if="scope.row.image">
                     <el-button
                             type="text"
-                            size="small"
+                            size="medium"
                             class="blueBug"
-                            color="#67c23a"
                             @click="dialogEdit=true,exam=scope.row,handleAvatarSuccess(scope.row.image)"
                     >
                         修改
@@ -179,9 +188,8 @@
                 <div v-else>
                     <el-button
                             type="text"
-                            size="small"
+                            size="medium"
                             class="blueBug"
-                            color="#67c23a"
                             @click="dialogEdit=true,exam=scope.row"
                     >
                         修改
@@ -189,10 +197,8 @@
                 </div>
                 <el-button
                         type="text"
-                        size="small"
+                        size="medium"
                         class="delBut non"
-                        :plain="true"
-                        color="#67c23a"
                         @click="deleteHandle(scope.row.id);"
                 >
                     删除

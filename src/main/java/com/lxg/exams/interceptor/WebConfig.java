@@ -5,6 +5,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @auther xiaolin
  * @creatr 2023/3/28 13:37
@@ -16,11 +19,17 @@ public class WebConfig implements WebMvcConfigurer {
     //添加拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        List<String> patterns=new ArrayList<>();
+        patterns.add("/");
+        patterns.add("/user/login");
+        patterns.add("/css/**");
+        patterns.add("/img/**");
+        patterns.add("/js/**");
         registry.addInterceptor(new LoginInterceptor())
                 //拦截所有请求
                 .addPathPatterns("/**")
                 //排除的请求
-                .excludePathPatterns("/index.html","/user/login","/","/css/**","/js/**","/img/**");
+                .excludePathPatterns(patterns);
     }
 
 
