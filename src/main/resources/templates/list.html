@@ -581,7 +581,7 @@
             //附加图片或修改图片的展示change
             handleFuJiaImgupload(file, fileList) {
                 //获取上传的图片用于展示
-                var img = fileList[0].raw;
+                var img = file.raw;
                 //展示图片
                 var reader = new FileReader();
                 reader.readAsDataURL(img);
@@ -605,14 +605,7 @@
                 this.imageUrl = `/api/img/${res}`;
             },
 
-            //用于识别的图片上传成功后处理
-           /* handleAvatarSuccess2(res, file, fileList) {
-                this.exam.image = res;
-                console.log(res);
-                console.log("用于识别的图片上传成功！");
-                // this.imageUrl2 = `/common/download?name=${res}`;
-                this.imageUrl2 = `/api/img/${res}`;
-            },*/
+
 
             //语音添加
             speechAddQue() {
