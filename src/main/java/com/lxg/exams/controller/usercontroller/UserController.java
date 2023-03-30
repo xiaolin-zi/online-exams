@@ -104,12 +104,12 @@ public class UserController {
     //跳转到添加错题表单
     @GetMapping("/form")
     public String getForm(){
-        return "/form";
+        return "form";
     }
     //跳转到添加错题表单
     @GetMapping("/form2")
     public String getForm2(){
-        return "/form2";
+        return "form2";
     }
 
 
@@ -149,20 +149,20 @@ public class UserController {
     //用户首页
     @GetMapping("/index")
     public String index(){
-        return "/user/userindex";
+        return "user/userindex";
     }
 
     //用户首页展示内容
     @GetMapping("/note")
     public String note(){
-        return "/user/note";
+        return "user/note";
     }
 
 
     //错题测试
     @GetMapping("/test")
     public String getTest(){
-        return "/user/test";
+        return "user/test";
     }
 
 
