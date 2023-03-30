@@ -52,7 +52,6 @@ public class StudyMapController {
             //file转base64
 //            String myUrl = Base64Util.encode(file.getBytes());
             String myUrl = Base64Util.encode(bytes);
-            System.out.println(myUrl);
 
         try {
             // 本地文件路径
@@ -67,7 +66,6 @@ public class StudyMapController {
             String accessToken = Token.getToken("lWwaEtuBTqFVt0P6KyFC9YCG","zxSxW17DDAK7l2u1PLGSiTgsMjyxa5Zb");
             String result = HttpUtil.post(url, accessToken, param);
 
-            System.out.println(result);
 
             JSONObject json = new JSONObject(result);//将字符串重新转JSON
             JSONArray str = json.getJSONArray("results");//识别都内容都放在键为result的数组中
@@ -78,7 +76,6 @@ public class StudyMapController {
                 JSONObject words = (JSONObject) ((JSONObject) str.get(i)).get("words");
                 result0+=words.get("word")+"\n";
             }
-            System.out.print(result0);
             return result0;
         } catch (Exception e) {
             e.printStackTrace();

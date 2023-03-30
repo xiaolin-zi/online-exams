@@ -1,8 +1,10 @@
 package com.lxg.exams.interceptor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.ArrayList;
@@ -16,6 +18,22 @@ import java.util.List;
 //配置类
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+
+    @Value("${image.staticAccessPath}")
+    private String staticAccessPath;
+
+    @Value("${image.uploadFolder}")
+    private String uploadFolder;
+
+    @Value("${image.path}")
+    private String basePath;
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(staticAccessPath).addResourceLocations("file:" + basePath);
+    }
+
+
     //添加拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

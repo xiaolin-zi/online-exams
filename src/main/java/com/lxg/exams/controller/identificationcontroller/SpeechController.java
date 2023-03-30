@@ -31,7 +31,6 @@ public class SpeechController {
     @PostMapping("/speechRecognition")
     public String speechToText(@RequestParam("file") MultipartFile file) throws Exception {
 
-        System.out.println(file);
 
         //创建一个目录对象
         String path = System.getProperty("java.io.tmpdir");
@@ -52,7 +51,6 @@ public class SpeechController {
 
         WebIATWSUtils.start();
         Thread.sleep(1000);
-        System.out.println("");
         return WebIATWSUtils.getResult();
     }
 

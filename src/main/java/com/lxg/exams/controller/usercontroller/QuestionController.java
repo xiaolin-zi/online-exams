@@ -19,6 +19,7 @@ public class QuestionController {
 
     @PostMapping
     public Boolean addQue(@RequestBody Question question, HttpSession session) {
+        System.out.println(question+"===============================================");
         question.setUid((Integer) session.getAttribute("uid"));
         return questionService.save(question);
     }
