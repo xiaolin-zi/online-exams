@@ -18,12 +18,14 @@
         }
 
         .avatar-uploader-icon {
-            font-size: 28px;
+            font-size: 24px;
             color: #8c939d;
             width: 100px;
             height: 100px;
             line-height: 100px;
             text-align: center;
+            position: relative;
+            top: 38px;
         }
 
         .avatar {
@@ -45,12 +47,14 @@
         }
 
         .avatar-uploader-icon {
-            font-size: 28px;
+            font-size: 24px;
             color: #8c939d;
             width: 100px;
             height: 100px;
             line-height: 100px;
             text-align: center;
+            position: relative;
+            top: 38px;
         }
 
         .avatar2 {
@@ -257,7 +261,7 @@
             </el-form-item>
             <el-form-item label="附加图片" prop="image">
                 <el-upload
-                        multiple="false"
+                        :multiple="false"
                         ref="xiugaiImg"
                         :auto-upload="false"
                         :on-change="handleFuJiaImgupload"
@@ -266,6 +270,7 @@
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess">
                     <img v-if="imageUrl" :src="imageUrl" class="avatar additional figures">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     <img v-else th:src="@{/img/img.png}" class="additionalfigures">
                 </el-upload>
             </el-form-item>
@@ -286,7 +291,7 @@
         <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
             <el-form-item label="图片识别" prop="image2">
                 <el-upload
-                        multiple="false"
+                        :multiple="false"
                         :auto-upload="false"
                         ref="upload"
                         class="avatar-uploader2"
@@ -327,7 +332,7 @@
             </el-form-item>
             <el-form-item label="附加图片"  v-model="exam.image">
                 <el-upload
-                        multiple="false"
+                        :multiple="false"
                         :auto-upload="false"
                         ref="fujiaImg"
                         class="avatar-uploader"
@@ -383,7 +388,7 @@
             </el-form-item>
             <el-form-item label="附加图片" prop="image">
                 <el-upload
-                        multiple="false"
+                        :multiple="false"
                         :auto-upload="false"
                         :on-change="handleFuJiaImgupload"
                         ref="yuyinImg"
