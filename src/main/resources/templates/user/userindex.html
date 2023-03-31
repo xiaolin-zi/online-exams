@@ -171,7 +171,9 @@
         <el-scrollbar class="pageScroll">
             <el-main>
                 <div class="main-container" style="z-index: 10; position: relative;">
-                    <div class="app-main" v-loading="loading">
+                    <div class="app-main" v-loading="loading"  element-loading-text="拼命加载中"
+                         element-loading-spinner="el-icon-loading"
+                         >
                         <div class="divTmp" v-show="loading"></div>
                         <iframe
                                 id="cIframe"
@@ -180,7 +182,7 @@
                                 :src="iframeUrl"
                                 width="100%"
                                 height="100%"
-                                v-show="!loading"
+                                ref = "iframe"
                         ></iframe>
                     </div>
                 </div>
@@ -249,6 +251,14 @@
                 dialogImg: false,
                 avatar:""
             }
+        },
+        mounted() {
+            window.menuHandle = this.menuHandle
+            if(!this.loading){
+                this.$refs.iframe.style.visibility = 'visible'
+            }else{
+                this.$refs.iframe.style.visibility = 'hidden'
+            }
             },
         created() {
             window.menuHandle = this.menuHandle;
@@ -289,7 +299,7 @@
                 this.timer = null
                 this.timer = setTimeout(() => {
                     this.loading = false
-                }, 1000)
+                }, 500)
             },
             getImage(avatar) {
                 return `/api/img/${avatar}`
