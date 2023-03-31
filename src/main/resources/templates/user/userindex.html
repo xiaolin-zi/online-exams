@@ -97,7 +97,7 @@
                             <a href="#"></i><i class="iconfont icon-boke"></i>个人资料</a>
                         </li>
                         <li>
-                            <el-button type="text" class="iconfont icon-icon-test" @click="dialogImg=true">上传头像</el-button>
+                            <el-button type="text" class="iconfont icon-icon-test" @click="getUid,dialogImg=true">上传头像</el-button>
                         </li>
                     </ul>
                 </li>
@@ -208,7 +208,7 @@
 
             <el-form-item>
                 <el-button type="success" @click="updateImg">提交</el-button>
-                <el-button type="success" plain @click="dialogImg = false,imageUrl=''">取消</el-button>
+                <el-button type="success" plain @click="dialogImg = false">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -250,7 +250,7 @@
                 avatar:""
             }
             },
-        mounted() {
+        created() {
             window.menuHandle = this.menuHandle;
             this.getUid();
         },
@@ -318,7 +318,7 @@
                     }
                 };
                /* this.imageUrl = URL.createObjectURL(file.raw);*/
-                console.log(this.imageUrl)
+               /* console.log(this.imageUrl)*/
             },
 
             handleAvatarSuccess(res) {
