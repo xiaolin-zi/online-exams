@@ -1,5 +1,5 @@
 <!DOCTYPE html >
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -61,7 +61,7 @@
 				//alert("1");
 				//在事件响应的function函数中有一个this对象，是当前正在响应事件的dom对象
 				//src属性表示验证码的img标签的图片路径，可读可写
-				this.src = "http://106.55.228.118:80/kaptcha?d=" + new Date();
+				this.src = "/kaptcha?d=" + new Date();
 			});
 
 			//给登录绑定单击事件
@@ -202,16 +202,16 @@
 			<input type="password" placeholder="确认密码" th:value="${password}"  name="repwd" id="repwd">
 			<input class="yzm" type="text" placeholder="验证码" autocomplete="off" name="code" id="code">
 			<img id="code_img" alt="" th:src="@{/kaptcha}">
-			<div id="image" prop="avatar" name="avatar">头像
+			<!--<div id="image" prop="avatar.jpg" name="avatar.jpg">头像
 			<el-upload
-					class="avatar-uploader"
+					class="avatar.jpg-uploader"
 					action="/common/upload"
 					:show-file-list="false"
 					:on-success="handleAvatarSuccess"
 					:before-upload="beforeAvatarUpload">
-				<img v-if="imageUrl" :src="imageUrl" class="avatar">
-				<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-			</el-upload></div>
+				<img v-if="imageUrl" :src="imageUrl" class="avatar.jpg">
+				<i v-else class="el-icon-plus avatar.jpg-uploader-icon"></i>
+			</el-upload></div>-->
 			<button type="submit" id="regist_bt" >注册</button><br>
 		</form>
 		<div id="toLogin">
@@ -222,8 +222,8 @@
 </div>
 
 <!--下雪-->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-<script src="http://www.lmlblog.com/winter/templets/xq/js/snowy.js"></script>
+<script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/js/snowy.js}"></script>
 <script th:src="@{/js/vue.js}"></script>
 <script th:src="@{/js/elementui/index.js}"></script>
 <link rel="stylesheet" th:href="@{/css/elementui/index.css}">
@@ -276,7 +276,7 @@
 
 
 	});
-	new Vue({
+/*	new Vue({
 		el:"#image",
 		data(){
 			return{
@@ -309,7 +309,7 @@
 				this.imageUrl = `/common/download?name=${res}`
 			}
 		}
-	})
+	})*/
 </script>
 </body>
 </html>
