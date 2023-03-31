@@ -48,9 +48,9 @@ public class SpeechController {
 
 //        WebIATWSUtils.setFile("src/main/resources/static/yuyin.mp3");
         WebIATWSUtils.setFile(path + "\\yuyin.mp3");
-
         WebIATWSUtils.start();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
+
         return WebIATWSUtils.getResult();
     }
 
