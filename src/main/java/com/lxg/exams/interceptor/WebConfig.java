@@ -42,6 +42,7 @@ public class WebConfig implements WebMvcConfigurer {
         patterns.add("/img/**");
         patterns.add("/js/**");
         patterns.add("/kaptcha/**");
+        patterns.add("/user/regist");
         registry.addInterceptor(new LoginInterceptor())
                 //拦截所有请求
                 .addPathPatterns("/**")
