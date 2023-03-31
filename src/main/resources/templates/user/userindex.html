@@ -203,6 +203,7 @@
                         :on-change="handleFuJiaImgupload"
                         class="avatar-uploader"
                         action="/common/upload"
+                        :multiple="false"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess">
                    <img  v-if="imageUrl" :src="imageUrl" class="avatar"  style="width: 200px; height: 200px; border:none">
