@@ -26,8 +26,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public int addUser(String username, String password,String avatar) {
-        int i = userMapper.addUser(username, password,avatar);
+    public int addUser(String username, String password) {
+        int i = userMapper.addUser(username, password);
         return i;
     }
 

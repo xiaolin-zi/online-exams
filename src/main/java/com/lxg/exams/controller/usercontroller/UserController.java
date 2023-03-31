@@ -60,13 +60,9 @@ public class UserController {
 
     //注册
     @PostMapping("/regist")
-    public String adminRegistSuccess(String username, String password, String code,String avatar,HttpServletRequest request, HttpSession session) {
-
-
+    public String adminRegistSuccess(String username, String password, String code,HttpServletRequest request, HttpSession session) {
         String token = (String) session.getAttribute("verifyCode");
         session.removeAttribute("verifyCode");
-
-
         if (token != null && token.equalsIgnoreCase(code)) {
 
             User user = userService.getUserByUsername(username);
@@ -77,7 +73,9 @@ public class UserController {
                 request.setAttribute("flag", true);//注册页标志
                 return "index";
             } else {
-                int i = userService.addUser(username, password, avatar);
+
+                int i = userService.addUser(username, password);
+
                 if (i > 0) {
                     request.setAttribute("regist_msg", "注册成功！");
                     request.setAttribute("flag", true);//注册页标志

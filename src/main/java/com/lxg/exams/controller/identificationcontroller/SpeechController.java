@@ -3,6 +3,7 @@ package com.lxg.exams.controller.identificationcontroller;
 
 import com.lxg.exams.utils.Base64Util;
 import com.lxg.exams.utils.WebIATWSUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,8 @@ import java.io.File;
 @Controller
 public class SpeechController {
 
+    @Value("${image.path}")
+    private String basePath;
 
     @GetMapping("/tospeech")
     public String tospeech() {
@@ -33,7 +36,9 @@ public class SpeechController {
 
 
         //创建一个目录对象
-        String path = System.getProperty("java.io.tmpdir");
+//        String path = System.getProperty("java.io.tmpdir");
+        String path = basePath;
+
         File dir = new File(path);
         //目录不存在，需要创建
         if (!dir.exists()) {
@@ -47,12 +52,19 @@ public class SpeechController {
 
 
 //        WebIATWSUtils.setFile("src/main/resources/static/yuyin.mp3");
-        WebIATWSUtils.setFile(path + "\\yuyin.mp3");
+        WebIATWSUtils.setFile(path + "/yuyin.mp3");
+
 
         WebIATWSUtils.start();
-        Thread.sleep(1000);
-        return WebIATWSUtils.getResult();
+        System.out.println(Thread.currentThread().getName()+"speechController");
+
+//        Thread.sleep(2000);
+        String result = WebIATWSUtils.getResult();
+
+        return result;
     }
 
 
 }
+
+

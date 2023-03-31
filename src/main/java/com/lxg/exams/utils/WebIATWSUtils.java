@@ -2,6 +2,7 @@ package com.lxg.exams.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.lxg.exams.controller.identificationcontroller.SpeechController;
 import okhttp3.*;
 
 import javax.crypto.Mac;
@@ -45,6 +46,8 @@ public class WebIATWSUtils extends WebSocketListener {
 
     private static String result = "";
 
+    private static  Thread mainthread=null;
+
     public static void setFile(String path){
         System.out.println(path);
         file = path;
@@ -57,8 +60,10 @@ public class WebIATWSUtils extends WebSocketListener {
 
 
 
+
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
+        System.out.println("哈哈哈哈，我是open");
         super.onOpen(webSocket, response);
         new Thread(()->{
             //连接成功，开始发送数据
@@ -152,6 +157,8 @@ public class WebIATWSUtils extends WebSocketListener {
 
     @Override
     public void onMessage(WebSocket webSocket, String text) {
+        System.out.println(Thread.currentThread().getName()+"哈哈哈哈message");
+        System.out.println("哈哈哈哈，我是onMessage");
         super.onMessage(webSocket, text);
         //System.out.println(text);
         ResponseData resp = json.fromJson(text, ResponseData.class);
@@ -182,12 +189,17 @@ public class WebIATWSUtils extends WebSocketListener {
 
                     result = decoder.toString();
 
-                    System.out.println("最终识别结果 ==》" + result );
 
+                    System.out.println("最终识别结果 ==》" + result );
                     System.out.println("本次识别sid ==》" + resp.getSid());
                     decoder.discard();
-                    webSocket.close(1000, "");
 
+                    // 通知主线程可以继续了
+                    synchronized (mainthread){
+                        mainthread.notify();
+                    }
+
+                    webSocket.close(1000, "");
 
 
                 } else {
@@ -199,13 +211,13 @@ public class WebIATWSUtils extends WebSocketListener {
     }
 
 
-    public static String getResult(){
+    public  static String getResult(){
         return result;
     }
 
 
 
-    public static void start() throws Exception {
+    public  static void start() throws Exception {
         // 构建鉴权url
         String authUrl = getAuthUrl(hostUrl, apiKey, apiSecret);
 
@@ -218,7 +230,15 @@ public class WebIATWSUtils extends WebSocketListener {
         Request request = new Request.Builder().url(url).build();
         // System.out.println(client.newCall(request).execute());
         //System.out.println("url===>" + url);
+        //开启了一个新的线程
         WebSocket webSocket = client.newWebSocket(request, new WebIATWSUtils());
+        System.out.println(Thread.currentThread().getName()+"start");
+        mainthread = Thread.currentThread();//获取主线程
+        //阻塞主线程
+        synchronized (mainthread){
+            mainthread.wait();
+        }
+
     }
 
 

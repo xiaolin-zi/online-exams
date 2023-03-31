@@ -27,7 +27,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     //根据用户名和密码插入用户
     @Insert("insert into t_user (username,password) values (#{username},#{password})")
-    public int addUser(String username,String password,String avatar);
+    public int addUser(String username,String password);
 }
 
 
