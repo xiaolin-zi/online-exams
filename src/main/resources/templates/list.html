@@ -257,7 +257,7 @@
             </el-form-item>
             <el-form-item label="附加图片" prop="image">
                 <el-upload
-                        multiple="false"
+                        :multiple="false"
                         ref="xiugaiImg"
                         :auto-upload="false"
                         :on-change="handleFuJiaImgupload"
@@ -286,7 +286,7 @@
         <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
             <el-form-item label="图片识别" prop="image2">
                 <el-upload
-                        multiple="false"
+                        :multiple="false"
                         :auto-upload="false"
                         ref="upload"
                         class="avatar-uploader2"
@@ -327,7 +327,7 @@
             </el-form-item>
             <el-form-item label="附加图片"  v-model="exam.image">
                 <el-upload
-                        multiple="false"
+                        :multiple="false"
                         :auto-upload="false"
                         ref="fujiaImg"
                         class="avatar-uploader"
@@ -383,7 +383,7 @@
             </el-form-item>
             <el-form-item label="附加图片" prop="image">
                 <el-upload
-                        multiple="false"
+                        :multiple="false"
                         :auto-upload="false"
                         :on-change="handleFuJiaImgupload"
                         ref="yuyinImg"
