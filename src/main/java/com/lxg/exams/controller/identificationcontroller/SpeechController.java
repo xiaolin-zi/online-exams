@@ -52,7 +52,7 @@ public class SpeechController {
 
 
 //        WebIATWSUtils.setFile("src/main/resources/static/yuyin.mp3");
-        WebIATWSUtils.setFile(path + "\\yuyin.mp3");
+        WebIATWSUtils.setFile(path + "/yuyin.mp3");
 
 
         WebIATWSUtils.start();
