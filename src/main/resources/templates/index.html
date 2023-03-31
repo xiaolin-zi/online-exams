@@ -1,16 +1,41 @@
 <!DOCTYPE html >
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-
+	<title>用户登录</title>
+	<style>
+		.avatar-uploader .el-upload {
+			border: 1px dashed #d9d9d9;
+			border-radius: 6px;
+			cursor: pointer;
+			position: relative;
+			overflow: hidden;
+		}
+		.avatar-uploader .el-upload:hover {
+			border-color: rgb(0, 204, 126);
+		}
+		.avatar-uploader-icon {
+			font-size: 28px;
+			color: #8c939d;
+			width: 100px;
+			height: 100px;
+			line-height: 100px;
+			text-align: center;
+		}
+		.avatar {
+			width: 100px;
+			height: 100px;
+			display: block;
+		}
+	</style>
 
 	<link rel="icon" th:href="@{/img/logo.png}" type="image/x-icon"/>
 
 	<link rel="stylesheet" th:href="@{/css/index.min.css}">
 	<script th:src="@{/js/jquery.js}"></script>
+	<script th:src="@{/js/axios.js}"></script>
 	<script type="text/javascript">
 
 		//页面加载完成之后
@@ -187,8 +212,12 @@
 </div>
 
 <!--下雪-->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-<script src="http://www.lmlblog.com/winter/templets/xq/js/snowy.js"></script>
+<script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/js/snowy.js}"></script>
+<script th:src="@{/js/vue.js}"></script>
+<script th:src="@{/js/elementui/index.js}"></script>
+<link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+<script th:src="@{/js/axios.js}"></script>
 <style type="text/css">
 	.snow-container {
 		position: fixed;
@@ -237,7 +266,6 @@
 
 
 	});
-
 </script>
 </body>
 </html>
