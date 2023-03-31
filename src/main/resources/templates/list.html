@@ -531,7 +531,7 @@
             //图片识别的图片展示chanage
             handleupload(file, fileList) {
                 //获取上传的图片用于展示
-                var img = fileList[0].raw;
+                var img = file.raw;
                 console.log(img);
                 //展示图片
                 var reader = new FileReader();

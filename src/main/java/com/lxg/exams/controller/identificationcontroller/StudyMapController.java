@@ -66,7 +66,6 @@ public class StudyMapController {
             String accessToken = Token.getToken("lWwaEtuBTqFVt0P6KyFC9YCG","zxSxW17DDAK7l2u1PLGSiTgsMjyxa5Zb");
             String result = HttpUtil.post(url, accessToken, param);
 
-
             JSONObject json = new JSONObject(result);//将字符串重新转JSON
             JSONArray str = json.getJSONArray("results");//识别都内容都放在键为result的数组中
 
