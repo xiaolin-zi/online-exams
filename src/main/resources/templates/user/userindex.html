@@ -97,7 +97,7 @@
                             <a href="#"></i><i class="iconfont icon-boke"></i>个人资料</a>
                         </li>
                         <li>
-                            <a href="#"><i class="iconfont icon-icon-test"></i>上传头像</a>
+                            <el-button type="text" class="iconfont icon-icon-test" @click="dialogImg=true">上传头像</el-button>
                         </li>
                     </ul>
                 </li>
@@ -122,10 +122,14 @@
                 </li>
             </div>
 
-            <div class="nav-right" th:if="${session.user}!=null">
-                <li class="user-avatar">
-                    <img class="avatar" th:src="@{/img/avatar.jpg}"/>
-                </li>
+            <div v-if="avatar">
+                <el-image style="width: 50px; height: 50px; border-radius:50%"
+                :src="getImage(avatar)"
+                :preview-src-list="[ `/api/img/${avatar}` ]">
+                </el-image>
+            </div>
+            <div v-else>
+                <img th:src="@{/img/img_1.png}" style="width: 50px; height: 50px; border-radius:50%">
             </div>
         </nav>
     </div>
@@ -183,6 +187,31 @@
             </el-main>
         </el-scrollbar>
     </el-container>
+    <el-dialog
+            title="上传头像"
+            :visible.sync="dialogImg"
+            width="30%">
+        <el-form ref="form"  label-width="80px">
+            <el-form-item label="选择头像" prop="avatar">
+                <el-upload
+                        ref="userImg"
+                        :auto-upload="false"
+                        :on-change="handleFuJiaImgupload"
+                        class="avatar-uploader"
+                        action="/common/upload"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess">
+                   <img  v-if="imageUrl" :src="imageUrl" class="avatar"  style="width: 200px; height: 200px; border:none">
+                    <img v-else th:src="@{/img/img_1.png}" style="width: 200px; height: 200px; border:none">
+                </el-upload>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="success" @click="updateImg">提交</el-button>
+                <el-button type="success" plain @click="dialogImg = false,imageUrl=''">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
 </div>
 <script>
     new Vue({
@@ -214,11 +243,16 @@
                 iframeUrl: '/user/note',
                 goBackFlag: false,
                 loading: false,
-                timer: null
+                timer: null,
+                fileList: [],
+                imageUrl:'',
+                dialogImg: false,
+                avatar:""
             }
-        },
+            },
         mounted() {
-            window.menuHandle = this.menuHandle
+            window.menuHandle = this.menuHandle;
+            this.getUid();
         },
         methods: {
             logout() {
@@ -256,6 +290,61 @@
                 this.timer = setTimeout(() => {
                     this.loading = false
                 }, 1000)
+            },
+            getImage(avatar) {
+                return `/api/img/${avatar}`
+            },
+            getUid(){
+                axios.get("/user").then(res=>{
+                    if (res.data){
+                        this.avatar=res.data;
+                        this.imageUrl = `/api/img/${res.data}`;
+                    }
+
+                })
+            },
+
+            //修改头像的展示change
+            handleFuJiaImgupload(file, fileList) {
+                //获取上传的图片用于展示
+                var img = file.raw;
+                //展示图片
+                var reader = new FileReader();
+                reader.readAsDataURL(img);
+                //改为箭头函数，不然this指向的是reader
+                reader.onload = (e) => {
+                    if (reader.readyState == 2) {
+                        this.imageUrl = e.target.result;
+                    }
+                };
+               /* this.imageUrl = URL.createObjectURL(file.raw);*/
+                console.log(this.imageUrl)
+            },
+
+            handleAvatarSuccess(res) {
+                console.log(res);
+                this.avatar = res;/*
+                this.imageUrl = `/api/img/${res}`;*/
+            },
+            //修改头像
+            updateImg() {
+                //提交修改图片的上传
+                this.$refs.userImg.submit();
+
+                setTimeout(() => {
+                    axios.put("/user/" + this.avatar).then((resp) => {
+                        if (resp) {
+                            this.dialogImg = false;
+                            this.imageUrl = '';
+                            this.avatar='';
+                            this.getUid();
+                            this.$message({
+                                type: 'success',
+                                message: '修改成功!'
+                            });
+                        }
+                    });
+                }, 1000);
             }
         }
     })
