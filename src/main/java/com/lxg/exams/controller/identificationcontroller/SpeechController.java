@@ -27,6 +27,9 @@ public class SpeechController {
     }
 
 
+    static final Object lock = new Object();
+    static boolean t2Run = false;
+
     @ResponseBody
     @PostMapping("/speechRecognition")
     public String speechToText(@RequestParam("file") MultipartFile file) throws Exception {
@@ -48,11 +51,18 @@ public class SpeechController {
 
 //        WebIATWSUtils.setFile("src/main/resources/static/yuyin.mp3");
         WebIATWSUtils.setFile(path + "\\yuyin.mp3");
-        WebIATWSUtils.start();
-        Thread.sleep(2000);
 
-        return WebIATWSUtils.getResult();
+
+        WebIATWSUtils.start();
+        System.out.println(Thread.currentThread().getName()+"speechController");
+
+//        Thread.sleep(2000);
+        String result = WebIATWSUtils.getResult();
+
+        return result;
     }
 
 
 }
+
+
