@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <title>408错题本</title>
     <script th:src="@{/js/vue.js}"></script>
     <script th:src="@{/js/elementui/index.js}"></script>
@@ -173,7 +174,7 @@
         <el-scrollbar class="pageScroll">
             <el-main>
                 <div class="main-container" style="z-index: 10; position: relative;">
-                    <div class="app-main" v-loading="loading"  element-loading-text="拼命加载中"
+                    <div class="app-main" v-loading="loading"  element-loading-text="别急，我在加载..."
                          element-loading-spinner="el-icon-loading"
                          >
                         <div class="divTmp" v-show="loading"></div>
@@ -195,7 +196,11 @@
             title="上传头像"
             :visible.sync="dialogImg"
             width="30%">
-        <el-form ref="form"  label-width="80px">
+        <el-form
+                v-loading="uploading"
+                element-loading-text="正在给你更换头像..."
+                element-loading-spinner="el-icon-loading"
+                ref="form"  label-width="80px">
             <el-form-item label="选择头像" prop="avatar">
                 <el-upload
                         ref="userImg"
@@ -252,7 +257,9 @@
                 fileList: [],
                 imageUrl:'',
                 dialogImg: false,
-                avatar:""
+                avatar:"",
+                //头像上传判定
+                uploading: false,
             }
         },
         mounted() {
@@ -336,28 +343,29 @@
 
             handleAvatarSuccess(res) {
                 console.log(res);
-                this.avatar = res;/*
-                this.imageUrl = `/api/img/${res}`;*/
+                this.avatar = res;
+                this.imageUrl = `/api/img/${res}`;
+                axios.put("/user/" + this.avatar).then((resp) => {
+                    if (resp) {
+                        this.dialogImg = false;
+                        this.imageUrl = '';
+                        this.avatar='';
+                        this.getUid();
+                        this.$message({
+                            type: 'success',
+                            message: '头像修改成功!'
+                        });
+                    }
+                });
+                //加载动画关闭
+                this.uploading = false;
             },
             //修改头像
             updateImg() {
+                //点击提交展示加载中
+                this.uploading = true;
                 //提交修改图片的上传
                 this.$refs.userImg.submit();
-
-                setTimeout(() => {
-                    axios.put("/user/" + this.avatar).then((resp) => {
-                        if (resp) {
-                            this.dialogImg = false;
-                            this.imageUrl = '';
-                            this.avatar='';
-                            this.getUid();
-                            this.$message({
-                                type: 'success',
-                                message: '修改成功!'
-                            });
-                        }
-                    });
-                }, 1000);
             }
         }
     })

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <title>Title</title>
     <style>
         .avatar-uploader .el-upload {
@@ -188,7 +189,7 @@
                             type="text"
                             size="medium"
                             class="blueBug"
-                            @click="dialogEdit=true,exam=scope.row,handleAvatarSuccess(scope.row.image)"
+                            @click="dialogEdit=true,exam=scope.row,handleImgShow(scope.row.image)"
                     >
                         修改
                     </el-button>
@@ -231,7 +232,11 @@
             title="编辑错题"
             :visible.sync="dialogEdit"
             width="30%">
-        <el-form ref="form" :model="exam" :rules="rules" label-width="80px">
+        <el-form
+                v-loading="uploading"
+                element-loading-text="别急，我拿命在上传..."
+                element-loading-spinner="el-icon-loading"
+                ref="form" :model="exam" :rules="rules" label-width="80px">
             <el-form-item label="题目" prop="title">
                 <el-input :autosize="{ minRows: 2, maxRows: 4}"
                           placeholder="请输入题目" type="textarea" v-model="exam.title" resize:none></el-input>
@@ -268,7 +273,7 @@
                         class="avatar-uploader"
                         action="/common/upload"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccess">
+                        :on-success="handleUpdateSuccess">
                     <img v-if="imageUrl" :src="imageUrl" class="avatar additional figures">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                     <img v-else th:src="@{/img/img.png}" class="additionalfigures">
@@ -288,7 +293,11 @@
             title="图片上传错题"
             :visible.sync="dialogUpdate1"
             width="30%">
-        <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
+        <el-form
+                v-loading="uploading"
+                element-loading-text="别急，我拿命在上传..."
+                element-loading-spinner="el-icon-loading"
+                ref="form" :rules="rules" :model="exam" label-width="80px">
             <el-form-item label="图片识别" prop="image2">
                 <el-upload
                         :multiple="false"
@@ -339,7 +348,7 @@
                         action="/common/upload"
                         :on-change="handleFuJiaImgupload"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
+                        :on-success="handleUploadSuccess"
                         >
                     <img v-if="imageUrl" :src="imageUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -358,7 +367,11 @@
             title="语音上传错题"
             :visible.sync="dialogUpdate2"
             width="30%">
-        <el-form ref="form" :rules="rules" :model="exam" label-width="80px">
+        <el-form
+                v-loading="uploading"
+                element-loading-text="别急，我拿命在上传..."
+                element-loading-spinner="el-icon-loading"
+                ref="form" :rules="rules" :model="exam" label-width="80px">
             <el-form-item label="题目" prop="title">
                 <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
                           placeholder="请输入题目" v-model="exam.title" id="speech-exam-title"></el-input>
@@ -395,7 +408,7 @@
                         class="avatar-uploader"
                         action="/common/upload"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
+                        :on-success="handleUploadSuccess"
                         >
                     <img v-if="imageUrl" :src="imageUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -470,7 +483,8 @@
                 fileList: [],
                 //语音识别判断当前是否正在录音
                 isRecoding: false,
-
+                //判断当前是否正在上传图片
+                uploading: false,
             };
         },
         created() {
@@ -616,83 +630,90 @@
                 };
             },
 
-            handleAvatarSuccess(res) {
+            //处理修改时候的图片展示
+            handleImgShow(res){
+                this.exam.image = res;
+                this.imageUrl = `/api/img/${res}`;
+            },
+
+
+            //处理修改图片成功后的回调
+            handleUpdateSuccess(res) {
                 this.exam.image = res;
                 console.log(this.exam.image);
                 console.log("用于附加或者修改的图片上传成功！");
                 // this.imageUrl = `/common/download?name=${res}`;
                 this.imageUrl = `/api/img/${res}`;
+
+                //等待上传完毕后，再进行添加或者修改
+                axios.put("/question", this.exam).then((resp) => {
+                    if (resp) {
+                        this.dialogEdit = false;
+                        this.imageUrl = '';
+                        this.exam.title = '';
+                        this.exam.types = '';
+                        this.getAll();
+                        this.$message({
+                            type: 'success',
+                            message: '修改成功!'
+                        });
+                    }
+                });
+                //加载动画关闭
+                this.uploading = false;
             },
 
+            //处理添加题目的图片上传成功后的回调
+            handleUploadSuccess(res){
+                this.exam.image = res;
+                console.log(this.exam.image);
+                console.log("用于附加或者修改的图片上传成功！");
+                // this.imageUrl = `/common/download?name=${res}`;
+                this.imageUrl = `/api/img/${res}`;
 
+                //等待上传完毕后，再进行添加或者修改
+                axios.post("/question", this.exam).then((resp) => {
+                    console.log(resp);
+                    if (resp) {
+                        this.dialogUpdate1 = false;
+                        this.dialogUpdate2 = false;
+                        this.imageUrl = '';
+                        this.imageUrl2 = '';
+                        this.exam.title = '';
+                        this.exam.types = '';
+                        this.getAll();
+                        this.$message({
+                            type: 'success',
+                            message: '添加题目成功!'
+                        });
+                    }
+                });
+                //加载动画关闭
+                this.uploading = false;
+            },
 
             //语音添加
             speechAddQue() {
+                //点击提交展示加载中
+                this.uploading = true;
                 this.$refs.yuyinImg.submit();
-
-                setTimeout(()=>{
-                    axios.post("/question", this.exam).then((resp) => {
-                        console.log(resp);
-                        if (resp) {
-                            this.dialogUpdate1 = false;
-                            this.dialogUpdate2 = false;
-                            this.imageUrl = '';
-                            this.imageUrl2 = '';
-                            this.exam.title = '';
-                            this.exam.types = '';
-                        }
-                        this.getAll();
-                    });
-                },1000);
-
-
             },
 
 
             //图片添加
             addQue() {
-
+                //点击提交展示加载中
+                this.uploading = true;
                 //点击提交把图片进行上传
                 // this.$refs.upload.submit();//这个识别的图片不需要上传
                 this.$refs.fujiaImg.submit();
-
-                setTimeout(()=>{
-                    axios.post("/question", this.exam).then((resp) => {
-                        console.log(resp);
-                        if (resp) {
-                            this.dialogUpdate1 = false;
-                            this.dialogUpdate2 = false;
-                            this.imageUrl = '';
-                            this.imageUrl2 = '';
-                            this.exam.title = '';
-                            this.exam.types = '';
-                        }
-                        this.getAll();
-                    });
-                },1000);
-
             },
             //图片修改
             updateQue() {
+                //点击提交展示加载中
+                this.uploading = true;
                 //提交修改图片的上传
                 this.$refs.xiugaiImg.submit();
-
-                setTimeout(()=>{
-                    axios.put("/question", this.exam).then((resp) => {
-                        if (resp) {
-                            this.dialogEdit = false;
-                            this.imageUrl = '';
-                            this.exam.title = '';
-                            this.exam.types = '';
-                            this.getAll();
-                            this.$message({
-                                type: 'success',
-                                message: '修改成功!'
-                            });
-                        }
-                    });
-                },1000);
-
             },
             //语音识别
             speech(e) {
