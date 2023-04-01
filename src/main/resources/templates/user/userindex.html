@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
     <title>408错题本</title>
     <script th:src="@{/js/vue.js}"></script>
     <script th:src="@{/js/elementui/index.js}"></script>
@@ -61,7 +61,6 @@
         }
 
 
-
     </style>
 
 </head>
@@ -85,17 +84,17 @@
                         <li>
                             <a href="#"><i class="iconfont icon-biaoqian"></i></i>修改密码</a>
                         </li>
-<!--                        <el-dialog-->
-<!--                                title="提示"-->
-<!--                                :visible.sync="dialogVisible"-->
-<!--                                width="30%"-->
-<!--                                :before-close="handleClose">-->
-<!--                            <span>这是一段信息</span>-->
-<!--                            <span slot="footer" class="dialog-footer">-->
-<!--                                <el-button @click="dialogVisible = false">取 消</el-button>-->
-<!--                                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>-->
-<!--                            </span>-->
-<!--                        </el-dialog>-->
+                        <!--                        <el-dialog-->
+                        <!--                                title="提示"-->
+                        <!--                                :visible.sync="dialogVisible"-->
+                        <!--                                width="30%"-->
+                        <!--                                :before-close="handleClose">-->
+                        <!--                            <span>这是一段信息</span>-->
+                        <!--                            <span slot="footer" class="dialog-footer">-->
+                        <!--                                <el-button @click="dialogVisible = false">取 消</el-button>-->
+                        <!--                                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>-->
+                        <!--                            </span>-->
+                        <!--                        </el-dialog>-->
                         <li>
                             <a href="#"></i><i class="iconfont icon-boke"></i>个人资料</a>
                         </li>
@@ -127,8 +126,8 @@
 
             <div v-if="avatar">
                 <el-image style="width: 50px; height: 50px; border-radius:50%"
-                :src="getImage(avatar)"
-                :preview-src-list="[ `/api/img/${avatar}` ]">
+                          :src="getImage(avatar)"
+                          :preview-src-list="[ `/api/img/${avatar}` ]">
                 </el-image>
             </div>
             <div v-else>
@@ -174,9 +173,9 @@
         <el-scrollbar class="pageScroll">
             <el-main>
                 <div class="main-container" style="z-index: 10; position: relative;">
-                    <div class="app-main" v-loading="loading"  element-loading-text="别急，我在加载..."
+                    <div class="app-main" v-loading="loading" element-loading-text="别急，我在加载..."
                          element-loading-spinner="el-icon-loading"
-                         >
+                    >
                         <div class="divTmp" v-show="loading"></div>
                         <iframe
                                 id="cIframe"
@@ -185,7 +184,7 @@
                                 :src="iframeUrl"
                                 width="100%"
                                 height="100%"
-                                ref = "iframe"
+                                ref="iframe"
                         ></iframe>
                     </div>
                 </div>
@@ -198,26 +197,27 @@
             width="30%">
         <el-form
                 v-loading="uploading"
-                element-loading-text="正在给你更换头像..."
+                element-loading-text="正在给您更换头像..."
                 element-loading-spinner="el-icon-loading"
-                ref="form"  label-width="80px">
+                ref="form" label-width="80px">
             <el-form-item label="选择头像" prop="avatar">
                 <el-upload
                         ref="userImg"
                         :auto-upload="false"
-                        :on-change="handleFuJiaImgupload"
+                        :on-change="showAvatar"
                         class="avatar-uploader"
                         action="/common/upload"
                         :multiple="false"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess">
-                   <img  v-if="imageUrl" :src="imageUrl" class="avatar"  style="width: 200px; height: 200px; border:none">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar"
+                         style="width: 200px; height: 200px; border:none">
                     <img v-else th:src="@{/img/img_1.png}" style="width: 200px; height: 200px; border:none">
                 </el-upload>
             </el-form-item>
 
             <el-form-item>
-                <el-button type="success" @click="updateImg">提交</el-button>
+                <el-button type="success" @click="startUpdateAvatar">提交</el-button>
                 <el-button type="success" plain @click="dialogImg = false">取消</el-button>
             </el-form-item>
         </el-form>
@@ -255,21 +255,21 @@
                 loading: false,
                 timer: null,
                 fileList: [],
-                imageUrl:'',
+                imageUrl: '',
                 dialogImg: false,
-                avatar:"",
+                avatar: "",
                 //头像上传判定
                 uploading: false,
             }
         },
         mounted() {
             window.menuHandle = this.menuHandle
-            if(!this.loading){
+            if (!this.loading) {
                 this.$refs.iframe.style.visibility = 'visible'
-            }else{
+            } else {
                 this.$refs.iframe.style.visibility = 'hidden'
             }
-            },
+        },
         created() {
             window.menuHandle = this.menuHandle;
             this.getUid();
@@ -314,10 +314,10 @@
             getImage(avatar) {
                 return `/api/img/${avatar}`
             },
-            getUid(){
-                axios.get("/user").then(res=>{
-                    if (res.data){
-                        this.avatar=res.data;
+            getUid() {
+                axios.get("/user").then(res => {
+                    if (res.data) {
+                        this.avatar = res.data;
                         this.imageUrl = `/api/img/${res.data}`;
                     }
 
@@ -325,7 +325,7 @@
             },
 
             //修改头像的展示change
-            handleFuJiaImgupload(file, fileList) {
+            showAvatar(file, fileList) {
                 //获取上传的图片用于展示
                 var img = file.raw;
                 //展示图片
@@ -337,8 +337,8 @@
                         this.imageUrl = e.target.result;
                     }
                 };
-               /* this.imageUrl = URL.createObjectURL(file.raw);*/
-               /* console.log(this.imageUrl)*/
+                /* this.imageUrl = URL.createObjectURL(file.raw);*/
+                /* console.log(this.imageUrl)*/
             },
 
             handleAvatarSuccess(res) {
@@ -349,11 +349,11 @@
                     if (resp) {
                         this.dialogImg = false;
                         this.imageUrl = '';
-                        this.avatar='';
+                        this.avatar = '';
                         this.getUid();
                         this.$message({
                             type: 'success',
-                            message: '头像修改成功!'
+                            message: '已经换上您喜欢的头像啦！'
                         });
                     }
                 });
@@ -366,6 +366,54 @@
                 this.uploading = true;
                 //提交修改图片的上传
                 this.$refs.userImg.submit();
+            },
+
+            //用户点击开始更新头像
+            startUpdateAvatar() {
+                //判断修改次数
+                this.toUpdateAvatar("avatar", this.updateImg);
+            },
+            toUpdateAvatar(key, method) {
+                var v = this.getCookie(key);
+                //判断是否有cookie
+                if (!v) {
+                    method();
+                    //获取第二天凌晨到当前时间的秒数
+                    var tim_sec = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                    this.setCookie(key, "1", tim_sec);
+                } else if(v >= 3){ //判断是否超过修改次数
+                    this.$message({
+                        type: 'warning',
+                        message: '每天只能修改3次头像哦!'
+                    });
+                }else {
+                    method();
+                    //修改次数减一
+                    var avatartimeout = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                    var value = this.getCookie(key);
+                    this.setCookie("avatar", parseInt(value) + 1, avatartimeout);
+                }
+            },
+
+            setCookie(name, value, second) {
+                if (!second) {
+                    second = 7 * 24 * 60 * 60;//默认7天
+                }
+                var exp = new Date();
+                exp.setTime(exp.getTime() + second * 1000);
+                document.cookie = name + "=" + encodeURI(value) + ";expires=" + exp.toGMTString() + ";path=/";
+            },
+            getCookie(name) {
+                if (document.cookie.length > 0) {
+                    c_start = document.cookie.indexOf(name + "=");//获取字符串的起点
+                    if (c_start != -1) {
+                        c_start = c_start + name.length + 1;//获取值的起点
+                        c_end = document.cookie.indexOf(";", c_start);//获取结尾处
+                        if (c_end == -1) c_end = document.cookie.length;//如果是最后一个，结尾就是cookie字符串的结尾
+                        return decodeURI(document.cookie.substring(c_start, c_end));//截取字符串返回
+                    }
+                }
+                return "";
             }
         }
     })
