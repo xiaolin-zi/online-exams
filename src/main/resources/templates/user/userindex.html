@@ -70,7 +70,11 @@
     <div class="header">
         <nav class="nav-container">
             <div class="nav-left">
-                <img class="logo" th:src="@{/img/logo.png}"/>
+                <el-image
+                          :src="`/img/logo.png`"
+                          class="logo"
+                          :preview-src-list="[ `/img/logo.png` ]">
+                </el-image>
             </div>
             <ul class="nav-main">
                 <li class="main-item">
