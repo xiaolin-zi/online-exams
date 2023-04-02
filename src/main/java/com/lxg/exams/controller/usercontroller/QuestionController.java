@@ -4,14 +4,12 @@ package com.lxg.exams.controller.usercontroller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxg.exams.bean.Question;
-import com.lxg.exams.mapper.QuestionMapper;
 import com.lxg.exams.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -24,7 +22,9 @@ public class QuestionController {
 
     @PostMapping
     public Boolean addQue(@RequestBody Question question, HttpSession session) {
-        System.out.println(question + "===============================================");
+        question.setId(null);
+        //设置为私有
+        question.setIspublic(0);
         question.setUid((Integer) session.getAttribute("uid"));
         return questionService.save(question);
     }
@@ -86,6 +86,33 @@ public class QuestionController {
         Question question = questionService.getById(id);
         Integer ispublic = question.getIspublic();
         if (ispublic == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    //根据uid和title查询题目是否存在
+    @PostMapping("/isExist")
+    public Boolean getQuestionByUidAndTitle(@RequestBody Question question,HttpSession session) {
+
+        LambdaQueryWrapper<Question> lqw = new LambdaQueryWrapper<>();
+        Integer uid = (Integer) session.getAttribute("uid");
+        lqw.eq(Question::getUid,uid);
+        lqw.eq(Question::getIsdeleted,0);
+        lqw.eq(Question::getTitle,question.getTitle());
+        lqw.eq(Question::getOptiona,question.getOptiona());
+        lqw.eq(Question::getOptionb,question.getOptionb());
+        lqw.eq(Question::getOptionc,question.getOptionc());
+        lqw.eq(Question::getOptiond,question.getOptiond());
+        lqw.eq(Question::getAnswer,question.getAnswer());
+        lqw.eq(Question::getTypes,question.getTypes());
+        lqw.eq(Question::getImage,question.getImage());
+
+        Question question1 = questionService.getOne(lqw);
+        System.out.println(question1+"=====================================");
+        if (question1 != null) {
             return true;
         } else {
             return false;

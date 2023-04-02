@@ -94,33 +94,62 @@
             </template>
         </el-table-column>
         <el-table-column
-                label="科目"
-                prop="typesName"
-               >
+                label="题目信息"
+        >
+            <el-table-column
+                    label="科目"
+                    prop="typesName"
+            >
+            </el-table-column>
+            <el-table-column
+                    label="题目"
+                    prop="title">
+            </el-table-column>
+            <el-table-column
+                    label="更新时间"
+                    prop="updateTime">
+            </el-table-column>
         </el-table-column>
+
+
         <el-table-column
-                label="题目"
-                prop="title">
+                label="用户信息"
+        >
+            <el-table-column
+                    label="用户名"
+                    prop="username">
+            </el-table-column>
+            <el-table-column
+                    label="用户头像"
+                    prop="userAvatar">
+                <template slot-scope="{ row }">
+                    <div v-if="row.userAvatar">
+                        <el-image style="width: 100px; height: 100px; border-radius: 50%; border:none;cursor: pointer;"
+                                  :src="getImage(row.userAvatar)"
+                                  :preview-src-list="[ `/api/img/${row.userAvatar}` ]">
+                        </el-image>
+                    </div>
+                    <div v-else>
+                        <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
+                    </div>
+                </template>
+            </el-table-column>
         </el-table-column>
+
         <el-table-column
-                label="用户名"
-                prop="username">
-        </el-table-column>
-        <el-table-column
-                label="用户头像"
-                prop="userAvatar">
-            <template slot-scope="{ row }">
-                <div v-if="row.userAvatar">
-                    <el-image style="width: 100px; height: 100px; border-radius: 50%; border:none;cursor: pointer;"
-                              :src="getImage(row.userAvatar)"
-                              :preview-src-list="[ `/api/img/${row.userAvatar}` ]">
-                    </el-image>
-                </div>
-                <div v-else>
-                    <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
-                </div>
+                label="操作">
+            <template slot-scope="props">
+                <el-button
+                        type="text"
+                        size="medium"
+                        class="delBut non"
+                        @click="addMyQuestion(props.row)"
+                >
+                    添加进我的题库
+                </el-button>
             </template>
         </el-table-column>
+
 
     </el-table>
 </div>
@@ -146,15 +175,53 @@
                     console.log(res);
                     this.tableData = res.data.data;
                     this.total = res.data.count;
-                    this.updateTime = res.data.updateTime;
                 });
             },
             getImage(image) {
                 // return `/common/download?name=${image}`
                 return `/api/img/${image}`
             },
-            load () {
+            load() {
                 this.count += 4
+            },
+            addMyQuestion(res) {
+                console.log(res);
+
+                this.$confirm('确定添加进题库吗', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    //判断用户题库是否已经存在该题目
+                    axios.post("/question/isExist", res).then((resp) => {
+                        if (resp.data) {
+                            this.$message({
+                                type: 'info',
+                                message: '该题目已在您的题库中!'
+                            });
+                            return;
+                        } else {
+                            axios.post("/question", res).then((resp) => {
+                                if (resp) {
+                                    this.$message({
+                                        type: 'success',
+                                        message: '添加成功!'
+                                    });
+                                }
+                            });
+                        }
+
+                    });
+
+
+                }).catch(() => {
+                    //用户点击取消按钮
+                    this.$message({
+                        type: 'info',
+                        message: '已取消添加'
+                    });
+                });
+
             }
         },
     });

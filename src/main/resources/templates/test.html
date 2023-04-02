@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <script th:src="@{/js/vue.js}"></script>
+  <script th:src="@{/js/elementui/index.js}"></script>
+  <link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+  <script th:src="@{/js/axios.js}"></script>
+  <style>
+    h1 {
+      font-size: 30px;
+      font-family: '宋体';
+      height: 50px;
+      line-height: 50px;
+    }
+
+    .demo-table-expand {
+      font-size: 0;
+    }
+
+    .demo-table-expand label {
+      width: 90px;
+      color: #99a9bf;
+    }
+
+    .demo-table-expand .el-form-item {
+      margin-right: 0;
+      margin-bottom: 0;
+      width: 50%;
+    }
+
+    .el-icon-arrow-right:before {
+      color: black;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <h1 style="text-align: center">逛逛吧</h1>
+  <el-table
+          :show-header="false"
+          :data="tableData"
+          style="width: 100%">
+    <el-table-column type="expand">
+      <template slot-scope="props">
+        <el-form label-position="left" inline class="demo-table-expand">
+          <el-form-item label="题目">
+            <span>{{ props.row.title }}</span>
+          </el-form-item>
+          <el-form-item label="选项A">
+            <span>{{ props.row.optiona }}</span>
+          </el-form-item>
+          <el-form-item label="选项B">
+            <span>{{ props.row.optionb }}</span>
+          </el-form-item>
+          <el-form-item label="选项C">
+            <span>{{ props.row.optionc }}</span>
+          </el-form-item>
+          <el-form-item label="选项D">
+            <span>{{ props.row.optiond }}</span>
+          </el-form-item>
+          <el-form-item label="答案">
+            <span>{{ props.row.answer }}</span>
+          </el-form-item>
+          <el-form-item label="附图">
+            <div v-if="props.row.image">
+              <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
+                        :src="getImage(props.row.image)"
+                        :preview-src-list="[ `/api/img/${props.row.image}` ]">
+              </el-image>
+            </div>
+            <div v-else>
+              <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
+            </div>
+          </el-form-item>
+        </el-form>
+      </template>
+    </el-table-column>
+    <el-table-column
+            label="附图"
+            prop="image">
+      <template slot-scope="{ row }">
+        <div v-if="row.image">
+          <el-image style="width: 200px; height: 120px; border:none;cursor: pointer;"
+                    :src="getImage(row.image)"
+                    :preview-src-list="[ `/api/img/${row.image}` ]">
+          </el-image>
+        </div>
+        <div v-else>
+          <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
+        </div>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+            label="科目"
+            prop="typesName"
+    >
+    </el-table-column>
+    <el-table-column
+            label="题目"
+            prop="title">
+    </el-table-column>
+
+
+    <el-table-column
+            label="用户名"
+            prop="username">
+    </el-table-column>
+    <el-table-column
+            label="用户头像"
+            prop="userAvatar">
+      <template slot-scope="{ row }">
+        <div v-if="row.userAvatar">
+          <el-image style="width: 100px; height: 100px; border-radius: 50%; border:none;cursor: pointer;"
+                    :src="getImage(row.userAvatar)"
+                    :preview-src-list="[ `/api/img/${row.userAvatar}` ]">
+          </el-image>
+        </div>
+        <div v-else>
+          <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
+        </div>
+      </template>
+
+    </el-table-column>
+
+
+  </el-table>
+</div>
+
+
+<script>
+  new Vue({
+    el: "#app",
+    data() {
+      return {
+        tableData: [],//数据
+        total: 0,//总记录数
+        updateTime: "",//更新时间
+        count: 8 //首次加载条数
+      }
+    },
+    created() {
+      this.getData();
+    },
+    methods: {
+
+
+      getData() {
+        axios.get("/public/getData").then(res => {
+          console.log(res);
+          this.tableData = res.data.data;
+          this.total = res.data.count;
+          this.updateTime = res.data.updateTime;
+        });
+      },
+      getImage(image) {
+        // return `/common/download?name=${image}`
+        return `/api/img/${image}`
+      },
+      load() {
+        this.count += 4
+      }
+    },
+  });
+</script>
+
+</body>
+</html>
