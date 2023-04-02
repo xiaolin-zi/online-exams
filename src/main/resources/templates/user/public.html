@@ -197,7 +197,7 @@
                     this.total = res.data.count;
                     //每页6条，少于6条也是一页
                     this.totalPage = parseInt((res.data.count + this.pageSize - 1) / this.pageSize);
-                    this.tableData = this.tableData.concat(this.allData.slice(0, 10));
+                    this.tableData = this.tableData.concat(this.allData.slice(0, this.pageSize));
                 });
             },
             getImage(image) {
@@ -211,8 +211,6 @@
                     if (scrollDistance <= 0) {  //等于0证明已经到底，可以请求接口
 
                         if (this.currentPage < this.totalPage) {//当前页数小于总页数就请求
-                            console.log(this.currentPage,'哈哈哈哈');
-                            console.log(this.totalPage,'哈哈哈')
                             this.currentPage++;//当前页数自增
                             // 显示  isLoading  等待提示
                             this.isLoading = true;
