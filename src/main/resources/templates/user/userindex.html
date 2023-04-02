@@ -222,7 +222,7 @@
 
             <el-form-item>
                 <el-button type="success" @click="startUpdateAvatar">提交</el-button>
-                <el-button type="success" plain @click="dialogImg = false,$refs.userImg.clearFiles()">取消</el-button>
+                <el-button type="success" plain @click="dialogImg = false,$refs.userImg.clearFiles(),imageUrl = `/api/img/${avatar}`">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -317,7 +317,7 @@
                     inputErrorMessage: '密码格式不正确'
                 }).then(({value}) => {
 
-                    axios.get('/user/checkPassword/'+`${value}`).then(res => {
+                    axios.get('/user/checkPassword/' + `${value}`).then(res => {
                         if (res.data) {
                             this.$message({
                                 type: 'success',
@@ -329,11 +329,11 @@
                                 cancelButtonText: '取消',
                                 inputPattern: /^[\w]{5,16}$/,
                                 inputErrorMessage: '密码格式不正确'
-                            }).then(({value})=>{
+                            }).then(({value}) => {
 
                                 console.log(value);
                                 //更改密码
-                                axios.put('/user/updatePassword/'+`${value}`).then(res => {
+                                axios.put('/user/updatePassword/' + `${value}`).then(res => {
                                     if (res.data) {
                                         this.$message({
                                             type: 'success',
@@ -348,13 +348,12 @@
                                 }).catch(err => {
                                     console.log(err);
                                 })
-                            }).catch(()=>{
+                            }).catch(() => {
                                 this.$message({
                                     type: 'info',
                                     message: '取消输入'
                                 });
                             });
-
 
 
                         } else {
@@ -376,198 +375,184 @@
                 });
             },
 
-                    //小组信息关闭
-                    handleGroupClose(done)
-                    {
-                        this.$confirm('确认关闭？')
-                            .then(_ => {
-                                done();
-                            })
-                            .catch(_ => {
-                            });
-                    }
-                ,
+            //小组信息关闭
+            handleGroupClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {
+                    });
+            }
+            ,
 
-                    logout()
-                    {
-                        this.$confirm('确定退出登录吗', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
-                            type: 'warning'
-                        }).then(() => {
-                            window.location.href = '/user/logout';
-                            this.$message({
-                                type: 'success',
-                                message: '已退出登录!'
-                            });
-                        }).catch(() => {
-                            //用户点击取消按钮
-                            this.$message({
-                                type: 'info',
-                                message: '已取消退出'
-                            });
+            logout() {
+                this.$confirm('确定退出登录吗', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    window.location.href = '/user/logout';
+                    this.$message({
+                        type: 'success',
+                        message: '已退出登录!'
+                    });
+                }).catch(() => {
+                    //用户点击取消按钮
+                    this.$message({
+                        type: 'info',
+                        message: '已取消退出'
+                    });
+                });
+            }
+            ,
+            goBack() {
+                const menu = this.menuList.find(item => item.id === this.menuActived)
+                this.menuHandle(menu, false)
+            }
+            ,
+
+            menuHandle(item, goBackFlag) {
+                this.loading = true
+                this.menuActived = item.id
+                this.iframeUrl = item.url
+                this.goBackFlag = goBackFlag
+                this.closeLoading()
+            }
+            ,
+            closeLoading() {
+                this.timer = null
+                this.timer = setTimeout(() => {
+                    this.loading = false
+                }, 500)
+            }
+            ,
+            getImage(avatar) {
+                return `/api/img/${avatar}`
+            }
+            ,
+            getUid() {
+                axios.get("/user").then(res => {
+                    if (res.data) {
+                        this.avatar = res.data;
+                        this.imageUrl = `/api/img/${res.data}`;
+                    }
+
+                })
+            }
+            ,
+
+            //修改头像的展示change
+            showAvatar(file, fileList) {
+                //获取上传的图片用于展示
+                var img = file.raw;
+                //展示图片
+                var reader = new FileReader();
+                reader.readAsDataURL(img);
+                //改为箭头函数，不然this指向的是reader
+                reader.onload = (e) => {
+                    if (reader.readyState == 2) {
+                        this.imageUrl = e.target.result;
+                    }
+                };
+                /* this.imageUrl = URL.createObjectURL(file.raw);*/
+                /* console.log(this.imageUrl)*/
+            }
+            ,
+
+            handleAvatarSuccess(res) {
+                console.log(res);
+                this.avatar = res;
+                this.imageUrl = `/api/img/${res}`;
+                axios.put("/user/" + this.avatar).then((resp) => {
+                    if (resp) {
+                        this.dialogImg = false;
+                        this.imageUrl = '';
+                        this.avatar = '';
+                        this.getUid();
+                        this.$message({
+                            type: 'success',
+                            message: '已经换上您喜欢的头像啦！'
                         });
                     }
-                ,
-                    goBack()
-                    {
-                        const menu = this.menuList.find(item => item.id === this.menuActived)
-                        this.menuHandle(menu, false)
-                    }
-                ,
-
-                    menuHandle(item, goBackFlag)
-                    {
-                        this.loading = true
-                        this.menuActived = item.id
-                        this.iframeUrl = item.url
-                        this.goBackFlag = goBackFlag
-                        this.closeLoading()
-                    }
-                ,
-                    closeLoading()
-                    {
-                        this.timer = null
-                        this.timer = setTimeout(() => {
-                            this.loading = false
-                        }, 500)
-                    }
-                ,
-                    getImage(avatar)
-                    {
-                        return `/api/img/${avatar}`
-                    }
-                ,
-                    getUid()
-                    {
-                        axios.get("/user").then(res => {
-                            if (res.data) {
-                                this.avatar = res.data;
-                                this.imageUrl = `/api/img/${res.data}`;
-                            }
-
-                        })
-                    }
-                ,
-
-                    //修改头像的展示change
-                    showAvatar(file, fileList)
-                    {
-                        //获取上传的图片用于展示
-                        var img = file.raw;
-                        //展示图片
-                        var reader = new FileReader();
-                        reader.readAsDataURL(img);
-                        //改为箭头函数，不然this指向的是reader
-                        reader.onload = (e) => {
-                            if (reader.readyState == 2) {
-                                this.imageUrl = e.target.result;
-                            }
-                        };
-                        /* this.imageUrl = URL.createObjectURL(file.raw);*/
-                        /* console.log(this.imageUrl)*/
-                    }
-                ,
-
-                    handleAvatarSuccess(res)
-                    {
-                        console.log(res);
-                        this.avatar = res;
-                        this.imageUrl = `/api/img/${res}`;
-                        axios.put("/user/" + this.avatar).then((resp) => {
-                            if (resp) {
-                                this.dialogImg = false;
-                                this.imageUrl = '';
-                                this.avatar = '';
-                                this.getUid();
-                                this.$message({
-                                    type: 'success',
-                                    message: '已经换上您喜欢的头像啦！'
-                                });
-                            }
-                        });
-                        //加载动画关闭
-                        this.uploading = false;
-                    }
-                ,
+                });
+                //加载动画关闭
+                this.uploading = false;
+            }
+            ,
 
 
-                    //修改头像
-                    updateImg()
-                    {
-                        //点击提交展示加载中
-                        this.uploading = true;
-                        //提交修改图片的上传
-                        this.$refs.userImg.submit();
-                    }
-                ,
+            //修改头像
+            updateImg() {
+                //点击提交展示加载中
+                this.uploading = true;
+                //提交修改图片的上传
+                this.$refs.userImg.submit();
+            }
+            ,
 
-                    //用户点击开始更新头像
-                    startUpdateAvatar()
-                    {
-                        //判断是否修改过
-                        if (this.isChangeAvatar) {
-                            this.toUpdateAvatar("avatar", this.updateImg);
-                        } else {
-                            this.dialogImg = true;
-                            this.$message({
-                                type: 'warning',
-                                message: '您还没有修改头像哦!'
-                            });
-                            //加载动画关闭
-                            this.uploading = false;
-                        }
-                    }
-                ,
-                    toUpdateAvatar(key, method)
-                    {
-                        var v = this.getCookie(key);
-                        //判断是否有cookie
-                        if (!v) {
-                            method();
-                            //获取第二天凌晨到当前时间的秒数
-                            var tim_sec = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
-                            this.setCookie(key, "1", tim_sec);
-                        } else if (v >= 3) { //判断是否超过修改次数
-                            this.$message({
-                                type: 'warning',
-                                message: '每天只能修改3次头像哦!'
-                            });
-                        } else {
-                            method();
-                            //修改次数+1,满3次后不再修改
-                            var avatartimeout = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
-                            var value = this.getCookie(key);
-                            this.setCookie("avatar", parseInt(value) + 1, avatartimeout);
-                        }
-                    }
-                ,
+            //用户点击开始更新头像
+            startUpdateAvatar() {
+                //判断是否修改过
+                if (this.isChangeAvatar) {
+                    this.toUpdateAvatar("avatar", this.updateImg);
+                } else {
+                    this.dialogImg = true;
+                    this.$message({
+                        type: 'warning',
+                        message: '您还没有修改头像哦!'
+                    });
+                    //加载动画关闭
+                    this.uploading = false;
+                }
+            }
+            ,
+            toUpdateAvatar(key, method) {
+                var v = this.getCookie(key);
+                //判断是否有cookie
+                if (!v) {
+                    method();
+                    //获取第二天凌晨到当前时间的秒数
+                    var tim_sec = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                    this.setCookie(key, "1", tim_sec);
+                } else if (v >= 3) { //判断是否超过修改次数
+                    this.$message({
+                        type: 'warning',
+                        message: '每天只能修改3次头像哦!'
+                    });
+                } else {
+                    method();
+                    //修改次数+1,满3次后不再修改
+                    var avatartimeout = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                    var value = this.getCookie(key);
+                    this.setCookie("avatar", parseInt(value) + 1, avatartimeout);
+                }
+            }
+            ,
 
-                    setCookie(name, value, second)
-                    {
-                        if (!second) {
-                            second = 7 * 24 * 60 * 60;//默认7天
-                        }
-                        var exp = new Date();
-                        exp.setTime(exp.getTime() + second * 1000);
-                        document.cookie = name + "=" + encodeURI(value) + ";expires=" + exp.toGMTString() + ";path=/";
-                    }
-                ,
-                    getCookie(name)
-                    {
-                        if (document.cookie.length > 0) {
-                            c_start = document.cookie.indexOf(name + "=");//获取字符串的起点
-                            if (c_start != -1) {
-                                c_start = c_start + name.length + 1;//获取值的起点
-                                c_end = document.cookie.indexOf(";", c_start);//获取结尾处
-                                if (c_end == -1) c_end = document.cookie.length;//如果是最后一个，结尾就是cookie字符串的结尾
-                                return decodeURI(document.cookie.substring(c_start, c_end));//截取字符串返回
-                            }
-                        }
-                        return "";
+            setCookie(name, value, second) {
+                if (!second) {
+                    second = 7 * 24 * 60 * 60;//默认7天
+                }
+                var exp = new Date();
+                exp.setTime(exp.getTime() + second * 1000);
+                document.cookie = name + "=" + encodeURI(value) + ";expires=" + exp.toGMTString() + ";path=/";
+            }
+            ,
+            getCookie(name) {
+                if (document.cookie.length > 0) {
+                    c_start = document.cookie.indexOf(name + "=");//获取字符串的起点
+                    if (c_start != -1) {
+                        c_start = c_start + name.length + 1;//获取值的起点
+                        c_end = document.cookie.indexOf(";", c_start);//获取结尾处
+                        if (c_end == -1) c_end = document.cookie.length;//如果是最后一个，结尾就是cookie字符串的结尾
+                        return decodeURI(document.cookie.substring(c_start, c_end));//截取字符串返回
                     }
                 }
-            })
+                return "";
+            }
+        }
+    })
 </script>
 </body>
 
