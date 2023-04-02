@@ -47,7 +47,8 @@ public class UserController {
             request.setAttribute("login_msg", "登录成功！");
             session.setAttribute("user",user);
             session.setAttribute("uid",user.getUid());
-            return "user/userindex";
+//            return "user/userindex";
+            return "redirect:/user/index";
         }else{
             request.setAttribute("flag", false);//登录页标志
             request.setAttribute("login_msg", "账号或密码错误！");
@@ -145,8 +146,15 @@ public class UserController {
     //跳转到查看错题
     @GetMapping("/page")
     public String page(){
-        return "list";
+        return "user/list";
     }
+
+    //跳转到查看公开错题
+    @GetMapping("/public")
+    public String topublic(){
+        return "user/public";
+    }
+
 
     //跳转到查看团队信息
     @GetMapping("/teamdata")

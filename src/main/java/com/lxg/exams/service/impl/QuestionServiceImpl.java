@@ -28,7 +28,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     public int addQuestion(String title, String optionA, String optionB, String optionC, String optionD, String answer, int types, String image, String remark, int uid) {
         //id自增，不需要传入
         //isDelete默认为0，不需要传入
-        Question question = new Question(null,title,optionA,optionB,optionC,optionD,answer,types,image,remark,null,uid);
+        //isPublic默认为0，不需要传入
+        Question question = new Question(null,title,optionA,optionB,optionC,optionD,answer,types,image,remark,null,uid,null,null,null,null,null);
         int insert = questionMapper.insert(question);
         return insert;
     }
@@ -44,7 +45,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     //根据id修改题目
     @Override
     public int updateQuestion(String title, String optionA, String optionB, String optionC, String optionD,  String answer,int types,String image, String remark,int uid) {
-        Question question = new Question(null,title,optionA,optionB,optionC,optionD,answer,types,image,remark,null,uid);
+        Question question = new Question(null,title,optionA,optionB,optionC,optionD,answer,types,image,remark,null,uid,null,null,null,null,null);
         int i = questionMapper.updateById(question);
         return i;
     }
@@ -55,6 +56,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         Question question = questionMapper.selectById(id);
         return question;
     }
+
+
+
 
 
 }

@@ -7,23 +7,25 @@
     <resultMap id="BaseResultMap" type="com.lxg.exams.bean.Question">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="title" column="title" jdbcType="CHAR"/>
-            <result property="optionA" column="optionA" jdbcType="CHAR"/>
-            <result property="optionB" column="optionB" jdbcType="CHAR"/>
-            <result property="optionC" column="optionC" jdbcType="CHAR"/>
-            <result property="optionD" column="optionD" jdbcType="CHAR"/>
+            <result property="optiona" column="optionA" jdbcType="CHAR"/>
+            <result property="optionb" column="optionB" jdbcType="CHAR"/>
+            <result property="optionc" column="optionC" jdbcType="CHAR"/>
+            <result property="optiond" column="optionD" jdbcType="CHAR"/>
             <result property="answer" column="answer" jdbcType="VARCHAR"/>
             <result property="types" column="types" jdbcType="INTEGER"/>
             <result property="image" column="image" jdbcType="VARCHAR"/>
             <result property="remark" column="remark" jdbcType="VARCHAR"/>
             <result property="uid" column="uid" jdbcType="INTEGER"/>
             <result property="isdeleted" column="isDeleted" jdbcType="INTEGER"/>
+            <result property="ispublic" column="isPublic" jdbcType="TINYINT"/>
+            <result property="updateTime" column="update_time" jdbcType="DATE"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,title,optionA,
         optionB,optionC,optionD,
         answer,types,image,
-        remark,uid,isDeleted
+        remark,uid,isDeleted,isPublic,update_time
     </sql>
     <select id="getAllByIdQuestion" resultType="com.lxg.exams.bean.Question"></select>
 </mapper>
