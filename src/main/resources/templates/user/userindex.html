@@ -270,6 +270,24 @@
                 avatar: "",
                 //头像上传判定
                 uploading: false,
+                //头像是否修改过
+                isChangeAvatar: false,
+            }
+        },
+        watch:{
+            //监听图片是否修改过
+            imageUrl: function (newVal) {
+                //修改的时候才会触发
+                if (this.dialogImg){
+                    var theOld = "/api/img/"+this.avatar;
+                    if (newVal != theOld) {
+                        console.log(newVal, theOld,'图片修改过');
+                        this.isChangeAvatar = true;
+                    } else {
+                        console.log(newVal, theOld,'图片没有修改过');
+                        this.isChangeAvatar = false;
+                    }
+                }
             }
         },
         mounted() {
@@ -370,6 +388,8 @@
                 //加载动画关闭
                 this.uploading = false;
             },
+
+
             //修改头像
             updateImg() {
                 //点击提交展示加载中
@@ -380,8 +400,18 @@
 
             //用户点击开始更新头像
             startUpdateAvatar() {
-                //判断修改次数
-                this.toUpdateAvatar("avatar", this.updateImg);
+                //判断是否修改过
+                if (this.isChangeAvatar) {
+                    this.toUpdateAvatar("avatar", this.updateImg);
+                } else {
+                    this.dialogImg = true;
+                    this.$message({
+                        type: 'warning',
+                        message: '您还没有修改头像哦!'
+                    });
+                    //加载动画关闭
+                    this.uploading = false;
+                }
             },
             toUpdateAvatar(key, method) {
                 var v = this.getCookie(key);
@@ -398,7 +428,7 @@
                     });
                 }else {
                     method();
-                    //修改次数减一
+                    //修改次数+1,满3次后不再修改
                     var avatartimeout = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
                     var value = this.getCookie(key);
                     this.setCookie("avatar", parseInt(value) + 1, avatartimeout);
