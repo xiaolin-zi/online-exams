@@ -123,10 +123,32 @@ public class UserController {
 
 
 
-    //跳转到修改密码
-    @GetMapping("/password")
-    public String updatePwd() {
-        return "password";
+    //验证密码是否正确
+    @ResponseBody
+    @GetMapping("/checkPassword/{value}")
+    public boolean checkPassword(@PathVariable String value,HttpSession session,HttpServletRequest request) {
+        //获取当前登录用户的id
+        int uid = (Integer) session.getAttribute("uid");
+        User user = userService.getById(uid);
+        System.out.println(value+"===================="+user.getPassword()+"====================");
+        if (user.getPassword().equals(value)) {
+            System.out.println("密码正确");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //修改密码
+    @ResponseBody
+    @PutMapping("/updatePassword/{password}")
+    public boolean updatePassword(@PathVariable String password, HttpSession session,HttpServletRequest request) {
+        //获取当前登录用户的id
+        int uid = (Integer) session.getAttribute("uid");
+        User user = userService.getById(uid);
+        user.setPassword(password);
+        boolean b = userService.updateById(user);
+        return b;
     }
 
 
