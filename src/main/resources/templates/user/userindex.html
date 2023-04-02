@@ -222,7 +222,7 @@
 
             <el-form-item>
                 <el-button type="success" @click="startUpdateAvatar">提交</el-button>
-                <el-button type="success" plain @click="dialogImg = false">取消</el-button>
+                <el-button type="success" plain @click="dialogImg = false,$refs.userImg.clearFiles()">取消</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
