@@ -220,7 +220,7 @@
                                 const end = start + this.pageSize;//计算下一页结束索引
                                 this.tableData = this.tableData.concat(this.allData.slice(start, end));//将下一页数据添加到表格数据
                                 this.isLoading = false;
-                            },1500);
+                            },800);
                         } else if(this.currentPage>=this.totalPage){
                             //说明已经是最后一页了
                             this.$refs.bottomImg.innerText = '数据已经全部加载完毕';
