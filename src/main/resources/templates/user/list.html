@@ -259,12 +259,15 @@
     <el-dialog
             title="编辑错题"
             :visible.sync="dialogEdit"
+            top="0"
             width="30%">
         <el-form
                 v-loading="uploading"
                 element-loading-text="正在更改..."
                 element-loading-spinner="el-icon-loading"
-                ref="form" :model="exam" :rules="rules" label-width="80px">
+                ref="form" :model="exam" :rules="rules" label-width="80px"
+                size="small"
+        >
             <el-form-item label="题目" prop="title">
                 <el-input :autosize="{ minRows: 2, maxRows: 4}"
                           placeholder="请输入题目" type="textarea" v-model="exam.title" resize:none></el-input>
@@ -318,10 +321,12 @@
     </el-dialog>
     <!--添加数据对话框表单-->
     <el-dialog
+            top="0"
             title="图片上传错题"
             :visible.sync="dialogUpdate1"
             width="30%">
         <el-form
+                size="small"
                 v-loading="uploading"
                 element-loading-text="别急，我拿命在上传..."
                 element-loading-spinner="el-icon-loading"
@@ -392,10 +397,12 @@
     </el-dialog>
     <!--添加数据对话框表单-->
     <el-dialog
+            top="0"
             title="语音上传错题"
             :visible.sync="dialogUpdate2"
             width="30%">
         <el-form
+                size="small"
                 v-loading="uploading"
                 element-loading-text="别急，我拿命在上传..."
                 element-loading-spinner="el-icon-loading"
