@@ -833,7 +833,32 @@
             speechAddQue() {
                 //点击提交展示加载中
                 this.uploading = true;
-                this.$refs.yuyinImg.submit();
+                //判断是否有图片
+                if (this.imageUrl) {
+                    //有图片
+                    this.$refs.fujiaImg.submit();
+                } else {
+                    //没有图片
+                    axios.post("/question", this.exam).then((resp) => {
+                        if (resp) {
+                            this.dialogUpdate1 = false;
+                            this.dialogUpdate2 = false;
+                            this.imageUrl = '';
+                            this.imageUrl2 = '';
+                            this.exam.title = '';
+                            this.exam.types = '';
+                            this.getAll();
+                            this.$message({
+                                type: 'success',
+                                duration:1000,
+                                message: '添加题目成功!'
+                            });
+                        }
+                    });
+                    //加载动画关闭
+                    this.uploading = false;
+                }
+                // this.$refs.yuyinImg.submit();
             },
 
 
@@ -843,7 +868,36 @@
                 this.uploading = true;
                 //点击提交把图片进行上传
                 // this.$refs.upload.submit();//这个识别的图片不需要上传
-                this.$refs.fujiaImg.submit();
+                //判断是否有图片
+                if (this.imageUrl) {
+                    //有图片
+                    this.$refs.fujiaImg.submit();
+                } else {
+                    //没有图片
+                    axios.post("/question", this.exam).then((resp) => {
+                        if (resp) {
+                            this.dialogUpdate1 = false;
+                            this.dialogUpdate2 = false;
+                            this.imageUrl = '';
+                            this.imageUrl2 = '';
+                            this.exam.title = '';
+                            this.exam.types = '';
+                            this.getAll();
+                            this.$message({
+                                type: 'success',
+                                duration:1000,
+                                message: '添加题目成功!'
+                            });
+                        }
+                    });
+                    //加载动画关闭
+                    this.uploading = false;
+                }
+
+
+
+
+                // this.$refs.fujiaImg.submit();
             },
             //表单修改
             updateQue() {
