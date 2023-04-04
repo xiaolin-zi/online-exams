@@ -289,10 +289,10 @@
             </el-form-item>
             <el-form-item label="科目类型" prop="types">
                 <el-select v-model="exam.types" placeholder="请选择科目类型">
-                    <el-option label="计算机网络" value="1"></el-option>
-                    <el-option label="操作系统" value="2"></el-option>
-                    <el-option label="计算机组成原理" value="3"></el-option>
-                    <el-option label="数据结构" value="4"></el-option>
+                    <el-option label="计算机网络" :value="1"></el-option>
+                    <el-option label="操作系统" :value="2"></el-option>
+                    <el-option label="计算机组成原理" :value="3"></el-option>
+                    <el-option label="数据结构" :value="4"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="附加图片" prop="image">
@@ -938,7 +938,7 @@
                     if(this.isChangeImg){
                         //没有更改表单但是更改了图片
                         this.$refs.xiugaiImg.submit();
-                    }else{
+                    } else{
                         //没有更改图片也没有更改表单
                         //直接关闭弹窗
                         this.dialogEdit = true;
