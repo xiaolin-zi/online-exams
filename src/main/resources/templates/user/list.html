@@ -263,7 +263,7 @@
             width="30%">
         <el-form
                 v-loading="uploading"
-                element-loading-text="正在更改..."
+                element-loading-text="正在更改中..."
                 element-loading-spinner="el-icon-loading"
                 ref="form" :model="exam" :rules="rules" label-width="80px"
                 size="small"
@@ -721,7 +721,9 @@
                 formData.append("file", img);
                 //调用接口
                 axios({
-                    url: "/eduMap",
+                    // url: "/eduMap",//试卷版接口，次数有限
+                    url: "/highPrecision",//基础高精度版接口
+                    // url: "/basic",//基础通用版接口
                     method: "post",
                     data: formData,
                     headers: {'Content-Type': 'multipart/form-data'}
@@ -738,7 +740,7 @@
                     // this.exam.title = string;
                 }).catch(function (error) {
                     // 处理失败情况
-                    alert("上传失败！");
+                    alert("接口不可用！");
                     console.log(error.message)
                 });
 
