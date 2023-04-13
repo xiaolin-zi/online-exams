@@ -8,7 +8,7 @@ class OnlineExamsApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println("Hello World!O(∩_∩)O哈哈~");
+        System.out.println("Hello Jenkins!O(∩_∩)O哈哈~");
 
         }
 
