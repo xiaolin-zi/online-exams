@@ -180,7 +180,7 @@
         </el-table-column>
         <el-table-column
                 prop="remark"
-                label="备注"
+                label="笔记"
         ></el-table-column>
         <el-table-column
                 label="操作"
@@ -286,6 +286,9 @@
             </el-form-item>
             <el-form-item label="答案" prop="answer">
                 <el-input v-model="exam.answer"></el-input>
+            </el-form-item>
+            <el-form-item label="笔记" prop="remark">
+                <el-input v-model="exam.remark"></el-input>
             </el-form-item>
             <el-form-item label="科目类型" prop="types">
                 <el-select v-model="exam.types" placeholder="请选择科目类型">
@@ -501,6 +504,7 @@
                     types: "",
                     image: "",
                     image2: "",
+                    remark: ""
                 },
                 dialogEdit: false,
                 dialogUpdate1: false,
@@ -525,7 +529,7 @@
                 isChange: false,
                 //判断当前题目附图是否修改过
                 isChangeImg: false,
-                oldExam:{
+                oldExam: {
                     title: "",
                     optiona: "",
                     optionb: "",
@@ -533,6 +537,7 @@
                     optiond: "",
                     answer: "",
                     types: "",
+                    remark:""
                 }
             };
         },
@@ -545,11 +550,11 @@
             exam: {
                 handler: function (newVal) {
                     //修改的时候才会触发
-                    if (this.dialogEdit){
-                        if(newVal.title != this.oldExam.title || newVal.optiona != this.oldExam.optiona || newVal.optionb != this.oldExam.optionb || newVal.optionc != this.oldExam.optionc || newVal.optiond != this.oldExam.optiond || newVal.answer != this.oldExam.answer || newVal.types != this.oldExam.types){
+                    if (this.dialogEdit) {
+                        if (newVal.title != this.oldExam.title || newVal.optiona != this.oldExam.optiona || newVal.optionb != this.oldExam.optionb || newVal.optionc != this.oldExam.optionc || newVal.optiond != this.oldExam.optiond || newVal.answer != this.oldExam.answer || newVal.remark != this.oldExam.remark || newVal.types != this.oldExam.types) {
                             console.log('表单修改过');
                             this.isChange = true;
-                        }else {
+                        } else {
                             console.log('表单没有修改过');
                             this.isChange = false;
                         }
@@ -560,13 +565,13 @@
             //监听图片是否修改过
             imageUrl: function (newVal) {
                 //修改的时候才会触发
-                if (this.dialogEdit){
-                    var theOld = "/api/img/"+this.exam.image;
+                if (this.dialogEdit) {
+                    var theOld = "/api/img/" + this.exam.image;
                     if (newVal != theOld) {
-                        console.log(newVal, theOld,'图片修改过');
+                        console.log(newVal, theOld, '图片修改过');
                         this.isChangeImg = true;
                     } else {
-                        console.log(newVal, theOld,'图片没有修改过');
+                        console.log(newVal, theOld, '图片没有修改过');
                         this.isChangeImg = false;
                     }
                 }
@@ -611,7 +616,7 @@
                             this.getAll();
                             this.$message({
                                 type: 'success',
-                                duration:1000,
+                                duration: 1000,
                                 message: '题目已分享到逛一逛!'
                             });
                         }
@@ -620,7 +625,7 @@
                     //用户点击取消按钮
                     this.$message({
                         type: 'info',
-                        duration:1000,
+                        duration: 1000,
                         message: '已取消分享'
                     });
                 });
@@ -638,7 +643,7 @@
                             this.getAll();
                             this.$message({
                                 type: 'success',
-                                duration:1000,
+                                duration: 1000,
                                 message: '题目已设为私有!'
                             });
                         }
@@ -647,7 +652,7 @@
                     //用户点击取消按钮
                     this.$message({
                         type: 'info',
-                        duration:1000,
+                        duration: 1000,
                         message: '已取消题目设为私有'
                     });
                 });
@@ -665,7 +670,7 @@
                             this.getAll();
                             this.$message({
                                 type: 'success',
-                                duration:1000,
+                                duration: 1000,
                                 message: '删除成功!'
                             });
                         }
@@ -674,7 +679,7 @@
                     //用户点击取消按钮
                     this.$message({
                         type: 'info',
-                        duration:1000,
+                        duration: 1000,
                         message: '已取消删除'
                     });
                 });
@@ -792,7 +797,7 @@
                         this.getAll();
                         this.$message({
                             type: 'success',
-                            duration:1000,
+                            duration: 1000,
                             message: '修改成功!'
                         });
                     }
@@ -822,7 +827,7 @@
                         this.getAll();
                         this.$message({
                             type: 'success',
-                            duration:1000,
+                            duration: 1000,
                             message: '添加题目成功!'
                         });
                     }
@@ -852,7 +857,7 @@
                             this.getAll();
                             this.$message({
                                 type: 'success',
-                                duration:1000,
+                                duration: 1000,
                                 message: '添加题目成功!'
                             });
                         }
@@ -887,7 +892,7 @@
                             this.getAll();
                             this.$message({
                                 type: 'success',
-                                duration:1000,
+                                duration: 1000,
                                 message: '添加题目成功!'
                             });
                         }
@@ -895,8 +900,6 @@
                     //加载动画关闭
                     this.uploading = false;
                 }
-
-
 
 
                 // this.$refs.fujiaImg.submit();
@@ -907,14 +910,14 @@
                 this.uploading = true;
                 //点击提交把图片进行上传
                 //判断表单是否更改过
-                if(this.isChange){
+                if (this.isChange) {
                     //表单更改过
                     console.log("表单更改过");
                     //判断是否更改了图片
-                    if(this.isChangeImg){
+                    if (this.isChangeImg) {
                         //表单更改过也更改了图片
                         this.$refs.xiugaiImg.submit();
-                    }else{
+                    } else {
                         //没有更改图片但是更改了表单
                         //不需要上传图片直接进行修改
                         axios.put("/question", this.exam).then((resp) => {
@@ -926,7 +929,7 @@
                                 this.getAll();
                                 this.$message({
                                     type: 'success',
-                                    duration:1000,
+                                    duration: 1000,
                                     message: '修改成功!'
                                 });
                             }
@@ -934,19 +937,19 @@
                         //加载动画关闭
                         this.uploading = false;
                     }
-                } else{
+                } else {
                     //表单没有更改过
                     //判断是否更改了图片
-                    if(this.isChangeImg){
+                    if (this.isChangeImg) {
                         //没有更改表单但是更改了图片
                         this.$refs.xiugaiImg.submit();
-                    } else{
+                    } else {
                         //没有更改图片也没有更改表单
                         //直接关闭弹窗
                         this.dialogEdit = true;
                         this.$message({
                             type: 'info',
-                            duration:1000,
+                            duration: 1000,
                             message: '您未做任何修改!'
                         });
                         //加载动画关闭
