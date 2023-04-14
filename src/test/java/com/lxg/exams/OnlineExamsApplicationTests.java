@@ -10,8 +10,7 @@ class OnlineExamsApplicationTests {
     void contextLoads() {
         System.out.println("Hello Jenkins!O(∩_∩)O哈哈~");
 
-        }
-
-
-
     }
+
+
+}
