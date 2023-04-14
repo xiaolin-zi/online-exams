@@ -196,7 +196,9 @@
                         class="rank"
                         v-model="scope.row.rank"
                         show-text
-                        :change="changeRank(scope.row)">
+                        :texts="texts"
+                        :max="3"
+                        @change="changeRank(scope.row)">
                 </el-rate>
 
                 <div v-if="scope.row.image">
@@ -550,7 +552,8 @@
                     answer: "",
                     types: "",
                     remark: ""
-                }
+                },
+                texts:['不熟悉', '模糊', '熟悉']
             };
         },
         created() {
@@ -1019,7 +1022,15 @@
                 this.isRecoding = !this.isRecoding;
             },
             changeRank(ee) {
-                axios.put("/question", ee)
+                axios.put("/question", ee).then((resp)=>{
+                    if(resp){
+                        this.$message({
+                            type: 'success',
+                            duration: 1000,
+                            message: '修改熟悉度成功!'
+                        });
+                    }
+                })
             }
         }
     });
