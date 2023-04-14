@@ -288,6 +288,7 @@
         >
             <el-form-item label="题目" prop="title">
                 <el-input :autosize="{ minRows: 2, maxRows: 4}"
+                          @focus="onMyFocus" @blur="onMyBlur"
                           placeholder="请输入题目" type="textarea" v-model="exam.title" resize:none></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optiona">
@@ -361,29 +362,32 @@
                         action="/common/upload"
                         :show-file-list="false"
                         :on-change="handleupload"
+                        @mousedown.native="cancelblur"
                 >
                     <img v-if="imageUrl2" :src="imageUrl2" class="avatar2">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-form-item>
             <el-form-item label="题目" prop="title">
-                <el-input type="textarea" v-model="exam.title" id="exam-title" :autosize="{ minRows: 2, maxRows: 4}"
+                <el-input type="textarea" v-model="exam.title"
+                          @focus="onMyFocus" @blur="onMyBlur"
+                          id="exam-title" :autosize="{ minRows: 2, maxRows: 4}"
                           placeholder="请输入题目"></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optiona">
-                <el-input v-model="exam.optiona"></el-input>
+                <el-input type="textarea" v-model="exam.optiona" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
-            <el-form-item label="选项B" prop="optionb">
-                <el-input v-model="exam.optionb"></el-input>
+            <el-form-item  label="选项B" prop="optionb">
+                <el-input type="textarea" v-model="exam.optionb" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="选项C" prop="optionc">
-                <el-input v-model="exam.optionc"></el-input>
+                <el-input type="textarea" v-model="exam.optionc" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="选项D" prop="optiond">
-                <el-input v-model="exam.optiond"></el-input>
+                <el-input type="textarea" v-model="exam.optiond" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="答案" prop="answer">
-                <el-input v-model="exam.answer"></el-input>
+                <el-input type="textarea" v-model="exam.answer" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="科目类型" prop="types">
                 <el-select v-model="exam.types" placeholder="请选择科目类型">
@@ -429,23 +433,26 @@
                 element-loading-spinner="el-icon-loading"
                 ref="form" :rules="rules" :model="exam" label-width="80px">
             <el-form-item label="题目" prop="title">
-                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"
+                <el-input type="textarea"
+                          :autosize="{ minRows: 2, maxRows: 4}"
+
+                          @focus="onMyFocus" @blur="onMyBlur"
                           placeholder="请输入题目" v-model="exam.title" id="speech-exam-title"></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optiona">
-                <el-input v-model="exam.optiona"></el-input>
+                <el-input type="textarea" v-model="exam.optiona" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="选项B" prop="optionb">
-                <el-input v-model="exam.optionb"></el-input>
+                <el-input type="textarea" v-model="exam.optionb" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="选项C" prop="optionc">
-                <el-input v-model="exam.optionc"></el-input>
+                <el-input type="textarea" v-model="exam.optionc" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
-            <el-form-item label="选项D" prop="optiond">
-                <el-input v-model="exam.optiond"></el-input>
+            <el-form-item  label="选项D" prop="optiond">
+                <el-input type="textarea" v-model="exam.optiond" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="答案" prop="answer">
-                <el-input v-model="exam.answer"></el-input>
+                <el-input type="textarea" v-model="exam.answer" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="科目类型" prop="types">
                 <el-select v-model="exam.types" placeholder="请选择科目类型">
@@ -469,7 +476,7 @@
                     <img v-if="imageUrl" :src="imageUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
-                <el-button type="success" @click="speech">开始识别</el-button>
+                <el-button type="success" @click="speech" id="startSpeech" @mousedown.native="cancelblur">开始识别</el-button>
             </el-form-item>
 
 
@@ -504,6 +511,7 @@
             alert(msg);
         }
     });
+
 
 
     new Vue({
@@ -563,7 +571,7 @@
             };
         },
         created() {
-            this.getAll()
+            this.getAll();
         },
 
         watch: {
@@ -759,7 +767,8 @@
                     // console.log(response);
                     // console.log(response.data);
                     let string = response.data;
-                    var result = document.getElementById("exam-title");
+                    // var result = document.getElementById("exam-title");
+                    var result = document.getElementsByClassName('getMessage')[0];
                     // alert(result);
                     // 处理成功情况
                     result.value = string;
@@ -986,6 +995,9 @@
             },
             //语音识别
             speech(e) {
+
+
+
                 console.log(recorder, "已经初始化");
                 //判断当前是否正在录音
                 if (!this.isRecoding) {
@@ -1021,7 +1033,8 @@
 
                                 console.log(response.data);
                                 let string = response.data;
-                                var result = document.getElementById('speech-exam-title');
+                                // var result = document.getElementById('speech-exam-title');
+                                var result = document.getElementsByClassName('getMessage')[0];
                                 // 处理成功情况
                                 result.value = string;
                                 result.dispatchEvent(new Event('input'));
@@ -1033,6 +1046,8 @@
                 }
                 this.isRecoding = !this.isRecoding;
             },
+
+            //修改熟悉度
             changeRank(ee) {
                 axios.put("/question", ee).then((resp) => {
                     if (resp) {
@@ -1043,6 +1058,22 @@
                         });
                     }
                 })
+            },
+
+            //监听输入框
+            onMyBlur(e) {
+                console.log('输入框失去焦点');
+                $(e.target).removeClass("getMessage");
+            },
+            onMyFocus(e) {
+                console.log('输入框获取焦点');
+                $(e.target).addClass("getMessage");
+            },
+
+            //取消输入框失去焦点
+            cancelblur(e){
+                // alert(e);
+                e.preventDefault();
             }
         }
     });
