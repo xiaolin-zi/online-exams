@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 腾讯云
+ Source Server         : local
  Source Server Type    : MySQL
  Source Server Version : 50735
- Source Host           : 106.55.228.118:3306
+ Source Host           : localhost:3306
  Source Schema         : online_exams
 
  Target Server Type    : MySQL
  Target Server Version : 50735
  File Encoding         : 65001
 
- Date: 02/04/2023 19:09:59
+ Date: 14/04/2023 14:46:31
 */
 
 SET NAMES utf8mb4;
@@ -33,11 +33,11 @@ CREATE TABLE `question`  (
   `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '附加图片',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '题目备注',
   `uid` int(11) NULL DEFAULT NULL COMMENT '用户ID',
-  `isDeleted` int(1) NULL DEFAULT 0 COMMENT '逻辑删除：1删除，0未删除',
+  `rank` int(10) NULL DEFAULT 0 COMMENT '熟练度',
   `isPublic` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否公开：1是，0否（默认）',
   `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 84 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for t_user
@@ -50,6 +50,6 @@ CREATE TABLE `t_user`  (
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`uid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

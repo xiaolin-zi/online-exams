@@ -87,10 +87,6 @@
             background-color: #67c23a;
             color: #FFFFFF;
         }
-/*
-        .rank {
-            width: 150px;
-        }*/
     </style>
 </head>
 <body>
@@ -202,7 +198,6 @@
         >
             <template slot-scope="scope">
                 <el-rate
-                        class="rank"
                         v-model="scope.row.rank"
                         show-text
                         :texts="texts"
@@ -852,6 +847,7 @@
                         this.imageUrl2 = '';
                         this.exam.title = '';
                         this.exam.types = '';
+                        this.exam.rank = '';
                         this.getAll();
                         this.$message({
                             type: 'success',
@@ -956,6 +952,7 @@
                                 this.imageUrl = '';
                                 this.exam.title = '';
                                 this.exam.types = '';
+                                this.exam.rank = '';
                                 this.getAll();
                                 this.$message({
                                     type: 'success',
