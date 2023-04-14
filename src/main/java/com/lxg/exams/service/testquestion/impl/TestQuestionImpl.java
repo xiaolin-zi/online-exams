@@ -22,32 +22,42 @@ public class TestQuestionImpl implements TestQuestionService {
      */
     @Override
     public ArrayList<Question> get20Question(int uid) {
-        int num=0;
+//        int num=0;
         Random random = new Random();
-        ArrayList<Question> A;
+        ArrayList<Question> A=null;
+        //根据uid获取该用户全部的错题
         ArrayList<Question> allQuestionByUid = questionMapper.getAllQuestionByUid(uid);
         //查询的题目的总数
         int size = allQuestionByUid.size();
+
         int[] ints = new int[size];
         if(size>=20){
-            //获取现在数组里面有多少个数字
-            for(int j=0;j<ints.length;j++){
-                if(ints[j]!=0){
-                    num++;
-                }
-            }
-            for(int k=0;k<num;k++){
-                //随机获取一个数
-                int i = random.nextInt(size);
-                for(int n=0;n<num;){
-                    if(i!=ints[n]){
-                        n++;
-                    }else{
+//            int index = random.nextInt(size);
+//
+//            A.add(allQuestionByUid.get(index));
+            while (A.size()<20){
+                //产生一个随机数
+                int index = random.nextInt(size);
+                //数组中含有index则为true,没有则为flase
+                boolean flag = true;
+                for(int i = 0 ;i<size; i++){
+                    if(ints[i]==index){
+                        flag=false;
                         break;
                     }
-
+                }
+                if(flag){
+                    A.add(allQuestionByUid.get(index));
+                    ints[index]=index;
                 }
             }
+
+//            //获取现在数组里面有多少个数字
+//            for(int j=0;j<ints.length;j++){
+//                if(ints[j]!=0){
+//                    num++;
+//                }
+//            }
 
         }else{
             return allQuestionByUid;
