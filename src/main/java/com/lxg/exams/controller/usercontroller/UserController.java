@@ -50,7 +50,7 @@ public class UserController {
 //            return "user/userindex";
             return "redirect:/user/index";
         }else{
-            request.setAttribute("flag", false);//登录页标志
+//            request.setAttribute("flag", false);//登录页标志
             request.setAttribute("login_msg", "账号或密码错误！");
             return "index";
         }
@@ -71,7 +71,7 @@ public class UserController {
                 //已被注册
                 //设置消息提醒
                 request.setAttribute("regist_msg", "用户名已注册！");
-                request.setAttribute("flag", true);//注册页标志
+//                request.setAttribute("flag", true);//注册页标志
                 return "index";
             } else {
 
@@ -79,11 +79,16 @@ public class UserController {
 
                 if (i > 0) {
                     request.setAttribute("regist_msg", "注册成功！");
-                    request.setAttribute("flag", true);//注册页标志
-                    return "index";
+//                    request.setAttribute("registSuccess",true);
+//                    request.setAttribute("flag", true);//注册页标志
+//                    return "index";
+                    User user1 = userService.getUserByUsername(username);
+                    session.setAttribute("uid",user1.getUid());
+                    session.setAttribute("user",user1);
+                    return "redirect:/user/index";
                 } else {
                     request.setAttribute("regist_msg", "注册失败！");
-                    request.setAttribute("flag", true);//注册页标志
+//                    request.setAttribute("flag", true);//注册页标志
                     return "index";
                 }
             }
