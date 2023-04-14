@@ -35,9 +35,9 @@ public class QuestionController {
         Integer uid = (Integer) session.getAttribute("uid");
         Page quePage = new Page(page, pageSize);
         LambdaQueryWrapper<Question> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(Question::getIsdeleted, 0);
         lqw.eq(Question::getUid, uid);
         lqw.eq(question.getTypes() != null, Question::getTypes, question.getTypes());
+        lqw.eq(question.getRank() != null, Question::getRank, question.getRank());
         lqw.like(question.getTitle() != null, Question::getTitle, question.getTitle());
         questionService.page(quePage, lqw);
         return quePage;
@@ -55,14 +55,14 @@ public class QuestionController {
         return b;
     }
 
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     //删除错题
     public Boolean deleteQue(@PathVariable Integer id) {
         Question question = questionService.getById(id);
         question.setIsdeleted(1);
         boolean b = questionService.updateById(question);
         return b;
-    }
+    }*/
 
 
     @PostMapping("/public/{id}")
@@ -100,7 +100,6 @@ public class QuestionController {
         LambdaQueryWrapper<Question> lqw = new LambdaQueryWrapper<>();
         Integer uid = (Integer) session.getAttribute("uid");
         lqw.eq(Question::getUid,uid);
-        lqw.eq(Question::getIsdeleted,0);
         lqw.eq(Question::getTitle,question.getTitle());
         lqw.eq(Question::getOptiona,question.getOptiona());
         lqw.eq(Question::getOptionb,question.getOptionb());
@@ -118,5 +117,15 @@ public class QuestionController {
             return false;
         }
     }
+/*
+    @PostMapping("/update/{rank}")
+    public Boolean updateRank(@PathVariable Integer rank,HttpSession session){
+        LambdaQueryWrapper<Question> lqw=new LambdaQueryWrapper<>();
+        Integer uid = (Integer) session.getAttribute("uid");
+        lqw.eq(Question::getUid,uid);
+        lqw.eq(Question::getRank,rank);
+        questionService.updateById()
+        return questionService.update(lqw);
+    }*/
 }
 
