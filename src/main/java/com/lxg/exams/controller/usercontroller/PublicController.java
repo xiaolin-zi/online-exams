@@ -35,7 +35,6 @@ public class PublicController {
         //查询所有公开的问题
         LambdaQueryWrapper<Question> lqw = new LambdaQueryWrapper<>();
         lqw.eq(Question::getIspublic, 1);
-        lqw.eq(Question::getIsdeleted, 0);
         List<Question> list = questionService.list(lqw);
         //遍历list
         for (Question question : list) {

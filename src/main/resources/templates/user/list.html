@@ -87,6 +87,10 @@
             background-color: #67c23a;
             color: #FFFFFF;
         }
+
+        .rank {
+            width: 150px;
+        }
     </style>
 </head>
 <body>
@@ -188,6 +192,13 @@
                 align="center"
         >
             <template slot-scope="scope">
+                <el-rate
+                        class="rank"
+                        v-model="scope.row.rank"
+                        show-text
+                        :change="changeRank(scope.row)">
+                </el-rate>
+
                 <div v-if="scope.row.image">
                     <el-button
                             type="text"
@@ -212,14 +223,14 @@
                         修改
                     </el-button>
                 </div>
-                <el-button
+                <!--<el-button
                         type="text"
                         size="medium"
                         class="delBut non"
                         @click="deleteHandle(scope.row.id);"
                 >
                     删除
-                </el-button>
+                </el-button>-->
                 <div v-if="scope.row.ispublic==0">
                     <el-button
                             type="text"
@@ -504,7 +515,8 @@
                     types: "",
                     image: "",
                     image2: "",
-                    remark: ""
+                    remark: "",
+                    rank: 1
                 },
                 dialogEdit: false,
                 dialogUpdate1: false,
@@ -537,7 +549,7 @@
                     optiond: "",
                     answer: "",
                     types: "",
-                    remark:""
+                    remark: ""
                 }
             };
         },
@@ -658,32 +670,32 @@
                 });
             },
 
-
-            deleteHandle(id) {
-                this.$confirm('确定删除题目吗', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    axios.delete("/question/" + id).then(resp => {
-                        if (resp) {
-                            this.getAll();
-                            this.$message({
-                                type: 'success',
-                                duration: 1000,
-                                message: '删除成功!'
+            /*
+                        deleteHandle(id) {
+                            this.$confirm('确定删除题目吗', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                            }).then(() => {
+                                axios.delete("/question/" + id).then(resp => {
+                                    if (resp) {
+                                        this.getAll();
+                                        this.$message({
+                                            type: 'success',
+                                            duration: 1000,
+                                            message: '删除成功!'
+                                        });
+                                    }
+                                });
+                            }).catch(() => {
+                                //用户点击取消按钮
+                                this.$message({
+                                    type: 'info',
+                                    duration: 1000,
+                                    message: '已取消删除'
+                                });
                             });
-                        }
-                    });
-                }).catch(() => {
-                    //用户点击取消按钮
-                    this.$message({
-                        type: 'info',
-                        duration: 1000,
-                        message: '已取消删除'
-                    });
-                });
-            },
+                        },*/
             //处理页码大小和当前页变动时候触发的事件
             handleSizeChange(val) {
                 this.pageSize = val;
@@ -1004,6 +1016,9 @@
                 }
                 this.isRecoding = !this.isRecoding;
             },
+            changeRank(ee) {
+                axios.put("/question", ee)
+            }
         }
     });
 
