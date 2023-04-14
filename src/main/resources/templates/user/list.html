@@ -87,10 +87,10 @@
             background-color: #67c23a;
             color: #FFFFFF;
         }
-
+/*
         .rank {
             width: 150px;
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -101,6 +101,15 @@
 
             <el-form-item label="题目相关词">
                 <el-input v-model="exam.title" placeholder="题目相关词"></el-input>
+            </el-form-item>
+
+            <el-form-item label="熟悉度">
+                <el-select v-model="exam.rank" placeholder="熟悉度">
+                    <el-option label="全部" value=""></el-option>
+                    <el-option label="不熟悉" value="1"></el-option>
+                    <el-option label="模糊" value="2"></el-option>
+                    <el-option label="熟悉" value="3"></el-option>
+                </el-select>
             </el-form-item>
 
             <el-form-item label="科目">
@@ -209,7 +218,8 @@
 
                             @click="exam=scope.row,oldExam.title = exam.title ,oldExam.types = exam.types ,
                             oldExam.optiona = exam.optiona ,oldExam.optionb = exam.optionb ,oldExam.optionc = exam.optionc ,
-                            oldExam.optiond = exam.optiond ,oldExam.answer = exam.answer ,
+                            oldExam.optiond = exam.optiond ,oldExam.answer = exam.answer ,oldExam.remark = exam.remark ,
+                            oldExam.rank = exam.rank ,
                             handleImgShow(scope.row.image),dialogEdit=true"
                     >
                         修改
@@ -518,7 +528,7 @@
                     image: "",
                     image2: "",
                     remark: "",
-                    rank: 1
+                    rank: ""
                 },
                 dialogEdit: false,
                 dialogUpdate1: false,
@@ -551,9 +561,10 @@
                     optiond: "",
                     answer: "",
                     types: "",
-                    remark: ""
+                    remark: "",
+                    rank: ""
                 },
-                texts:['不熟悉', '模糊', '熟悉']
+                texts: ['不熟悉', '模糊', '熟悉']
             };
         },
         created() {
@@ -566,7 +577,8 @@
                 handler: function (newVal) {
                     //修改的时候才会触发
                     if (this.dialogEdit) {
-                        if (newVal.title != this.oldExam.title || newVal.optiona != this.oldExam.optiona || newVal.optionb != this.oldExam.optionb || newVal.optionc != this.oldExam.optionc || newVal.optiond != this.oldExam.optiond || newVal.answer != this.oldExam.answer || newVal.remark != this.oldExam.remark || newVal.types != this.oldExam.types) {
+                        console.log(newVal.rank, this.oldExam.rank)
+                        if (newVal.title != this.oldExam.title || newVal.optiona != this.oldExam.optiona || newVal.optionb != this.oldExam.optionb || newVal.optionc != this.oldExam.optionc || newVal.optiond != this.oldExam.optiond || newVal.answer != this.oldExam.answer || newVal.remark != this.oldExam.remark || newVal.types != this.oldExam.types || newVal.rank != this.oldExam.rank) {
                             console.log('表单修改过');
                             this.isChange = true;
                         } else {
@@ -609,6 +621,7 @@
             getAll() {
                 var param = "?title=" + this.exam.title;
                 param += "&types=" + this.exam.types;
+                param += "&rank=" + this.exam.rank;
                 axios.get("/question/" + this.page + "/" + this.pageSize + param).then(res => {
                     console.log(res);
                     this.total = res.data.total;
@@ -869,6 +882,7 @@
                             this.imageUrl2 = '';
                             this.exam.title = '';
                             this.exam.types = '';
+                            this.exam.rank = '';
                             this.getAll();
                             this.$message({
                                 type: 'success',
@@ -904,6 +918,7 @@
                             this.imageUrl2 = '';
                             this.exam.title = '';
                             this.exam.types = '';
+                            this.exam.rank = '';
                             this.getAll();
                             this.$message({
                                 type: 'success',
@@ -1022,8 +1037,8 @@
                 this.isRecoding = !this.isRecoding;
             },
             changeRank(ee) {
-                axios.put("/question", ee).then((resp)=>{
-                    if(resp){
+                axios.put("/question", ee).then((resp) => {
+                    if (resp) {
                         this.$message({
                             type: 'success',
                             duration: 1000,
