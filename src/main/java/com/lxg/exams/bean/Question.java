@@ -86,7 +86,11 @@ public class Question implements Serializable {
     private Integer ispublic;
 
 
+
+
     private String updateTime;
+
+    private Integer isdeleted;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -131,7 +135,8 @@ public class Question implements Serializable {
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getUid() == null ? other.getUid() == null : this.getUid().equals(other.getUid()))
             && (this.getRank() == null ? other.getRank() == null : this.getRank().equals(other.getRank()))
-            && (this.getIspublic() == null ? other.getIspublic() == null : this.getIspublic().equals(other.getIspublic()));
+            && (this.getIspublic() == null ? other.getIspublic() == null : this.getIspublic().equals(other.getIspublic()))
+            && (this.getIsdeleted() == null ? other.getIsdeleted() == null : this.getIsdeleted().equals(other.getIsdeleted()))    ;
     }
 
     @Override
@@ -151,6 +156,7 @@ public class Question implements Serializable {
         result = prime * result + ((getUid() == null) ? 0 : getUid().hashCode());
         result = prime * result + ((getRank() == null) ? 0 : getRank().hashCode());
         result = prime * result + ((getIspublic() == null) ? 0 : getIspublic().hashCode());
+        result = prime * result + ((getIsdeleted() == null) ? 0 : getIsdeleted().hashCode());
         return result;
     }
 
@@ -173,6 +179,7 @@ public class Question implements Serializable {
         sb.append(", uid=").append(uid);
         sb.append(", rank=").append(rank);
         sb.append(", ispublic=").append(ispublic);
+        sb.append(", isdeleted=").append(isdeleted);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

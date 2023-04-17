@@ -230,14 +230,14 @@
                         修改
                     </el-button>
                 </div>
-                <!--<el-button
+                <el-button
                         type="text"
                         size="medium"
                         class="delBut non"
                         @click="deleteHandle(scope.row.id);"
                 >
                     删除
-                </el-button>-->
+                </el-button>
                 <div v-if="scope.row.ispublic==0">
                     <el-button
                             type="text"
@@ -689,7 +689,6 @@
                 });
             },
 
-            /*
                         deleteHandle(id) {
                             this.$confirm('确定删除题目吗', '提示', {
                                 confirmButtonText: '确定',
@@ -714,7 +713,7 @@
                                     message: '已取消删除'
                                 });
                             });
-                        },*/
+                        },
             //处理页码大小和当前页变动时候触发的事件
             handleSizeChange(val) {
                 this.pageSize = val;

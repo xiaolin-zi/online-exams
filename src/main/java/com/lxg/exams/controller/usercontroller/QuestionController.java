@@ -36,6 +36,7 @@ public class QuestionController {
         Page quePage = new Page(page, pageSize);
         LambdaQueryWrapper<Question> lqw = new LambdaQueryWrapper<>();
         lqw.eq(Question::getUid, uid);
+        lqw.eq(Question::getIsdeleted, 0);
         lqw.eq(question.getTypes() != null, Question::getTypes, question.getTypes());
         lqw.eq(question.getRank() != null, Question::getRank, question.getRank());
         lqw.like(question.getTitle() != null, Question::getTitle, question.getTitle());
@@ -55,14 +56,15 @@ public class QuestionController {
         return b;
     }
 
-    /*@DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
     //删除错题
     public Boolean deleteQue(@PathVariable Integer id) {
         Question question = questionService.getById(id);
         question.setIsdeleted(1);
+        System.out.println(question+"=====================");
         boolean b = questionService.updateById(question);
         return b;
-    }*/
+    }
 
 
     @PostMapping("/public/{id}")
