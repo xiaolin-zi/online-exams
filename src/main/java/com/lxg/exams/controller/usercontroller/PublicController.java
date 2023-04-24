@@ -47,7 +47,10 @@ public class PublicController {
             question.setUserAvatar(avatar);
 
             Integer types = question.getTypes();
-            if (types == 1) {
+            //根据types查询出分类名称
+            if(types==null){
+                question.setTypesName("暂无分类");
+            }else if (types == 1) {
                 question.setTypesName("计算机网络");
             } else if (types == 2) {
                 question.setTypesName("操作系统");
@@ -55,6 +58,8 @@ public class PublicController {
                 question.setTypesName("计算机组成原理");
             } else if (types == 4) {
                 question.setTypesName("数据结构");
+            }else {
+                question.setTypesName("暂无分类");
             }
         }
         int count = list.size();

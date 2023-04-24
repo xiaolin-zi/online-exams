@@ -114,7 +114,7 @@
                     <span>贡献值排行榜</span>
                     <el-button style="float: right; padding: 3px 0" type="text" @click="showMyRanking">查看我的排名</el-button>
                 </div>
-                <div v-for="(o,index) in userList" :key="o" class="text item">
+                <div v-for="(o,index) in userList" :key="index" class="text item">
                     <el-card shadow="hover">
                         <el-row >
                             <el-col :span="4">
