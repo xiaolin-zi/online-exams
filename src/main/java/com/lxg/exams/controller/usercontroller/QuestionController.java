@@ -4,7 +4,9 @@ package com.lxg.exams.controller.usercontroller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxg.exams.bean.Question;
+import com.lxg.exams.bean.User;
 import com.lxg.exams.service.QuestionService;
+import com.lxg.exams.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,8 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private UserService userService;
 
     @PostMapping
     public Boolean addQue(@RequestBody Question question, HttpSession session) {
@@ -76,6 +80,12 @@ public class QuestionController {
             question.setIspublic(0);
         } else {
             question.setIspublic(1);
+            //贡献值加1
+            Integer uid = question.getUid();
+            User user = userService.getById(uid);
+            Integer contribution = user.getContributions();
+            user.setContributions(contribution+1);
+            userService.updateById(user);
         }
         boolean b = questionService.updateById(question);
         return b;

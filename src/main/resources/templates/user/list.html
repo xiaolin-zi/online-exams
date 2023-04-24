@@ -375,19 +375,24 @@
                           placeholder="请输入题目"></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optiona">
-                <el-input type="textarea" v-model="exam.optiona" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+                <el-input type="textarea" v-model="exam.optiona" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
-            <el-form-item  label="选项B" prop="optionb">
-                <el-input type="textarea" v-model="exam.optionb" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            <el-form-item label="选项B" prop="optionb">
+                <el-input type="textarea" v-model="exam.optionb" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="选项C" prop="optionc">
-                <el-input type="textarea" v-model="exam.optionc" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+                <el-input type="textarea" v-model="exam.optionc" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="选项D" prop="optiond">
-                <el-input type="textarea" v-model="exam.optiond" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+                <el-input type="textarea" v-model="exam.optiond" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="答案" prop="answer">
-                <el-input type="textarea" v-model="exam.answer" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+                <el-input type="textarea" v-model="exam.answer" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="科目类型" prop="types">
                 <el-select v-model="exam.types" placeholder="请选择科目类型">
@@ -440,19 +445,24 @@
                           placeholder="请输入题目" v-model="exam.title" id="speech-exam-title"></el-input>
             </el-form-item>
             <el-form-item label="选项A" prop="optiona">
-                <el-input type="textarea" v-model="exam.optiona" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+                <el-input type="textarea" v-model="exam.optiona" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="选项B" prop="optionb">
-                <el-input type="textarea" v-model="exam.optionb" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+                <el-input type="textarea" v-model="exam.optionb" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="选项C" prop="optionc">
-                <el-input type="textarea" v-model="exam.optionc" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+                <el-input type="textarea" v-model="exam.optionc" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
-            <el-form-item  label="选项D" prop="optiond">
-                <el-input type="textarea" v-model="exam.optiond" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            <el-form-item label="选项D" prop="optiond">
+                <el-input type="textarea" v-model="exam.optiond" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="答案" prop="answer">
-                <el-input type="textarea" v-model="exam.answer" @focus="onMyFocus" @blur="onMyBlur" :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+                <el-input type="textarea" v-model="exam.answer" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
             </el-form-item>
             <el-form-item label="科目类型" prop="types">
                 <el-select v-model="exam.types" placeholder="请选择科目类型">
@@ -476,7 +486,8 @@
                     <img v-if="imageUrl" :src="imageUrl" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
-                <el-button type="success" @click="speech" id="startSpeech" @mousedown.native="cancelblur">开始识别</el-button>
+                <el-button type="success" @click="speech" id="startSpeech" @mousedown.native="cancelblur">开始识别
+                </el-button>
             </el-form-item>
 
 
@@ -511,7 +522,6 @@
             alert(msg);
         }
     });
-
 
 
     new Vue({
@@ -642,16 +652,45 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.post("/question/public/" + id).then(resp => {
-                        if (resp) {
-                            this.getAll();
-                            this.$message({
-                                type: 'success',
-                                duration: 1000,
-                                message: '题目已分享到逛一逛!'
-                            });
-                        }
-                    });
+                    //一天只能改变一次
+                    var v = this.getCookie('questionStatus'+id);
+                    //判断是否有cookie
+                    if (!v) {
+                        axios.post("/question/public/" + id).then(resp => {
+                            if (resp) {
+                                this.getAll();
+                                this.$message({
+                                    type: 'success',
+                                    duration: 1000,
+                                    message: '题目已分享到逛一逛!'
+                                });
+                            }
+                        });
+                        //获取第二天凌晨到当前时间的秒数
+                        var tim_sec = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                        this.setCookie('questionStatus'+id, "1", tim_sec);
+                    } else if (v >= 1) { //判断是否超过修改次数
+                        this.$message({
+                            type: 'warning',
+                            duration: 1000,
+                            message: '今日已不能更改题目状态哦!'
+                        });
+                    } else {
+                        axios.post("/question/public/" + id).then(resp => {
+                            if (resp) {
+                                this.getAll();
+                                this.$message({
+                                    type: 'success',
+                                    duration: 1000,
+                                    message: '题目已分享到逛一逛!'
+                                });
+                            }
+                        });
+                        //修改次数+1,满3次后不再修改
+                        var avatartimeout = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                        var value = this.getCookie('questionStatus'+id);
+                        this.setCookie('questionStatus'+id, parseInt(value) + 1, avatartimeout);
+                    }
                 }).catch(() => {
                     //用户点击取消按钮
                     this.$message({
@@ -669,16 +708,47 @@
                     type: 'warning'
                 }).then(() => {
 
-                    axios.post("/question/public/" + id).then(resp => {
-                        if (resp) {
-                            this.getAll();
-                            this.$message({
-                                type: 'success',
-                                duration: 1000,
-                                message: '题目已设为私有!'
-                            });
-                        }
-                    });
+                    //一天只能改变一次
+                    var v = this.getCookie('questionStatus'+id);
+                    //判断是否有cookie
+                    if (!v) {
+                        axios.post("/question/public/" + id).then(resp => {
+                            if (resp) {
+                                this.getAll();
+                                this.$message({
+                                    type: 'success',
+                                    duration: 1000,
+                                    message: '题目已设为私有!'
+                                });
+                            }
+                        });
+                        //获取第二天凌晨到当前时间的秒数
+                        var tim_sec = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                        this.setCookie('questionStatus'+id, "1", tim_sec);
+                    } else if (v >= 1) { //判断是否超过修改次数
+                        this.$message({
+                            type: 'warning',
+                            duration: 1000,
+                            message: '今日已不能更改题目状态哦!'
+                        });
+                    } else {
+                        axios.post("/question/public/" + id).then(resp => {
+                            if (resp) {
+                                this.getAll();
+                                this.$message({
+                                    type: 'success',
+                                    duration: 1000,
+                                    message: '题目已设为私有!'
+                                });
+                            }
+                        });
+                        //修改次数+1,满3次后不再修改
+                        var avatartimeout = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                        var value = this.getCookie('questionStatus'+id);
+                        this.setCookie('questionStatus'+id, parseInt(value) + 1, avatartimeout);
+                    }
+
+
                 }).catch(() => {
                     //用户点击取消按钮
                     this.$message({
@@ -689,31 +759,53 @@
                 });
             },
 
-                        deleteHandle(id) {
-                            this.$confirm('确定删除题目吗', '提示', {
-                                confirmButtonText: '确定',
-                                cancelButtonText: '取消',
-                                type: 'warning'
-                            }).then(() => {
-                                axios.delete("/question/" + id).then(resp => {
-                                    if (resp) {
-                                        this.getAll();
-                                        this.$message({
-                                            type: 'success',
-                                            duration: 1000,
-                                            message: '删除成功!'
-                                        });
-                                    }
-                                });
-                            }).catch(() => {
-                                //用户点击取消按钮
-                                this.$message({
-                                    type: 'info',
-                                    duration: 1000,
-                                    message: '已取消删除'
-                                });
+            setCookie(name, value, second) {
+                if (!second) {
+                    second = 7 * 24 * 60 * 60;//默认7天
+                }
+                var exp = new Date();
+                exp.setTime(exp.getTime() + second * 1000);
+                document.cookie = name + "=" + encodeURI(value) + ";expires=" + exp.toGMTString() + ";path=/";
+            }
+            ,
+            getCookie(name) {
+                if (document.cookie.length > 0) {
+                    c_start = document.cookie.indexOf(name + "=");//获取字符串的起点
+                    if (c_start != -1) {
+                        c_start = c_start + name.length + 1;//获取值的起点
+                        c_end = document.cookie.indexOf(";", c_start);//获取结尾处
+                        if (c_end == -1) c_end = document.cookie.length;//如果是最后一个，结尾就是cookie字符串的结尾
+                        return decodeURI(document.cookie.substring(c_start, c_end));//截取字符串返回
+                    }
+                }
+                return "";
+            },
+
+            deleteHandle(id) {
+                this.$confirm('确定删除题目吗', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.delete("/question/" + id).then(resp => {
+                        if (resp) {
+                            this.getAll();
+                            this.$message({
+                                type: 'success',
+                                duration: 1000,
+                                message: '删除成功!'
                             });
-                        },
+                        }
+                    });
+                }).catch(() => {
+                    //用户点击取消按钮
+                    this.$message({
+                        type: 'info',
+                        duration: 1000,
+                        message: '已取消删除'
+                    });
+                });
+            },
             //处理页码大小和当前页变动时候触发的事件
             handleSizeChange(val) {
                 this.pageSize = val;
@@ -996,7 +1088,6 @@
             speech(e) {
 
 
-
                 console.log(recorder, "已经初始化");
                 //判断当前是否正在录音
                 if (!this.isRecoding) {
@@ -1070,7 +1161,7 @@
             },
 
             //取消输入框失去焦点
-            cancelblur(e){
+            cancelblur(e) {
                 // alert(e);
                 e.preventDefault();
             }
