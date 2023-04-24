@@ -2,9 +2,9 @@
     font-family: "iconfont"; /* Project id 3976993 */
     /* Color fonts */
     src:
-            url('//at.alicdn.com/t/c/font_3976993_mm9mfiy1ugl.woff2?t=1680359269540') format('woff2'),
-            url('//at.alicdn.com/t/c/font_3976993_mm9mfiy1ugl.woff?t=1680359269540') format('woff'),
-            url('//at.alicdn.com/t/c/font_3976993_mm9mfiy1ugl.ttf?t=1680359269540') format('truetype');
+            url('//at.alicdn.com/t/c/font_3976993_xe94p14vx5.woff2?t=1682318269490') format('woff2'),
+            url('//at.alicdn.com/t/c/font_3976993_xe94p14vx5.woff?t=1682318269490') format('woff'),
+            url('//at.alicdn.com/t/c/font_3976993_xe94p14vx5.ttf?t=1682318269490') format('truetype');
 }
 
 .iconfont {
@@ -13,6 +13,14 @@
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-jiangbei:before {
+    content: "\e693";
+}
+
+.icon-weibiaoti-_huabanfuben:before {
+    content: "\e616";
 }
 
 .icon-guangguang:before {

@@ -249,6 +249,12 @@
                         } else {
                             axios.post("/question", res).then((resp) => {
                                 if (resp) {
+                                    //给题目的所有者添加贡献值
+                                    axios.post("/user/addContribution", res).then((resp) => {
+                                        if (resp.data.code==200) {
+                                            console.log("贡献值添加成功");
+                                        }
+                                    });
                                     this.$message({
                                         type: 'success',
                                         message: '添加成功!'

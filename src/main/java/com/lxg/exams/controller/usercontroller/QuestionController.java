@@ -109,7 +109,12 @@ public class QuestionController {
         lqw.eq(Question::getOptiond,question.getOptiond());
         lqw.eq(Question::getAnswer,question.getAnswer());
         lqw.eq(Question::getTypes,question.getTypes());
-        lqw.eq(Question::getImage,question.getImage());
+        lqw.eq(Question::getIsdeleted,question.getIsdeleted());
+        if(question.getImage()==null){
+            lqw.isNull(Question::getImage);
+        }else {
+            lqw.eq(Question::getImage,question.getImage());
+        }
 
         Question question1 = questionService.getOne(lqw);
         System.out.println(question1+"=====================================");
