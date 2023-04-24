@@ -108,14 +108,43 @@
         </el-col>
 
         <el-col :span="15">
-            <el-card class="box-card" style="height: 650px;">
+            <el-card shadow="hover" class="box-card" style="height: 650px;overflow-y: scroll">
                 <div slot="header" class="clearfix">
                     <i class="iconfont icon-jiangbei"></i>
                     <span>贡献值排行榜</span>
                     <el-button style="float: right; padding: 3px 0" type="text" @click="showMyRanking">查看我的排名</el-button>
                 </div>
-                <div v-for="o in userList" :key="o" class="text item">
-                    {{'列表内容 ' + o }}
+                <div v-for="(o,index) in userList" :key="o" class="text item">
+                    <el-card shadow="hover">
+                        <el-row >
+                            <el-col :span="4">
+                                <div>
+                                    <el-image style="width: 50px; height: 50px; border-radius:50%"
+                                              :src=`/api/img/${o.avatar}`
+                                              :preview-src-list="[ `/api/img/${o.avatar}` ]">
+                                    </el-image>
+                                </div>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-row>
+                                    <div>
+                                        <span style="font-size: 18px">{{o.username}}</span>
+                                    </div>
+                                </el-row>
+                                <el-row>
+                                    <div>
+                                        <span style="font-size: 18px;color: rgba(191, 191, 191);">贡献值：{{o.contributions}}</span>
+                                    </div>
+                                </el-row>
+                            </el-col>
+                            <el-col :span="16">
+                                <div style="text-align: right">
+                                    <span style="font-size: 18px">Top{{index+1}}</span>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </el-card>
+
                 </div>
             </el-card>
         </el-col>
