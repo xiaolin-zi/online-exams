@@ -14,10 +14,7 @@ import org.thymeleaf.util.DateUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @auther xiaolin
@@ -268,7 +265,9 @@ public class UserController {
         int contribution = user.getContributions();
         map.put("contribution", contribution);
         //查询贡献值前10的用户
-        List<User> userList = userService.list(new QueryWrapper<User>().orderByDesc("contributions").last("limit 10"));
+//        List<User> userList = userService.list(new QueryWrapper<User>().orderByDesc("contributions").last("limit 10"));
+        List<User> userList = userService.list(new QueryWrapper<User>().orderByDesc("contributions"));
+
         map.put("userList", userList);
 
         //查询当前用户的排名
@@ -289,7 +288,7 @@ public class UserController {
     //给用户添加贡献值
     @PostMapping("/addContribution")
     @ResponseBody
-    public Map<String, Object> addContribution(@RequestBody Question question,HttpSession session) {
+    public Map<String, Object> addContribution(@RequestBody Question question, HttpSession session) {
         System.out.println(question);
         //获取题目所有者的id
         Integer uid = question.getUid();
@@ -297,7 +296,7 @@ public class UserController {
         User user = userService.getById(uid);
         //获取用户的贡献值
         Integer contribution = user.getContributions();
-        contribution+=1;
+        contribution += 1;
         user.setContributions(contribution);
         //更新用户
         userService.updateById(user);
@@ -306,4 +305,25 @@ public class UserController {
         map.put("code", 200);
         return map;
     }
+
+
+    //根据用户名查询其排名
+    @GetMapping("/getRankingByUserName")
+    @ResponseBody
+    public Map<String, Object> getRankingByUserName(String username) {
+        List<User> userList = new ArrayList<>();
+
+        userList = userService.list(new QueryWrapper<User>().like("username", username));
+
+
+        Map<String, Object> map = new HashMap<>();
+
+
+        map.put("userList", userList);
+        //状态码
+        map.put("code", 200);
+        return map;
+    }
+
+
 }

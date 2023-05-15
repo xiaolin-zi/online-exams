@@ -1,11 +1,17 @@
 package com.lxg.exams.service.impl;
 
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lxg.exams.bean.Question;
+import com.lxg.exams.bean.QuestionData;
+import com.lxg.exams.listener.QuestionExcelListener;
 import com.lxg.exams.service.QuestionService;
 import com.lxg.exams.mapper.QuestionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
 
 /**
 * @author xiaolin
@@ -57,8 +63,17 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         return question;
     }
 
-
-
+    @Override
+    public void saveQuestionBatch(MultipartFile file, QuestionService questionService, Integer uid) {
+        try {
+            InputStream inputStream = file.getInputStream();
+            EasyExcel.read(inputStream, QuestionData.class,new QuestionExcelListener(questionService,uid))
+                    .sheet()
+                    .doRead();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

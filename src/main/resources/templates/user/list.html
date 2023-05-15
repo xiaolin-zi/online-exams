@@ -121,6 +121,7 @@
                 <el-button type="success" @click="onSubmit">查询</el-button>
             </el-form-item>
             <el-row style="float: right">
+                <el-button type="success" plain @click="showExcelImport = true">批量导入</i></el-button>
                 <el-button type="success" plain @click="exam={},dialogUpdate1=true">图片上传</i></el-button>
                 <el-button type="success" plain @click="exam={},dialogUpdate2=true">语音输入</i></el-button>
             </el-row>
@@ -273,6 +274,50 @@
             color="#67c23a"
     >
     </el-pagination>
+
+    <!--批量导入弹出框-->
+    <el-dialog
+            title="批量导入错题"
+            :visible.sync="showExcelImport"
+            width="30%"
+    >
+        <el-form label-width="120px">
+            <el-form-item label="信息描述">
+                <el-tag type="info">excel模版说明</el-tag>
+                <el-tag>
+                    <a th:href="@{/template.xlsx}">点击下载模版</a>
+                </el-tag>
+            </el-form-item>
+
+            <el-form-item label="选择Excel">
+                <el-upload
+                        ref="upload"
+                        :auto-upload="false"
+                        :on-success="fileUploadSuccess"
+                        :on-error="fileUploadError"
+                        :disabled="importBtnDisabled"
+                        :limit="1"
+                        action="/question/batch"
+                        name="file"
+                        accept=".xls,.xlsx"
+                >
+                    <el-button slot="trigger" size="small" type="primary"
+                    >选取文件</el-button
+                    >
+                    <el-button
+                            :loading="importExcelloading"
+                            style="margin-left: 10px"
+                            size="small"
+                            type="success"
+                            @click="submitUpload"
+                    >上传到服务器</el-button
+                    >
+                </el-upload>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+
     <!--修改对话框-->
     <el-dialog
             title="编辑错题"
@@ -577,7 +622,10 @@
                     remark: "",
                     rank: ""
                 },
-                texts: ['不熟悉', '模糊', '熟悉']
+                texts: ['不熟悉', '模糊', '熟悉'],
+                showExcelImport: false,
+                importExcelloading: false,
+                importBtnDisabled: false,
             };
         },
         created() {
@@ -618,6 +666,51 @@
             },
         },
         methods: {
+
+
+            //点击按钮上传文件到接口里面
+            submitUpload() {
+                //判断是否有文件
+                if (this.$refs.upload.uploadFiles.length != 0) {
+                    this.importBtnDisabled = true;
+                    this.importExcelloading = true;
+                    this.$refs.upload.submit();
+                } else {
+                    this.$message({
+                        type: "error",
+                        message: "您还未选择文件哦！",
+                    });
+                }
+            },
+            //上传成功的回调
+            fileUploadSuccess() {
+                this.importExcelloading = false;
+                this.$message({
+                    type: "success",
+                    message: "批量添加成功！",
+                });
+                // 上传成功之后清除历史记录;否则只能上传一次
+                this.$refs.upload.clearFiles();
+            },
+
+            //上传失败的回调
+            fileUploadError() {
+                this.importExcelloading = false;
+                this.$message({
+                    type: "error",
+                    message: "批量添加失败",
+                });
+                // 上传成功之后清除历史记录;否则只能上传一次
+                this.$refs.upload.clearFiles();
+            },
+
+
+
+
+
+
+
+
             //页面展示给予颜色分层
             tableRowClassName({row, rowIndex}) {
                 if (rowIndex === 1) {

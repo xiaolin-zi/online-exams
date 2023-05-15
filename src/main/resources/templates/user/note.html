@@ -112,7 +112,16 @@
                 <div slot="header" class="clearfix">
                     <i class="iconfont icon-jiangbei"></i>
                     <span>贡献值排行榜</span>
-                    <el-button style="float: right; padding: 3px 0" type="text" @click="showMyRanking">查看我的排名</el-button>
+<!--                    <el-button style="float: right; padding: 3px 0" type="text" @click="showMyRanking">查看我的排名</el-button>-->
+                    <el-input
+                            placeholder="请输入用户名"
+                            v-model="input"
+                            prefix-icon="el-icon-search"
+                            size="small"
+                            style="width: 200px;float: right"
+                            @input="getOrder(input)"
+                            clearable>
+                    </el-input>
                 </div>
                 <div v-for="(o,index) in userList" :key="index" class="text item">
                     <el-card shadow="hover">
@@ -175,6 +184,7 @@
                 ranking: 0,
                 userList: [],
                 deadline: Date.now() + (new Date().setHours(23, 59, 59) - Date.now()),
+                input: '',
             };
         },
         created() {
@@ -202,13 +212,22 @@
                     }
                 })
             },
-            showMyRanking(){
+            /*showMyRanking(){
                 this.$notify({
                     title: '提示',
                     message: '你的排名是：' + this.ranking,
                     duration: 0,
                 });
+            },*/
+            getOrder(username){
+
+                axios.get('/user/getRankingByUserName?username='+username).then(res=>{
+                    if (res.data.code === 200) {
+                        this.userList = res.data.userList;
+                    }
+                })
             }
+
         },
     };
     var Ctor = Vue.extend(Main)
