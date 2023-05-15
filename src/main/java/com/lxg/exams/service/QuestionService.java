@@ -2,6 +2,7 @@ package com.lxg.exams.service;
 
 import com.lxg.exams.bean.Question;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
 * @author xiaolin
@@ -25,5 +26,5 @@ public interface QuestionService extends IService<Question> {
     Question getQuestionById(int id);
 
 
-
+    void saveQuestionBatch(MultipartFile file, QuestionService questionService,Integer uid);
 }

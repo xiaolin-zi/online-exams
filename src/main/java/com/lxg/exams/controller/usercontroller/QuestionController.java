@@ -1,6 +1,7 @@
 package com.lxg.exams.controller.usercontroller;
 
 
+import com.alibaba.excel.EasyExcel;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lxg.exams.bean.Question;
@@ -9,10 +10,14 @@ import com.lxg.exams.service.QuestionService;
 import com.lxg.exams.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -32,6 +37,23 @@ public class QuestionController {
         question.setUid((Integer) session.getAttribute("uid"));
         return questionService.save(question);
     }
+
+
+    //批量添加题目
+    @PostMapping("/batch")
+    public Map<String,Object> addBatchQue(MultipartFile file, HttpSession session) {
+
+        Integer uid = (Integer) session.getAttribute("uid");
+
+        //上传过来的excel文件
+        questionService.saveQuestionBatch(file,questionService,uid);
+        Map<String,Object> map = new HashMap<>();
+        map.put("code",200);
+        map.put("msg","上传成功");
+        return map;
+    }
+
+
 
     //分页查询错题
     @GetMapping("/{page}/{pageSize}")
