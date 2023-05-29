@@ -3,23 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
     <title>错题测试</title>
 </head>
+<script th:src="@{/js/vue.js}"></script>
+<script th:src="@{/js/elementui/index.js}"></script>
+<link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+<script src="https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js"></script>
+<script th:src="@{/js/axios.js}"></script>
+
 <body>
-    <h1>错题测试</h1>
+
+<div id="app">
+    <textarea :id="tinymceId" class="tinymce-textarea"></textarea>
+    <input v-model="mytext" type="text" name="text"/>
+</div>
+
 </body>
+
 <script>
-    function A(x) {
-        this.x = x;
-    }
-        A.prototype.x = 1;
-        function B(x) {
-            this.x = x;
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                mytext:"hhhhh",
+                hasChange: false,
+                hasInit: false,
+                tinymceId: "tinymceId",
+            }
+        },
+        watch: {
+            mytext(val) {
+                console.log(val);
+                if (!this.hasChange && this.hasInit) {
+                    this.$nextTick(() =>
+                        window.tinymce.get(this.tinymceId).setContent(val || "")
+                    );
+                }
+            },
+        },
+        mounted() {
+            this.initTinymce();
+        },
+        activated() {
+            if (window.tinymce) {
+                this.initTinymce();
+            }
+        },
+        deactivated() {
+            this.destroyTinymce();
+        },
+        destroyed() {
+            this.destroyTinymce();
+        },
+        methods: {
+            initTinymce() {
+                const _this = this;
+                tinymce.init({
+                    selector: '#tinymceId', // 绑定的textarea元素
+                    height: 500, // 编辑器高度
+                    plugins: ['advlist anchor autolink autosave code codesample colorpicker colorpicker contextmenu directionality emoticons fullscreen hr image imagetools insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern visualblocks visualchars wordcount'], // 插件列表
+                    toolbar:  ['searchreplace bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat subscript superscript code codesample', 'hr bullist numlist link image charmap preview anchor pagebreak insertdatetime media table emoticons forecolor backcolor fullscreen'],// 工具栏按钮
+                    menubar: "file edit insert view format table", // 菜单栏
+                    statusbar: false, // 状态栏
+                    content_style: 'body { font-family: Arial; font-size: 14px }', // 编辑器样式
+                    language: 'zh_CN', // 编辑器语言
+                    images_upload_handler: function (blobInfo, success, failure) {
+                        // 上传图片
+                        let formData = new FormData();
+                        formData.append('file', blobInfo.blob(), blobInfo.filename());
+                        axios.post('/common/upload', formData)
+                            .then(res => {
+                                success(`/api/img/${res.data}`);
+                            }).catch(err => {
+                            failure('HTTP Error: ' + err.message);
+                        });
+                    },
+                    convert_urls: false,
+                    init_instance_callback: (editor) => {
+                        if (_this.mytext) {
+                            editor.setContent(_this.mytext);
+                        }
+                        _this.hasInit = true;
+                        editor.on("NodeChange Change KeyUp SetContent", () => {
+                            this.hasChange = true;
+                            // this.$emit("input", editor.getContent());
+                            this.mytext = editor.getContent();
+                        });
+                        editor.on('focus', function (e) {
+                            console.log('获得焦点');
+                        });
+                        editor.on('blur', function (e) {
+                            console.log('失去焦点');
+                        });
+                    },
+                });
+            },
+            destroyTinymce() {
+                const tinymce = window.tinymce.get(this.tinymceId);
+
+                if (tinymce) {
+                    tinymce.destroy();
+                }
+            },
+            setContent(value) {
+                window.tinymce.get(this.tinymceId).setContent(value);
+            },
+            getContent() {
+                window.tinymce.get(this.tinymceId).getContent();
+            },
         }
-        B.prototype = new A();
-        const b = new B(3);
-        delete b.x;
-        console.log(b.x);
+    });
 </script>
 </html>

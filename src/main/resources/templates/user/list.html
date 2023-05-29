@@ -93,14 +93,14 @@
 <div id="app">
     <!--表单-->
     <el-row>
-        <el-form :inline="true" :model="exam" ref="form" class="demo-form-inline">
+        <el-form :inline="true" :model="examQuery" ref="form" class="demo-form-inline">
 
             <el-form-item label="题目相关词">
-                <el-input v-model="exam.title" placeholder="题目相关词"></el-input>
+                <el-input v-model="examQuery.title" placeholder="题目相关词"></el-input>
             </el-form-item>
 
             <el-form-item label="熟悉度">
-                <el-select v-model="exam.rank" placeholder="熟悉度" clearable>
+                <el-select v-model="examQuery.rank" placeholder="熟悉度" clearable>
                     <el-option label="不熟悉" value="1"></el-option>
                     <el-option label="模糊" value="2"></el-option>
                     <el-option label="熟悉" value="3"></el-option>
@@ -108,7 +108,7 @@
             </el-form-item>
 
             <el-form-item label="科目">
-                <el-select v-model="exam.types" placeholder="科目" clearable>
+                <el-select v-model="examQuery.types" placeholder="科目" clearable>
                     <el-option label="计算机网络" value="1"></el-option>
                     <el-option label="操作系统" value="2"></el-option>
                     <el-option label="计算机组成原理" value="3"></el-option>
@@ -590,6 +590,11 @@
                     remark: "",
                     rank: ""
                 },
+                examQuery:{
+                    title: "",
+                    types: "",
+                    rank: ""
+                },
                 dialogEdit: false,
                 dialogUpdate1: false,
                 dialogUpdate2: false,
@@ -719,9 +724,9 @@
                 this.getAll();
             },
             getAll() {
-                var param = "?title=" + this.exam.title;
-                param += "&types=" + this.exam.types;
-                param += "&rank=" + this.exam.rank;
+                var param = "?title=" + this.examQuery.title;
+                param += "&types=" + this.examQuery.types;
+                param += "&rank=" + this.examQuery.rank;
                 axios.get("/question/" + this.page + "/" + this.pageSize + param).then(res => {
                     console.log(res);
                     this.total = res.data.total;
