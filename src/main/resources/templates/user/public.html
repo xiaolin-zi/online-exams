@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <script th:src="@{/js/vue.js}"></script>
+    <script th:src="@{/js/elementui/index.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+    <script th:src="@{/js/axios.js}"></script>
+    <style>
+        h1 {
+            font-size: 30px;
+            font-family: '宋体';
+            height: 50px;
+            line-height: 50px;
+        }
+
+        .demo-table-expand {
+            font-size: 0;
+        }
+
+        .demo-table-expand label {
+            width: 90px;
+            color: #99a9bf;
+        }
+
+        .demo-table-expand .el-form-item {
+            margin-right: 0;
+            margin-bottom: 0;
+            width: 50%;
+        }
+
+        .el-icon-arrow-right:before {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <h1 style="text-align: center">逛逛吧</h1>
+    <el-form :inline="true" :model="examQuery" ref="form" class="demo-form-inline">
+
+        <el-form-item label="题目相关词">
+            <el-input v-model="examQuery.title" placeholder="题目相关词"></el-input>
+        </el-form-item>
+
+        <el-form-item label="科目">
+            <el-select v-model="examQuery.types" placeholder="科目" clearable>
+                <el-option label="计算机网络" value="1"></el-option>
+                <el-option label="操作系统" value="2"></el-option>
+                <el-option label="计算机组成原理" value="3"></el-option>
+                <el-option label="数据结构" value="4"></el-option>
+            </el-select>
+        </el-form-item>
+
+        <el-form-item>
+            <el-button type="success" plain @click="exportAll">导出所有题目</i></el-button>
+            <el-button type="success" @click="onSubmit">查询</el-button>
+        </el-form-item>
+    </el-form>
+    <el-table
+            id="myTable"
+            :data="tableData"
+            style="width: 100%;
+            overflow: scroll;
+            max-height: 550px;
+            min-height: 550px;">
+        <el-table-column type="expand">
+            <template slot-scope="props">
+                <el-form label-position="left" inline class="demo-table-expand">
+                    <el-form-item label="题目">
+                        <span>{{ props.row.title }}</span>
+                    </el-form-item>
+                    <el-form-item label="选项A">
+                        <span>{{ props.row.optiona }}</span>
+                    </el-form-item>
+                    <el-form-item label="选项B">
+                        <span>{{ props.row.optionb }}</span>
+                    </el-form-item>
+                    <el-form-item label="选项C">
+                        <span>{{ props.row.optionc }}</span>
+                    </el-form-item>
+                    <el-form-item label="选项D">
+                        <span>{{ props.row.optiond }}</span>
+                    </el-form-item>
+                    <el-form-item label="答案">
+                        <span>{{ props.row.answer }}</span>
+                    </el-form-item>
+                    <el-form-item label="附图">
+                        <div v-if="props.row.image">
+                            <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
+                                      :src="getImage(props.row.image)"
+                                      :preview-src-list="[ `/api/img/${props.row.image}` ]">
+                            </el-image>
+                        </div>
+                        <div v-else>
+                            <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
+                        </div>
+                    </el-form-item>
+                </el-form>
+            </template>
+        </el-table-column>
+        <el-table-column
+                label="附图"
+                prop="image">
+            <template slot-scope="{ row }">
+                <div v-if="row.image">
+                    <el-image style="width: 200px; height: 120px; border:none;cursor: pointer;"
+                              :src="getImage(row.image)"
+                              :preview-src-list="[ `/api/img/${row.image}` ]">
+                    </el-image>
+                </div>
+                <div v-else>
+                    <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
+                </div>
+            </template>
+        </el-table-column>
+        <el-table-column
+                label="题目信息"
+        >
+            <el-table-column
+                    label="科目"
+                    prop="typesName"
+            >
+            </el-table-column>
+            <el-table-column
+                    label="题目"
+                    prop="title">
+            </el-table-column>
+            <el-table-column
+                    label="更新时间"
+                    prop="updateTime">
+            </el-table-column>
+        </el-table-column>
+
+
+        <el-table-column
+                label="用户信息"
+        >
+            <el-table-column
+                    label="用户名"
+                    prop="username">
+            </el-table-column>
+            <el-table-column
+                    label="用户头像"
+                    prop="userAvatar">
+                <template slot-scope="{ row }">
+                    <div v-if="row.userAvatar">
+                        <el-image style="width: 100px; height: 100px; border-radius: 50%; border:none;cursor: pointer;"
+                                  :src="getImage(row.userAvatar)"
+                                  :preview-src-list="[ `/api/img/${row.userAvatar}` ]">
+                        </el-image>
+                    </div>
+                    <div v-else>
+                        <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table-column>
+
+        <el-table-column
+                label="操作">
+            <template slot-scope="props">
+                <el-button
+                        type="text"
+                        size="medium"
+                        class="delBut non"
+                        @click="addMyQuestion(props.row)"
+                >
+                    添加进我的题库
+                </el-button>
+            </template>
+        </el-table-column>
+
+
+        <div slot="append" v-loading="isLoading" element-loading-text="努力加载数据中..."
+             element-loading-spinner="el-icon-loading" style="height:100px;text-align: center">
+            <div style="height:100px ; line-height: 100px ;width: 100% ;text-align: center" ref="bottomImg"></div>
+        </div>
+    </el-table>
+</div>
+
+
+<script>
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                //错题本数据
+                examQuery: {
+                    title: "",
+                    types: "",
+                },
+                tableData: [],//每次展示的数据
+                total: 0,//总记录数
+                totalPage: 0,//总页数
+                currentPage: 1,//当前页
+                pageSize: 6,//每页展示6条
+                allData: [],
+                updateTime: "",//更新时间
+                isLoading: false,
+            }
+        },
+        created() {
+            this.getData();
+        },
+        mounted() {
+            let myTable = document.getElementById("myTable");
+            myTable.addEventListener('scroll', this.loadTableData);
+        },
+        destroyed() {
+            let myTable = document.getElementById("myTable");
+            myTable.removeEventListener('scroll', this.loadTableData);
+        },
+        methods: {
+            downloadExcel (blobPart, filename) {
+                const blob = new Blob([blobPart], { type: 'application/vnd.ms-excel' })
+                console.log('downloadExcel', blob.size)
+                // 创建一个超链接，将文件流赋进去，然后实现这个超链接的单击事件
+                const elink = document.createElement('a')
+                elink.download = decodeURIComponent(filename)
+                elink.style.display = 'none'
+                elink.href = URL.createObjectURL(blob)
+                document.body.appendChild(elink)
+                elink.click()
+                URL.revokeObjectURL(elink.href) // 释放URL 对象
+                document.body.removeChild(elink)
+            },
+            //导出全部题目
+            exportAll(){
+                //提示
+                this.$confirm("是否导出全部已公开题目为excel？", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                }).then(() => {
+                    //导出全部题目
+                    axios({
+                        method: "get",
+                        url: "/public/exportAll",
+                        responseType: "blob",
+                    }).then((resp) => {
+                        // if (resp.data.code == 200) {
+                        this.downloadExcel(resp.data, "全部已公开题目.xlsx");
+                        this.$message({
+                            type: "success",
+                            message: "导出成功",
+                        });
+                        // }
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消导出",
+                    });
+                });
+            },
+            onSubmit(){
+                //清空数据
+                this.tableData = [];
+                this.allData = [];
+                this.currentPage = 1;
+                this.$refs.bottomImg.innerText = '';
+                this.getData();
+            },
+            getData() {
+                console.log(this.examQuery);
+                axios.post("/public/getData",this.examQuery).then(res => {
+                    console.log(res.data);
+                    this.allData = res.data.data;
+                    this.total = res.data.count;
+                    //每页6条，少于6条也是一页
+                    this.totalPage = parseInt((res.data.count + this.pageSize - 1) / this.pageSize);
+                    this.tableData = this.tableData.concat(this.allData.slice(0, this.pageSize));
+                });
+            },
+            getImage(image) {
+                // return `/common/download?name=${image}`
+                return `/api/img/${image}`
+            },
+
+            loadTableData(e) {
+                const scrollDistance = e.target.scrollHeight - e.target.scrollTop - e.target.clientHeight;
+                if (scrollDistance <= 0) {  //等于0证明已经到底，可以请求接口
+
+                    if (this.currentPage < this.totalPage) {//当前页数小于总页数就请求
+                        this.currentPage++;//当前页数自增
+                        // 显示  isLoading  等待提示
+                        this.isLoading = true;
+                        setTimeout(() => {
+                            //将下一页数据添加到表格数据
+                            const start = (this.currentPage - 1) * this.pageSize;//计算下一页起始索引
+                            const end = start + this.pageSize;//计算下一页结束索引
+                            this.tableData = this.tableData.concat(this.allData.slice(start, end));//将下一页数据添加到表格数据
+                            this.isLoading = false;
+                        }, 800);
+                    } else if (this.currentPage >= this.totalPage) {
+                        //说明已经是最后一页了
+                        this.$refs.bottomImg.innerText = '数据已经全部加载完毕';
+                    }
+                }
+            },
+
+
+            //添加进我的题库
+            addMyQuestion(res) {
+
+                this.$confirm('确定添加进题库吗', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    //判断用户题库是否已经存在该题目
+                    axios.post("/question/isExist", res).then((resp) => {
+                        if (resp.data) {
+                            this.$message({
+                                type: 'info',
+                                message: '该题目已在您的题库中!'
+                            });
+                            return;
+                        } else {
+                            axios.post("/question", res).then((resp) => {
+                                if (resp) {
+                                    //给题目的所有者添加贡献值
+                                    axios.post("/user/addContribution", res).then((resp) => {
+                                        if (resp.data.code == 200) {
+                                            console.log("贡献值添加成功");
+                                        }
+                                    });
+                                    this.$message({
+                                        type: 'success',
+                                        message: '添加成功!'
+                                    });
+                                }
+                            });
+                        }
+
+                    });
+
+
+                }).catch(() => {
+                    //用户点击取消按钮
+                    this.$message({
+                        type: 'info',
+                        message: '已取消添加'
+                    });
+                });
+
+            }
+        },
+    });
+</script>
+
+</body>
+</html>

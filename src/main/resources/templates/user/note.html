@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script th:src="@{/js/vue.js}"></script>
+    <script th:src="@{/js/elementui/index.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+    <script th:src="@{/js/axios.js}"></script>
+    <script th:src="@{/js/jquery.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/iconfont.min.css}">
+</head>
+
+<body>
+<div id="app">
+
+    <el-row :gutter="20">
+        <el-col :span="9">
+            <el-row>
+                <el-card shadow="hover" style="width: 100%;height: 448px;">
+                    <div slot="header" class="clearfix">
+                        <span>文嘉《明日歌》</span>
+                    </div>
+                    <div style="font-size: 18px;text-align: center; line-height: 50px;">明日复明日</div>
+                    <div style="font-size: 18px;text-align: center;line-height: 50px;">明日何其多</div>
+                    <div style="font-size: 18px;text-align: center;line-height: 50px;">我生待明日</div>
+                    <div style="font-size: 18px;text-align: center;line-height: 50px;">万事成蹉跎</div>
+                    <div style="margin-top: 50px;"></div>
+                    <el-statistic ref="statistic" @finish="hilarity" format="HH:mm:ss" :value="deadline"
+                                  title="距离明日：" time-indices>
+                    </el-statistic>
+                </el-card>
+            </el-row>
+
+            <el-row>
+                <el-card shadow="hover" style="width: 100%;height: 100px;">
+                    <el-col :span="8">
+                        <div>
+                            <el-statistic title="题目总数" :value="totalNum">
+                                <template slot="formatter"></template>
+                            </el-statistic>
+                        </div>
+                    </el-col>
+                    <el-col :span="8">
+                        <div>
+                            <el-statistic :value="dateNum" :title="title">
+                                <template slot="prefix">
+                                    <i class="el-icon-s-flag" style="color: red"></i>
+                                </template>
+                                <template slot="suffix">
+                                    <i class="el-icon-s-flag" style="color: blue"></i>
+                                </template>
+                            </el-statistic>
+                        </div>
+                    </el-col>
+                    <el-col :span="8">
+                        <div>
+                            <el-statistic :value="contribution" title="我的贡献值">
+                                <template slot="suffix">
+                                        <span class="like">
+                                            <i class="el-icon-star-on" style="color:red"></i>
+                                        </span>
+                                </template>
+                            </el-statistic>
+                        </div>
+                    </el-col>
+                </el-card>
+
+            </el-row>
+            <el-row>
+                <el-card shadow="hover" style="width: 100%;height: 100px;">
+                    <el-col :span="8">
+                        <div>
+                            <el-statistic title="用户数量" :value="userNum">
+                                <template slot="formatter"></template>
+                            </el-statistic>
+                        </div>
+                    </el-col>
+                    <el-col :span="8">
+                        <div>
+                            <el-statistic :value="ranking" :title="title2">
+                                <template slot="prefix">
+                                    <i class="el-icon-s-flag" style="color: red"></i>
+                                </template>
+                                <template slot="suffix">
+                                    <i class="el-icon-s-flag" style="color: blue"></i>
+                                </template>
+                            </el-statistic>
+                        </div>
+                    </el-col>
+                    <el-col :span="8">
+                        <div>
+                            <el-statistic :value="topContribution" title="榜首贡献值">
+                                <template slot="suffix">
+                                        <span class="like">
+                                            <i class="el-icon-star-on" style="color:red"></i>
+                                        </span>
+                                </template>
+                            </el-statistic>
+                        </div>
+                    </el-col>
+                </el-card>
+
+            </el-row>
+        </el-col>
+
+        <el-col :span="15">
+            <el-card shadow="hover" class="box-card" style="height: 650px;overflow-y: scroll">
+                <div slot="header" class="clearfix">
+                    <i class="iconfont icon-jiangbei"></i>
+                    <span>贡献值排行榜</span>
+                    <el-tooltip placement="right-end" effect="light">
+                        <div slot="content">
+                            贡献值获取规则：<br>
+                            1.公开题目，贡献值+1<br>
+                            2.题目被其他用户添加，贡献值+1<br>
+                        </div>
+                        <i class="el-icon-question"></i>
+                    </el-tooltip>
+                    <!--                    <el-button style="float: right; padding: 3px 0" type="text" @click="showMyRanking">查看我的排名</el-button>-->
+                    <el-input
+                            placeholder="请输入用户名"
+                            v-model="input"
+                            prefix-icon="el-icon-search"
+                            size="small"
+                            style="width: 200px;float: right"
+                            @input="getOrder(input)"
+                            clearable>
+                    </el-input>
+                </div>
+                <div v-for="(o,index) in userList" :key="index" class="text item">
+                    <el-card shadow="hover">
+                        <el-row>
+                            <el-col :span="4">
+                                <div>
+                                    <el-image style="width: 50px; height: 50px; border-radius:50%"
+                                              :src=`/api/img/${o.avatar}`
+                                              :preview-src-list="[ `/api/img/${o.avatar}` ]">
+                                    </el-image>
+                                </div>
+                            </el-col>
+                            <el-col :span="4">
+                                <el-row>
+                                    <div>
+                                        <span style="font-size: 18px">{{o.username}}</span>
+                                    </div>
+                                </el-row>
+                                <el-row>
+                                    <div>
+                                        <span style="font-size: 18px;color: rgba(191, 191, 191);">贡献值：{{o.contributions}}</span>
+                                    </div>
+                                </el-row>
+                            </el-col>
+                            <el-col :span="16">
+                                <div style="text-align: right">
+                                    <span style="font-size: 18px">Top{{index+1}}</span>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </el-card>
+
+                </div>
+            </el-card>
+        </el-col>
+
+    </el-row>
+
+
+</div>
+</body>
+<script>
+    var Main = {
+        data() {
+            return {
+                contribution: 0,
+                totalNum: 0,
+                dateNum: 0,
+                title: '今日新增题数',
+                title2: '实时贡献排名',
+                topContribution: 0,
+                userNum: 0,
+                ranking: 0,
+                userList: [],
+                deadline: Date.now() + (new Date().setHours(23, 59, 59) - Date.now()),
+                input: '',
+            };
+        },
+        created() {
+            this.getIndexData();
+        },
+        methods: {
+            hilarity() {
+                this.$notify({
+                    title: '提示',
+                    message: '时间已到，你可知寸金难买寸光阴？',
+                    duration: 0,
+                });
+            },
+            getIndexData() {
+                axios.get('/user/getIndexData').then(res => {
+                    console.log(res, "xxxxxxxxxxxxxxxxx")
+                    if (res.data.code === 200) {
+                        this.contribution = res.data.contribution;
+                        this.totalNum = res.data.totalNum;
+                        this.dateNum = res.data.dateNum;
+                        this.topContribution = res.data.topContribution;
+                        this.userNum = res.data.userNum;
+                        this.ranking = res.data.ranking;
+                        this.userList = res.data.userList;
+                    }
+                })
+            },
+            /*showMyRanking(){
+                this.$notify({
+                    title: '提示',
+                    message: '你的排名是：' + this.ranking,
+                    duration: 0,
+                });
+            },*/
+            getOrder(username) {
+
+                axios.get('/user/getRankingByUserName?username=' + username).then(res => {
+                    if (res.data.code === 200) {
+                        this.userList = res.data.userList;
+                    }
+                })
+            }
+
+        },
+    };
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+</script>
+<style lang="scss">
+    .like {
+        cursor: pointer;
+        font-size: 25px;
+        display: inline-block;
+    }
+
+    .text {
+        font-size: 14px;
+    }
+
+    .item {
+        margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+
+    .clearfix:after {
+        clear: both
+    }
+
+
+</style>
+
+</html>

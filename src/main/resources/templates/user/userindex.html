@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
+    <title>408错题本</title>
+    <script th:src="@{/js/vue.js}"></script>
+    <script th:src="@{/js/elementui/index.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+    <script th:src="@{/js/axios.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/iconfont.min.css}">
+    <link rel="stylesheet" th:href="@{/css/userindex-topbar.min.css}">
+    <link rel="icon" th:href="@{/img/logo.png}" type="image/x-icon"/>
+
+
+
+    <style>
+        /* .el-aside {
+             background-color: #ffffff;
+             color: #000000;
+             height: 685px;
+             font-family: '宋体';
+             !*border: #3a8ee6 1px solid;*!
+         }
+
+         .el-submenu__title, .el-dropdown-menu__item, .el-menu-item {
+             font-size: 20px;
+         }
+
+         .el-main {
+             background-color: #f3f4f7;;
+             color: #000000;
+             height: 685px;
+             overflow: hidden;
+         }
+         * {
+             margin: 0;
+             !* padding: 0;*!
+         }
+
+
+         .c_iframe {
+             background-color: white;
+             height: 685px;
+             color: black;
+         }
+
+         .menu {
+             height: 685px;
+             color: black;
+         }*/
+        .el-aside {
+            background-color: #ffffff;
+            color: #000000;
+            /*height: 685px;*/
+            font-family: '宋体';
+            /*border: #3a8ee6 1px solid;*/
+        }
+
+        .el-submenu__title, .el-dropdown-menu__item, .el-menu-item {
+            font-size: 20px;
+        }
+
+        .el-main {
+            background-color: #f3f4f7;;
+            color: #000000;
+            /* height: 685px;*/
+            width: 100%;
+            overflow: hidden;
+        }
+
+        * {
+            margin: 0;
+            /* padding: 0;*/
+        }
+
+        .c_iframe {
+            background-color: white;
+            height: 685px;
+            width: 100%;
+            padding-top: 1%;
+            color: black;
+        }
+
+        .menu {
+            height: 685px;
+            color: black;
+        }
+
+        .pageScroll {
+            height: 100%;
+            width: 100%;
+        }
+
+
+        .page-scroll .el-scrollbar__wrap {
+            overflow-x: hidden;
+        }
+
+
+
+
+       @media only screen and (max-width:1200px){
+           #myaside{
+               width: 50px;
+           }
+           .sidebaritemname{
+               display: none;
+           }
+       }
+    </style>
+
+</head>
+
+<body>
+<div id="app">
+    <div class="header">
+        <nav class="nav-container">
+            <div class="nav-left" style="width:200px" >
+                <el-image
+                        :src="`/img/logo.png`"
+                        class="logo"
+                        :preview-src-list="[ `/img/logo.png` ]">
+                </el-image>
+            </div>
+            <ul class="nav-main">
+                <li class="main-item">
+                    <a @click.prevent="toindex">首页</a>
+                </li>
+                <li class="main-item item-menu">
+                    <a>个人中心</a>
+                    <div class="division"></div>
+                    <!--弹出层-->
+                    <ul class="article secondaryMenu">
+                        <li>
+                            <a @click.prevent="updatePassword"><i class="iconfont icon-biaoqian"></i></i>修改密码</a>
+                        </li>
+
+                        <li>
+                            <a @click.prevent="toprofile"></i><i class="iconfont icon-boke"></i>个人资料</a>
+                        </li>
+                        <li>
+                            <a @click="getUid,dialogImg=true"><i class="iconfont icon-icon-test"></i>上传头像</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="main-item item-menu">
+                    <a @click.prevent="musicDialog = true">切换歌单</a>
+                </li>
+                <!--                <li class="main-item item-menu">-->
+                <!--                    <a @click="drawer = true">小组信息</a>-->
+                <!--                </li>-->
+
+                <!--                <el-drawer-->
+                <!--                        title="小组信息"-->
+                <!--                        :visible.sync="drawer"-->
+                <!--                        :direction="direction"-->
+                <!--                        size="50%"-->
+                <!--                        :before-close="handleGroupClose">-->
+                <!--                    <span>我来啦!</span>-->
+                <!--                </el-drawer>-->
+
+                <li class="main-item">
+                    <a href="https://github.com/linXiao01/online-exams" target="_blank">Github</a>
+                </li>
+                <li class="main-item">
+                    <a href="https://gitee.com/lin-xugeng/online-exams" target="_blank">Gitee</a>
+                </li>
+            </ul>
+
+            <div class="nav-right" th:if="${session.user}==null">
+                <li class="main-item">
+                    <a th:href="@{/tologin}">登录/注册</a>
+                </li>
+            </div>
+
+<!--            <i class="iconfont icon-suoxiao" @click="toggleFullScreen"></i>-->
+
+            <div style="margin-right: 20px">
+                <i style="font-size: 32px" :class="isFullscreen?'iconfont icon-suoxiao':'iconfont icon-quanping_o'" @click="toggleFullScreen"></i>
+            </div>
+
+
+
+
+            <div v-if="avatar">
+                <el-image style="width: 50px; height: 50px; border-radius:50%"
+                          :src="getImage(avatar)"
+                          :preview-src-list="[ `/api/img/${avatar}` ]">
+                </el-image>
+            </div>
+            <div v-else>
+                <img th:src="@{/img/img_1.png}" style="width: 50px; height: 50px; border-radius:50%">
+            </div>
+        </nav>
+    </div>
+    <el-container>
+        <el-aside width="auto" class="sidebar"  id="myaside">
+            <el-menu
+                    :default-active="defAct"
+                    :unique-opened="false"
+                    :collapse-transition="false"
+                    class="menu"
+                    background-color="#ffffff"
+                    color="black"
+                    active-text-color="#67c23a"
+            >
+                <div v-for="item in menuList" :key="item.id">
+                    <el-menu-item :index="item.id" @click="menuHandle(item,false)">
+                        <i :class="item.class"></i>
+                        <span slot="title" class="sidebaritemname">{{ item.name }}</span>
+                    </el-menu-item>
+                </div>
+<!--                <el-menu-item>-->
+<!--                    <i class="icon-tuichudenglu1 iconfont"></i>-->
+<!--                    <a @click="logout()" id="logout" slot="title">退出登录</a>-->
+<!--                </el-menu-item>-->
+            </el-menu>
+        </el-aside>
+        <el-scrollbar class="pageScroll">
+            <el-main>
+                <div class="main-container" style="z-index: 10; position: relative;">
+                    <div class="app-main" v-loading="loading" element-loading-text="别急，我在加载..."
+                         element-loading-spinner="el-icon-loading"
+                    >
+                        <div class="divTmp" v-show="loading"></div>
+                        <iframe
+                                id="cIframe"
+                                class="c_iframe"
+                                name="cIframe"
+                                :src="iframeUrl"
+                                width="100%"
+                                height="100%"
+                                ref="iframe"
+                        ></iframe>
+                    </div>
+                </div>
+            </el-main>
+        </el-scrollbar>
+    </el-container>
+    <el-dialog
+            title="上传头像"
+            :visible.sync="dialogImg"
+            width="30%">
+        <el-form
+                v-loading="uploading"
+                element-loading-text="正在给您更换头像..."
+                element-loading-spinner="el-icon-loading"
+                ref="form" label-width="80px">
+            <el-form-item label="选择头像" prop="avatar">
+                <el-upload
+                        ref="userImg"
+                        :auto-upload="false"
+                        :on-change="showAvatar"
+                        class="avatar-uploader"
+                        action="/common/upload"
+                        :multiple="false"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar"
+                         style="width: 200px; height: 200px; border:none">
+                    <img v-else th:src="@{/img/img_1.png}" style="width: 200px; height: 200px; border:none">
+                </el-upload>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="success" @click="startUpdateAvatar">提交</el-button>
+                <el-button type="success" plain
+                           @click="dialogImg = false,$refs.userImg.clearFiles(),imageUrl = `/api/img/${avatar}`,isChangeAvatar = false">
+                    取消
+                </el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+    <el-dialog title="切换歌单" :visible.sync="musicDialog">
+        <el-form>
+            <el-form-item label="网易云歌单ID">
+                <el-tooltip placement="right-end" effect="light">
+                    <div slot="content">
+                        网易云歌单ID获取方式<br>
+                        1.打开网易云音乐网页版<br>
+                        2.点击歌单<br>
+                        3.点击歌单封面<br>
+                        4.复制链接中的数字<br>
+                        5.粘贴到此处
+                    </div>
+                    <i class="el-icon-question"></i>
+                </el-tooltip>
+                <el-input v-model="musicId" autocomplete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="musicDialog = false">取 消</el-button>
+            <el-button type="primary" @click="updateMusic">确 定</el-button>
+        </div>
+    </el-dialog>
+
+
+    <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>-->
+    <!--    <meting-js server="netease" type="playlist" id="7689303591" fixed="true" mini="true" order="random" loop="all"-->
+    <!--               preload="auto" list-folded="false" autoplay="true">-->
+    <!--    </meting-js>-->
+
+
+</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<div id="player" class="aplayer aplayer-withlist aplayer-fixed" autoplay="true" data-server="netease"
+     data-type="playlist" data-order="random" data-fixed="true" data-listfolded="true" data-theme="#2D8CF0">
+</div>
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@1.2.0/dist/Meting.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/kaygb/kaygb@master/js/v3.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/kaygb/kaygb@master/layer/layer.js"></script>
+<script>
+    // const body=document.querySelector('body')
+    // const toggle=body.querySelector('.toggle')
+    // console.log(toggle)
+    // const sidebar=body.querySelector('#myaside')
+    // toggle.addEventListener('click',()=>{
+    //     sidebar.classList.toggle('close')
+    // })
+
+</script>
+<script th:src="@{/js/screenfull/dist/screenfull.js}"></script>
+<script>
+
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+
+                musicId: '',
+                musicDialog: false,
+                defAct: '1',
+                menuActived: '1',
+                menuList: [
+                    {
+                        id: '1',
+                        name: '错题集',
+                        class: 'icon-chakan iconfont',
+                        url: '/user/page',
+                    },
+                    {
+                        id: '2',
+                        name: '重做错题',
+                        class: 'icon-zhongxinpingjuan iconfont',
+                        url: '/user/rewrite',
+                    },
+                    {
+                        id: '4',
+                        name: '逛一逛',
+                        class: 'icon-guangguang iconfont',
+                        url: '/user/public',
+                    },
+                    {
+                        id: '5',
+                        name: '退出登录',
+                        class: 'icon-tuichudenglu1 iconfont',
+                        url: '/user/logout',
+                    }
+                ],
+                iframeUrl: '/user/note',
+                goBackFlag: false,
+                loading: false,
+                timer: null,
+                fileList: [],
+                imageUrl: '',
+                dialogImg: false,
+                avatar: "",
+                //头像上传判定
+                uploading: false,
+                //头像是否修改过
+                isChangeAvatar: false,
+
+                //小组信息展示
+                drawer: false,
+                direction: 'rtl',
+
+                //全屏
+                isFullscreen: false
+            }
+        },
+        watch: {
+            //监听图片是否修改过
+            imageUrl: function (newVal) {
+                //修改的时候才会触发
+                if (this.dialogImg) {
+                    var theOld = "/api/img/" + this.avatar;
+                    if (newVal != theOld) {
+                        console.log(newVal, theOld, '图片修改过');
+                        this.isChangeAvatar = true;
+                    } else {
+                        console.log(newVal, theOld, '图片没有修改过');
+                        this.isChangeAvatar = false;
+                    }
+                }
+            }
+        },
+        mounted() {
+            window.menuHandle = this.menuHandle
+            if (!this.loading) {
+                this.$refs.iframe.style.visibility = 'visible'
+            } else {
+                this.$refs.iframe.style.visibility = 'hidden'
+            }
+            this.init()
+        },
+        beforeDestroy() {
+            this.destroy()
+        },
+        created() {
+            window.menuHandle = this.menuHandle;
+            this.getUid();
+            //从cookie中获取musicId
+            this.musicId = this.getCookie('musicId');
+            //如果没有musicId则为默认值
+            if (!this.musicId) {
+                this.musicId = '7689303591';
+            }
+            //设置音乐播放器
+            document.getElementById('player').setAttribute('data-id', this.musicId)
+        },
+        methods: {
+            toggleFullScreen() {
+                if (!screenfull.enabled) {
+                    this.$message({
+                        message: 'you browser can not work',
+                        type: 'warning'
+                    })
+                    return false
+                }
+                screenfull.toggle()
+            },
+            change() {
+                this.isFullscreen = screenfull.isFullscreen
+            },
+            init() {
+                if (screenfull.enabled) {
+                    screenfull.on('change', this.change)
+                }
+            },
+            destroy() {
+                if (screenfull.enabled) {
+                    screenfull.off('change', this.change)
+                }
+            },
+
+            //更新歌单
+            updateMusic() {
+
+                document.getElementById('player').setAttribute('data-id', this.musicId)
+                //设置cookie
+                this.setCookie('musicId', this.musicId);
+                this.$message({
+                    type: 'success',
+                    message: '切换成功'
+                });
+                //重新加载
+                window.location.reload();
+
+                this.musicDialog = false;
+            },
+            toindex() {
+                this.loading = true
+                this.iframeUrl = '/user/note';
+                this.closeLoading()
+            },
+
+            //去个人资料
+            toprofile() {
+                this.loading = true
+                this.iframeUrl = '/user/profile';
+                this.closeLoading()
+            },
+
+            //用户旧密码表单
+            updatePassword() {
+                this.$prompt('请输入您当前的密码', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    inputPattern: /^[\w]{5,16}$/,
+                    inputErrorMessage: '密码格式不正确'
+                }).then(({value}) => {
+
+                    axios.get('/user/checkPassword/' + `${value}`).then(res => {
+                        if (res.data) {
+                            this.$message({
+                                type: 'success',
+                                duration: 1000,
+                                message: '密码输入正确'
+                            });
+
+                            this.$prompt('请输入新的密码', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                inputPattern: /^[\w]{5,16}$/,
+                                inputErrorMessage: '密码格式不正确'
+                            }).then(({value}) => {
+
+                                console.log(value);
+                                //更改密码
+                                axios.put('/user/updatePassword/' + `${value}`).then(res => {
+                                    if (res.data) {
+                                        this.$message({
+                                            type: 'success',
+                                            duration: 1000,
+                                            message: '密码修改成功'
+                                        });
+                                    } else {
+                                        this.$message({
+                                            type: 'error',
+                                            duration: 1000,
+                                            message: '密码修改失败'
+                                        });
+                                    }
+                                }).catch(err => {
+                                    console.log(err);
+                                })
+                            }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    duration: 1000,
+                                    message: '取消输入'
+                                });
+                            });
+
+
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                duration: 1000,
+                                message: '密码错误'
+                            });
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                    })
+
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        duration: 1000,
+                        message: '取消输入'
+                    });
+                });
+            },
+
+            //小组信息关闭
+            handleGroupClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {
+                    });
+            }
+            ,
+
+            logout() {
+                this.$confirm('确定退出登录吗', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    window.location.href = '/user/logout';
+                    this.$message({
+                        type: 'success',
+                        message: '已退出登录!'
+                    });
+                }).catch(() => {
+                    //用户点击取消按钮
+                    this.$message({
+                        type: 'info',
+                        duration: 1000,
+                        message: '已取消退出'
+                    });
+                });
+            }
+            ,
+            goBack() {
+                const menu = this.menuList.find(item => item.id === this.menuActived)
+                this.menuHandle(menu, false)
+            }
+            ,
+
+            menuHandle(item, goBackFlag) {
+                if(item.name == '退出登录'){
+                    this.logout();
+                }else{
+                    this.loading = true
+                    this.menuActived = item.id
+                    this.iframeUrl = item.url
+                    this.goBackFlag = goBackFlag
+                    this.closeLoading()
+                }
+            }
+            ,
+            closeLoading() {
+                this.timer = null
+                this.timer = setTimeout(() => {
+                    this.loading = false
+                }, 500)
+            }
+            ,
+            getImage(avatar) {
+                return `/api/img/${avatar}`
+            }
+            ,
+            getUid() {
+                axios.get("/user").then(res => {
+                    if (res.data) {
+                        this.avatar = res.data;
+                        this.imageUrl = `/api/img/${res.data}`;
+                    }
+
+                })
+            }
+            ,
+
+            //修改头像的展示change
+            showAvatar(file, fileList) {
+                //获取上传的图片用于展示
+                var img = file.raw;
+                //展示图片
+                var reader = new FileReader();
+                reader.readAsDataURL(img);
+                //改为箭头函数，不然this指向的是reader
+                reader.onload = (e) => {
+                    if (reader.readyState == 2) {
+                        this.imageUrl = e.target.result;
+                    }
+                };
+                /* this.imageUrl = URL.createObjectURL(file.raw);*/
+                /* console.log(this.imageUrl)*/
+            }
+            ,
+
+            handleAvatarSuccess(res) {
+                console.log(res);
+                this.avatar = res;
+                this.imageUrl = `/api/img/${res}`;
+                axios.put("/user/" + this.avatar).then((resp) => {
+                    if (resp) {
+                        this.dialogImg = false;
+                        this.imageUrl = '';
+                        this.avatar = '';
+                        this.getUid();
+                        this.$message({
+                            type: 'success',
+                            duration: 1000,
+                            message: '已经换上您喜欢的头像啦！'
+                        });
+                    }
+                });
+                //加载动画关闭
+                this.uploading = false;
+            }
+            ,
+
+
+            //修改头像
+            updateImg() {
+                //点击提交展示加载中
+                this.uploading = true;
+                //提交修改图片的上传
+                this.$refs.userImg.submit();
+            }
+            ,
+
+            //用户点击开始更新头像
+            startUpdateAvatar() {
+                //判断是否修改过
+                if (this.isChangeAvatar) {
+                    this.toUpdateAvatar("avatar", this.updateImg);
+                } else {
+                    this.dialogImg = true;
+                    this.$message({
+                        type: 'warning',
+                        duration: 1000,
+                        message: '您还没有修改头像哦!'
+                    });
+                    //加载动画关闭
+                    this.uploading = false;
+                }
+            }
+            ,
+            toUpdateAvatar(key, method) {
+                var v = this.getCookie(key);
+                //判断是否有cookie
+                if (!v) {
+                    method();
+                    //获取第二天凌晨到当前时间的秒数
+                    var tim_sec = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                    this.setCookie(key, "1", tim_sec);
+                } else if (v >= 3) { //判断是否超过修改次数
+                    this.$message({
+                        type: 'warning',
+                        duration: 1000,
+                        message: '每天只能修改3次头像哦!'
+                    });
+                } else {
+                    method();
+                    //修改次数+1,满3次后不再修改
+                    var avatartimeout = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                    var value = this.getCookie(key);
+                    this.setCookie("avatar", parseInt(value) + 1, avatartimeout);
+                }
+            }
+            ,
+
+            setCookie(name, value, second) {
+                if (!second) {
+                    second = 7 * 24 * 60 * 60;//默认7天
+                }
+                var exp = new Date();
+                exp.setTime(exp.getTime() + second * 1000);
+                document.cookie = name + "=" + encodeURI(value) + ";expires=" + exp.toGMTString() + ";path=/";
+            }
+            ,
+            getCookie(name) {
+                if (document.cookie.length > 0) {
+                    c_start = document.cookie.indexOf(name + "=");//获取字符串的起点
+                    if (c_start != -1) {
+                        c_start = c_start + name.length + 1;//获取值的起点
+                        c_end = document.cookie.indexOf(";", c_start);//获取结尾处
+                        if (c_end == -1) c_end = document.cookie.length;//如果是最后一个，结尾就是cookie字符串的结尾
+                        return decodeURI(document.cookie.substring(c_start, c_end));//截取字符串返回
+                    }
+                }
+                return "";
+            }
+        }
+    })
+</script>
+</body>
+
+</html>

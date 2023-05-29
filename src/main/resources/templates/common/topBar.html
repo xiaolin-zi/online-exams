@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>顶部栏</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .topBar {
+      height: 50px;
+      border-bottom: 1px rgb(0, 0, 0, .4) solid;
+
+    }
+
+    .topBar .pic1 {
+      float: left;
+      width: 70px;
+      height: 50px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .topBar ul {
+      list-style: none;
+    }
+
+    a {
+      text-decoration: none;
+      text-align: center;
+      display: block;
+      color: black;
+    }
+
+    .btn:hover {
+      text-decoration: underline;
+      color: skyblue;
+    }
+
+    .topBarBtn ul .index {
+      float: left;
+      margin-left: 40px;
+    }
+
+    .topBarBtn .btn {
+      line-height: 50px;
+    }
+
+    .topBarBtn .em {
+      color: skyblue;
+      text-decoration: underline;
+
+    }
+
+    .topBarBtn .login {
+      float: right;
+      margin-right: 30px;
+      margin-top: 8px;
+      width: 70px;
+      height: 30px;
+      border-radius: 50px;
+      border: 2px solid skyblue;
+    }
+
+    .topBarBtn .lr {
+      line-height: 30px;
+    }
+
+    .login:hover {
+      background-color: skyblue;
+    }
+  </style>
+</head>
+
+<body>
+<div class="topBar">
+  <div class="pic1"><img src="../../static/img/错题图标1.png" alt="图标"></div>
+
+
+  <div class="topBarBtn">
+    <ul>
+      <li class="index"><a class="btn em" href="#">首页</a></li>
+      <li class="index"><a class="btn" href="#">错题分析</a></li>
+      <li class="index"><a class="btn" href="#">个人中心</a></li>
+      <li class="index"><a class="btn" href="#">按钮按钮</a></li>
+      <li class="index"><a class="btn" href="#">按钮按钮</a></li>
+    </ul>
+    <div class="login"><a class="lr" href="#">注册</a></div>
+    <div class="login"><a class="lr" href="#">登录</a></div>
+  </div>
+</div>
+
+</body>
+
+</html>

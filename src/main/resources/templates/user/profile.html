@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<title>408错题本</title>
+<script th:src="@{/js/vue.js}"></script>
+<script th:src="@{/js/elementui/index.js}"></script>
+<link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+<script th:src="@{/js/axios.js}"></script>
+<link rel="stylesheet" th:href="@{/css/iconfont.min.css}">
+<!-- 引入 echarts.js -->
+<!--<script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>-->
+<!--<script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.2/echarts.common.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+<body>
+
+<div id="app">
+    <div>
+        <el-row :gutter="20">
+
+            <el-col :span="6" :xs="24">
+                <el-card style="height: 650px;" shadow="hover">
+                    <div slot="header" class="clearfix">
+                        <span>个人资料</span>
+                    </div>
+                    <div class="user-profile">
+                        <div v-if="user.avatar">
+                            <el-image style="width: 50px; height: 50px; border-radius:50%"
+                                      :src="getImage(user.avatar)"
+                                      :preview-src-list="[ `/api/img/${user.avatar}` ]">
+                            </el-image>
+                        </div>
+                        <div v-else>
+                            <img th:src="@{/img/img_1.png}" style="width: 50px; height: 50px; border-radius:50%">
+                        </div>
+                        <div class="box-center">
+                            <span>用户名:</span>
+                            <span class="user-name text-center">{{ user.username }}</span>
+                        </div>
+                        <div class="box-center" style="margin-top: 20px">
+                            <span>邮箱:</span>
+                            <span class="user-name text-center">{{ user.email }}</span>
+                        </div>
+                    </div>
+                    <div class="user-bio" style="margin-top: 20px">
+
+                        <div class="user-skills user-bio-section">
+
+                            <div class="user-bio-section-body">
+                                <div class="progress-item">
+                                    <span>计算机网络({{this.percentage.jsjwl}})</span>
+                                    <el-progress
+                                            :percentage="parseInt((this.percentage.jsjwl/this.percentage.total)*100)"/>
+                                </div>
+                                <div class="progress-item">
+                                    <span>操作系统({{this.percentage.czxt}})</span>
+                                    <el-progress
+                                            :percentage="parseInt((this.percentage.czxt/this.percentage.total)*100)"/>
+                                </div>
+                                <div class="progress-item">
+                                    <span>计算机组成原理({{this.percentage.jsjzcyl}})</span>
+                                    <el-progress
+                                            :percentage="parseInt((this.percentage.jsjzcyl/this.percentage.total)*100)"/>
+                                </div>
+                                <div class="progress-item">
+                                    <span>数据结构({{this.percentage.sjjg}})</span>
+                                    <el-progress
+                                            :percentage="parseInt((this.percentage.sjjg/this.percentage.total)*100)"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mypicture" style="width: 295px;height:250px;"></div>
+                </el-card>
+
+
+            </el-col>
+
+            <el-col :span="18" :xs="24">
+                <el-row>
+                    <el-card style="height:270px" shadow="hover">
+                        <el-form>
+                            <el-form-item label="用户名">
+                                <el-input v-model.trim="user.username"/>
+                            </el-form-item>
+                            <el-form-item label="邮箱">
+                                <el-input v-model.trim="user.email"/>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="submit">更新</el-button>
+                            </el-form-item>
+                        </el-form>
+
+                    </el-card>
+                </el-row>
+                <el-row style="margin-top:10px">
+                    <el-col :span="12">
+                        <el-card shadow="hover" style="height:370px">
+                            <div id="dailyAddition" style="width: 450px;height:350px;"></div>
+                        </el-card>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-card shadow="hover" style="height:370px">
+                            <h3 style="width: 100%;text-align: center;">公开错题数</h3>
+                            <div id="publicQuestion" style="width: 440px;height:320px;"></div>
+                        </el-card>
+                    </el-col>
+
+                </el-row>
+            </el-col>
+
+        </el-row>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                user: {
+                    username: '',
+                    email: '',
+                    avatar: '',
+                    contributions: '',
+                },
+                percentage: {
+                    jsjwl: 0,
+                    czxt: 0,
+                    jsjzcyl: 0,
+                    sjjg: 0,
+                    total: 0
+                },
+                activeTab: 'activity',
+                chart: null,
+                data: [],
+                chart2: null,
+                data2: [],
+                chart3: null,
+                data3: [],
+            }
+
+        },
+        beforeDestroy() {
+            if (!this.chart || !this.chart2 || !this.chart3) {
+                return
+            }
+            this.chart.dispose()
+            this.chart = null
+            this.chart2.dispose()
+            this.chart2 = null
+            this.chart3.dispose()
+            this.chart3 = null
+        },
+        created() {
+            this.getUser()
+            this.getPercentage()
+        },
+        mounted() {
+            this.$nextTick(() => {
+                this.initChart()
+            })
+        },
+        methods: {
+
+            initChart() {
+                this.chart = echarts.init(document.getElementById('mypicture'))
+                this.chart2 = echarts.init(document.getElementById('dailyAddition'))
+                this.chart3 = echarts.init(document.getElementById('publicQuestion'))
+                this.drawChart()
+            },
+            //获取用户每种类型的错题数
+            getPercentage() {
+                axios.get('/user/getPercentage')
+                    .then(res => {
+                        this.percentage = res.data
+                    })
+            },
+            drawChart() {
+                axios.get('/user/getRankData')
+                    .then(res => {
+                        this.data = res.data
+                        // 指定图表的配置项和数据
+                        var option = {
+                            // title: {
+                            //     text: '错题类型分布',
+                            //     left: 'center'
+                            // },
+                            // legend: {
+                            //     data: this.data
+                            // },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: '{a} <br/>{b} : {c} ({d}%)'
+                            },
+                            series: [
+                                {
+                                    name: '错题熟悉度',
+                                    type: 'pie',
+                                    data: this.data
+                                }
+                            ]
+                        };
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        this.chart.setOption(option);
+                    })
+                axios.get('/user/getQuestionCountByDate')
+                    .then(res => {
+                        this.data2 = res.data
+                        var option2 = {
+                            // title: {
+                            //     text: '每日错题数',
+                            //     left: 'center'
+                            // },
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: {
+                                    type: 'cross',
+                                    crossStyle: {
+                                        color: '#999'
+                                    }
+                                }
+                            },
+                            toolbox: {                  //工具栏
+                                show: true,               //显示工具栏组件
+                                feature: {                //各工具配置项
+                                    mark: {
+                                        show: true
+                                    },
+                                    dataView: {
+                                        show: true,           //显示该工具
+                                        readOnly: false,       //是否显示不可编辑(只读)
+                                        title: '数据视图'
+                                    },
+                                    magicType: {            //动态类型切换
+                                        show: true,           //是否显示该工具
+                                        type: ['line', 'bar'], //启用的动态类型
+                                        title: {
+                                            line: '切换为折线图',
+                                            bar: '切换为柱状图'
+                                        }
+                                    },
+                                    restore: {              //配置项还原
+                                        show: true,            //是否显示该工具
+                                        title: '还原'
+                                    },
+                                    saveAsImage: {          //保存为图片
+                                        show: true,            //是否显示该工具
+                                        title: '保存'
+                                    }
+                                }
+                            },
+                            legend: {
+                                data: this.data2.map(item => item.mydate)
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    data: this.data2.map(item => item.mydate),
+                                    axisPointer: {
+                                        type: 'shadow'
+                                    }
+                                }
+                            ],
+                            yAxis: {
+                                type: 'value',
+                                name: '错题数',
+                                min: 0,
+                                max: 50,
+                                interval: 10,
+                                axisLabel: {
+                                    formatter: '{value} 道'
+                                }
+                            },
+                            series: [{
+                                name: '每日错题数',
+                                data: this.data2.map(item => item.mycount),
+                                type: 'bar',
+                            }
+                            ]
+                        };
+                        this.chart2.setOption(option2)
+                    })
+                axios.get('/user/getQuestionCount')
+                    .then(res => {
+                        this.data3 = res.data
+                        var option3 = {
+
+                            series: [
+                                {
+                                    name: '公开错题数',
+                                    type: 'gauge',
+                                    center: ['50%', '60%'],
+                                    startAngle: 200,
+                                    endAngle: -20,
+                                    min: 0,
+                                    max: this.data3.totalCount,
+                                    splitNumber: parseInt(this.data3.totalCount / 5),
+                                    itemStyle: {
+                                        color: '#FFAB91'
+                                    },
+                                    progress: {
+                                        show: true,
+                                        width: 30
+                                    },
+                                    pointer: {
+                                        show: false
+                                    },
+                                    axisLine: {
+                                        lineStyle: {
+                                            width: 30
+                                        }
+                                    },
+                                    axisTick: {
+                                        distance: -45,
+                                        splitNumber: 5,
+                                        lineStyle: {
+                                            width: 2,
+                                            color: '#999'
+                                        }
+                                    },
+                                    splitLine: {
+                                        distance: -52,
+                                        length: 14,
+                                        lineStyle: {
+                                            width: 3,
+                                            color: '#999'
+                                        }
+                                    },
+                                    axisLabel: {
+                                        distance: -20,
+                                        color: '#999',
+                                        fontSize: 20,
+                                        formatter: function (val) {
+                                            //解决刻度的值为浮点数问题
+                                            return Math.ceil(val);
+                                        },
+                                    },
+                                    anchor: {
+                                        show: false
+                                    },
+                                    title: {
+                                        show: false
+                                    },
+                                    detail: {
+                                        valueAnimation: true,
+                                        width: '60%',
+                                        lineHeight: 40,
+                                        borderRadius: 8,
+                                        offsetCenter: [0, '-15%'],
+                                        fontSize: 60,
+                                        fontWeight: 'bolder',
+                                        formatter: '{value} 道',
+                                        color: 'inherit'
+                                    },
+                                    toolbox: {                  //工具栏
+                                        show: true,               //显示工具栏组件
+                                        feature: {                //各工具配置项
+                                            mark: {
+                                                show: true
+                                            },
+                                            dataView: {
+                                                show: true,           //显示该工具
+                                                readOnly: false,       //是否显示不可编辑(只读)
+                                                title: '数据视图'
+                                            },
+                                            magicType: {            //动态类型切换
+                                                show: true,           //是否显示该工具
+                                                type: ['line', 'bar'], //启用的动态类型
+                                                title: {
+                                                    line: '切换为折线图',
+                                                    bar: '切换为柱状图'
+                                                }
+                                            },
+                                            restore: {              //配置项还原
+                                                show: true,            //是否显示该工具
+                                                title: '还原'
+                                            },
+                                            saveAsImage: {          //保存为图片
+                                                show: true,            //是否显示该工具
+                                                title: '保存'
+                                            }
+                                        }
+                                    },
+                                    data: [
+                                        {
+                                            value: this.data3.publicCount
+                                        }
+                                    ]
+                                },
+                            ]
+                        };
+                        this.chart3.setOption(option3)
+                    })
+
+
+            },
+
+            //修改用户信息
+            submit() {
+                axios.post('/user/updateUser', this.user)
+                    .then(res => {
+                        this.$message({
+                            message: '修改成功',
+                            type: 'success'
+                        })
+                    })
+            },
+            getUser() {
+                axios.get('/user/getUser')
+                    .then(res => {
+                        this.user = res.data
+                    })
+            },
+            getImage(avatar) {
+                return `/api/img/${avatar}`
+            }
+        }
+    })
+</script>
+</body>
+</html>

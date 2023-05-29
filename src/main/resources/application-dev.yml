@@ -1,0 +1,39 @@
+spring:
+  #配置数据源(固定配置不要改）
+  datasource:
+    #配置数据源类型（可有）
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/online_exams?characterEncoding=utf-8&useSSL=false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+server:
+  port: 80
+  tomcat:
+    max-http-form-post-size: 100MB
+
+#mybatis-plus配置
+mybatis-plus:
+  configuration:
+    #配置日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+exam:
+  basePath: http://localhost/
+
+image:
+  #window系统用
+  path: E:/examsImg/
+
+  #静态资源对外暴露的访问路径
+  staticAccessPath: /api/img/**
+
+  #linux系统用
+  #静态资源实际存储路径
+#  uploadFolder: /examImg/

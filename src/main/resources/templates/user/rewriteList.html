@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>重做错题</title>
+    <script th:src="@{/js/vue.js}"></script>
+    <script th:src="@{/js/elementui/index.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+    <script th:src="@{/js/axios.js}"></script>
+    <script th:src="@{/js/jquery.js}"></script>
+    <style>
+        .demo-table-expand {
+            font-size: 0;
+        }
+
+        .demo-table-expand label {
+            width: 90px;
+            color: #99a9bf;
+        }
+
+        .demo-table-expand .el-form-item {
+            margin-right: 0;
+            margin-bottom: 0;
+            width: 50%;
+        }
+
+        .el-icon-arrow-right:before {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <!--表单-->
+    <el-row>
+        <el-form :inline="true" :model="exam" ref="form" class="demo-form-inline">
+
+            <el-form-item label="题目相关词">
+                <el-input v-model="exam.title" placeholder="题目相关词"></el-input>
+            </el-form-item>
+
+            <el-form-item label="熟悉度">
+                <el-select v-model="exam.rank" placeholder="熟悉度" clearable>
+                    <el-option label="不熟悉" value="1"></el-option>
+                    <el-option label="模糊" value="2"></el-option>
+                    <el-option label="熟悉" value="3"></el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="科目">
+                <el-select v-model="exam.types" placeholder="科目" clearable>
+                    <el-option label="计算机网络" value="1"></el-option>
+                    <el-option label="操作系统" value="2"></el-option>
+                    <el-option label="计算机组成原理" value="3"></el-option>
+                    <el-option label="数据结构" value="4"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="success" plain @click="exportAll">导出所有题目</i></el-button>
+                <el-button type="success" plain @click="exportPage">导出此页题目</i></el-button>
+                <el-button type="success" @click="onSubmit">查询</el-button>
+            </el-form-item>
+        </el-form>
+    </el-row>
+    <el-table
+            :data="tableData"
+            style="width: 100%;
+            overflow: scroll;
+            max-height: 550px;
+            min-height: 550px;">
+        <el-table-column type="expand">
+            <template slot-scope="props">
+                <el-form label-position="left" inline class="demo-table-expand">
+                    <el-form-item label="题目">
+                        <span>{{ props.row.title }}</span>
+                    </el-form-item>
+                    <el-form-item label="选项A">
+                        <span>{{ props.row.optiona }}</span>
+                    </el-form-item>
+                    <el-form-item label="选项B">
+                        <span>{{ props.row.optionb }}</span>
+                    </el-form-item>
+                    <el-form-item label="选项C">
+                        <span>{{ props.row.optionc }}</span>
+                    </el-form-item>
+                    <el-form-item label="选项D">
+                        <span>{{ props.row.optiond }}</span>
+                    </el-form-item>
+                    <el-form-item label="答案">
+                        <span>{{ props.row.answer }}</span>
+                    </el-form-item>
+                    <el-form-item label="科目类型">
+                        <span v-if="props.row.types == 1">计算机网络</span>
+                        <span v-if="props.row.types == 2">操作系统</span>
+                        <span v-if="props.row.types == 3">计算机组成原理</span>
+                        <span v-if="props.row.types == 4">数据结构</span>
+                    </el-form-item>
+                    <el-form-item label="图片" aline="center">
+                        <div v-if="props.row.image">
+                            <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
+                                      :src="getImage(props.row.image)"
+                                      :preview-src-list="[ `/api/img/${props.row.image}` ]">
+                            </el-image>
+                        </div>
+                        <!--          <div v-else>
+
+                                  </div>-->
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-rate
+                                v-model="props.row.rank"
+                                show-text
+                                :texts="texts"
+                                :max="3"
+                                @change="changeRank(props.row)">
+                        </el-rate>
+                    </el-form-item>
+                </el-form>
+            </template>
+        </el-table-column>
+        <el-table-column
+                prop="title"
+                label="题目"
+        >
+        </el-table-column>
+        <el-table-column
+                prop="optiona"
+                label="选项A"
+        ></el-table-column>
+        <el-table-column
+                prop="optionb"
+                label="选项B"
+        >
+        </el-table-column>
+        <el-table-column
+                prop="optionc"
+                label="选项C"
+        ></el-table-column>
+        <el-table-column
+                prop="optiond"
+                label="选项D"
+        ></el-table-column>
+        <el-table-column
+                prop="types"
+                label="科目"
+        >
+            <template slot-scope="scope">
+                <span v-if="scope.row.types == 1">计算机网络</span>
+                <span v-if="scope.row.types == 2">操作系统</span>
+                <span v-if="scope.row.types == 3">计算机组成原理</span>
+                <span v-if="scope.row.types == 4">数据结构</span>
+            </template>
+        </el-table-column>
+    </el-table>
+    <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="page"
+            :page-sizes="[10, 30, 50]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            background
+            color="#67c23a"
+    >
+    </el-pagination>
+</div>
+
+<script>
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                tableData: [],
+                //错题本数据
+                exam: {
+                    id: "",
+                    title: "",
+                    optionA: "",
+                    optionB: "",
+                    optionC: "",
+                    optionD: "",
+                    answer: "",
+                    types: "",
+                    image: "",
+                    rank: ""
+                },
+                pageSize: 10,
+                page: 1,
+                total: 0,//总记录数
+                imageUrl: '',
+                texts: ['不熟悉', '模糊', '熟悉']
+            };
+        },
+        created() {
+            this.getAll();
+        },
+        methods: {
+            downloadExcel (blobPart, filename) {
+                const blob = new Blob([blobPart], { type: 'application/vnd.ms-excel' })
+                console.log('downloadExcel', blob.size)
+                // 创建一个超链接，将文件流赋进去，然后实现这个超链接的单击事件
+                const elink = document.createElement('a')
+                elink.download = decodeURIComponent(filename)
+                elink.style.display = 'none'
+                elink.href = URL.createObjectURL(blob)
+                document.body.appendChild(elink)
+                elink.click()
+                URL.revokeObjectURL(elink.href) // 释放URL 对象
+                document.body.removeChild(elink)
+            },
+            //导出全部题目
+            exportAll(){
+                //提示
+                this.$confirm("是否导出全部题目为excel？", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                }).then(() => {
+                    //导出全部题目
+                    axios({
+                        method: "get",
+                        url: "/question/exportAll",
+                        responseType: "blob",
+                    }).then((resp) => {
+                        // if (resp.data.code == 200) {
+                            this.downloadExcel(resp.data, "全部题目.xlsx");
+                            this.$message({
+                                type: "success",
+                                message: "导出成功",
+                            });
+                        // }
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消导出",
+                    });
+                });
+            },
+            //导出当前页题目
+            exportPage(){
+                console.log(this.tableData);
+                //提示
+                this.$confirm("是否导出当前页题目为excel？", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                }).then(() => {
+                    //导出全部题目
+                    axios({
+                        method: "post",
+                        url: "/question/exportPage",
+                        data:this.tableData,
+
+                        responseType: "blob",
+                    }).then((resp) => {
+                        // if (resp.data.code == 200) {
+                        this.downloadExcel(resp.data, "用户题目.xlsx");
+                        this.$message({
+                            type: "success",
+                            message: "导出成功",
+                        });
+                        // }
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消导出",
+                    });
+                });
+            },
+            //查询方法
+            onSubmit() {
+                this.getAll();
+            },
+            getAll() {
+                var param = "?title=" + this.exam.title;
+                param += "&types=" + this.exam.types;
+                param += "&rank=" + this.exam.rank;
+                axios.get("/question/" + this.page + "/" + this.pageSize + param).then(res => {
+                    this.total = res.data.total;
+                    this.tableData = res.data.records;
+                });
+            },
+            getImage(image) {
+                return `/api/img/${image}`;
+            },
+            //修改熟悉度
+            changeRank(ee) {
+                axios.put("/question", ee).then((resp) => {
+                    if (resp) {
+                        this.$message({
+                            type: 'success',
+                            duration: 1000,
+                            message: '修改熟悉度成功!'
+                        });
+                    }
+                })
+            },
+            //处理页码大小和当前页变动时候触发的事件
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.getAll();
+            },
+            handleCurrentChange(val) {
+                this.page = val;
+                this.getAll();
+            }
+        }
+    })
+
+
+</script>
+</body>
+</html>

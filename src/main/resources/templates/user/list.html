@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
+    <title>Title</title>
+    <style>
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-uploader .el-upload:hover {
+            border-color: #67c23a;
+        }
+
+        .avatar-uploader-icon {
+            font-size: 24px;
+            color: #8c939d;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            position: relative;
+            top: 38px;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            display: block;
+        }
+
+        .avatar-uploader2 .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-uploader2 .el-upload:hover {
+            border-color: #67c23a;
+        }
+
+        .avatar-uploader-icon {
+            font-size: 24px;
+            color: #8c939d;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            text-align: center;
+            position: relative;
+            top: 38px;
+        }
+
+        .avatar2 {
+            width: 100px;
+            height: 100px;
+            display: block;
+        }
+
+        .additionalfigures {
+            width: 100px;
+            height: 100px;
+        }
+
+        /*content中的内容就是伪类要显示的文字或字符串内容*/
+        .btn-prev:before {
+            content: "<";
+        }
+
+        .btn-next:before {
+            content: ">";
+        }
+
+        .blueBug {
+            background-color: #67c23a;
+            color: #FFFFFF;
+        }
+
+        .delBut non {
+            background-color: #67c23a;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <!--表单-->
+    <el-row>
+        <el-form :inline="true" :model="exam" ref="form" class="demo-form-inline">
+
+            <el-form-item label="题目相关词">
+                <el-input v-model="exam.title" placeholder="题目相关词"></el-input>
+            </el-form-item>
+
+            <el-form-item label="熟悉度">
+                <el-select v-model="exam.rank" placeholder="熟悉度" clearable>
+                    <el-option label="不熟悉" value="1"></el-option>
+                    <el-option label="模糊" value="2"></el-option>
+                    <el-option label="熟悉" value="3"></el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="科目">
+                <el-select v-model="exam.types" placeholder="科目" clearable>
+                    <el-option label="计算机网络" value="1"></el-option>
+                    <el-option label="操作系统" value="2"></el-option>
+                    <el-option label="计算机组成原理" value="3"></el-option>
+                    <el-option label="数据结构" value="4"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="success" @click="onSubmit">查询</el-button>
+            </el-form-item>
+            <el-row style="float: right">
+                <el-button type="success" plain @click="showExcelImport = true">批量导入</i></el-button>
+                <el-button type="success" plain @click="exam={},dialogUpdate1=true">图片上传</i></el-button>
+                <el-button type="success" plain @click="exam={},dialogUpdate2=true">语音输入</i></el-button>
+            </el-row>
+        </el-form>
+    </el-row>
+    <el-table
+            :data="tableData"
+            stripe
+            class="tableBox"
+            :row-class-name="tableRowClassName"
+            height="550"
+    >
+        <el-table-column
+                prop="title"
+                label="题目"
+        />
+        </el-table-column>
+        <el-table-column
+                prop="image"
+                label="图片"
+                align="center"
+        >
+            <template slot-scope="{ row }">
+                <div v-if="row.image">
+                    <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
+                              :src="getImage(row.image)"
+                              :preview-src-list="[ `/api/img/${row.image}` ]">
+                    </el-image>
+                </div>
+                <div v-else>
+                    <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
+                </div>
+            </template>
+        </el-table-column>
+        <el-table-column
+                prop="optiona"
+                label="选项A"
+        ></el-table-column>
+        <el-table-column
+                prop="optionb"
+                label="选项B"
+        />
+        </el-table-column>
+        <el-table-column
+                prop="optionc"
+                label="选项C"
+        ></el-table-column>
+        <el-table-column
+                prop="optiond"
+                label="选项D"
+        ></el-table-column>
+        <el-table-column
+                prop="answer"
+                label="答案"
+        ></el-table-column>
+        <el-table-column
+                prop="types"
+                label="科目"
+        >
+            <template slot-scope="scope">
+                <span v-if="scope.row.types == 1">计算机网络</span>
+                <span v-if="scope.row.types == 2">操作系统</span>
+                <span v-if="scope.row.types == 3">计算机组成原理</span>
+                <span v-if="scope.row.types == 4">数据结构</span>
+            </template>
+        </el-table-column>
+        <el-table-column
+                prop="remark"
+                label="笔记"
+        ></el-table-column>
+        <el-table-column
+                label="操作"
+                width="160"
+                align="center"
+        >
+            <template slot-scope="scope">
+                <el-rate
+                        v-model="scope.row.rank"
+                        show-text
+                        :texts="texts"
+                        :max="3"
+                        @change="changeRank(scope.row)">
+                </el-rate>
+
+                <div v-if="scope.row.image">
+                    <el-button
+                            type="text"
+                            size="medium"
+                            class="blueBug"
+
+                            @click="exam=scope.row,oldExam.title = exam.title ,oldExam.types = exam.types ,
+                            oldExam.optiona = exam.optiona ,oldExam.optionb = exam.optionb ,oldExam.optionc = exam.optionc ,
+                            oldExam.optiond = exam.optiond ,oldExam.answer = exam.answer ,oldExam.remark = exam.remark ,
+                            oldExam.rank = exam.rank ,
+                            handleImgShow(scope.row.image),dialogEdit=true"
+                    >
+                        修改
+                    </el-button>
+                </div>
+                <div v-else>
+                    <el-button
+                            type="text"
+                            size="medium"
+                            class="blueBug"
+                            @click="dialogEdit=true,exam=scope.row"
+                    >
+                        修改
+                    </el-button>
+                </div>
+                <el-button
+                        type="text"
+                        size="medium"
+                        class="delBut non"
+                        @click="deleteHandle(scope.row.id);"
+                >
+                    删除
+                </el-button>
+                <div v-if="scope.row.ispublic==0">
+                    <el-button
+                            type="text"
+                            size="medium"
+                            class="blueBug"
+                            @click="publicHandle(scope.row.id);"
+                    >
+                        公开
+                    </el-button>
+                </div>
+                <div v-else>
+                    <el-button
+                            type="text"
+                            size="medium"
+                            class="blueBug"
+                            @click="privateHandle(scope.row.id);"
+                    >
+                        私有
+                    </el-button>
+                </div>
+            </template>
+        </el-table-column>
+    </el-table>
+    <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="page"
+            :page-sizes="[10, 30, 50]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            background
+            color="#67c23a"
+    >
+    </el-pagination>
+
+    <!--批量导入弹出框-->
+    <el-dialog
+            title="批量导入错题"
+            :visible.sync="showExcelImport"
+            width="30%"
+    >
+        <el-form label-width="120px">
+            <el-form-item label="信息描述">
+                <el-tag type="info">excel模版说明</el-tag>
+                <el-tag>
+                    <a th:href="@{/template.xlsx}">点击下载模版</a>
+                </el-tag>
+            </el-form-item>
+
+            <el-form-item label="选择Excel">
+                <el-upload
+                        ref="upload"
+                        :auto-upload="false"
+                        :on-success="fileUploadSuccess"
+                        :on-error="fileUploadError"
+                        :disabled="importBtnDisabled"
+                        :limit="1"
+                        action="/question/batch"
+                        name="file"
+                        accept=".xls,.xlsx"
+                >
+                    <el-button slot="trigger" size="small" type="primary"
+                    >选取文件
+                    </el-button
+                    >
+                    <el-button
+                            :loading="importExcelloading"
+                            style="margin-left: 10px"
+                            size="small"
+                            type="success"
+                            @click="submitUpload"
+                    >上传到服务器
+                    </el-button
+                    >
+                </el-upload>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+
+    <!--修改对话框-->
+    <el-dialog
+            title="编辑错题"
+            :visible.sync="dialogEdit"
+            top="0"
+            width="30%">
+        <el-form
+                v-loading="uploading"
+                element-loading-text="正在更改中..."
+                element-loading-spinner="el-icon-loading"
+                ref="form" :model="exam" :rules="rules" label-width="80px"
+                size="small"
+        >
+            <el-form-item label="题目" prop="title">
+                <el-input :autosize="{ minRows: 2, maxRows: 4}"
+                          @focus="onMyFocus" @blur="onMyBlur"
+                          placeholder="请输入题目" type="textarea" v-model="exam.title" resize:none></el-input>
+            </el-form-item>
+            <el-form-item label="选项A" prop="optiona">
+                <el-input v-model="exam.optiona"></el-input>
+            </el-form-item>
+            <el-form-item label="选项B" prop="optionb">
+                <el-input v-model="exam.optionb"></el-input>
+            </el-form-item>
+            <el-form-item label="选项C" prop="optionc">
+                <el-input v-model="exam.optionc"></el-input>
+            </el-form-item>
+            <el-form-item label="选项D" prop="optiond">
+                <el-input v-model="exam.optiond"></el-input>
+            </el-form-item>
+            <el-form-item label="答案" prop="answer">
+                <el-input v-model="exam.answer"></el-input>
+            </el-form-item>
+            <el-form-item label="笔记" prop="remark">
+                <el-input type="textarea"
+                          :autosize="{ minRows: 2, maxRows: 4}"
+                          v-model="exam.remark"></el-input>
+            </el-form-item>
+            <el-form-item label="科目类型" prop="types">
+                <el-select v-model="exam.types" placeholder="请选择科目类型">
+                    <el-option label="计算机网络" :value="1"></el-option>
+                    <el-option label="操作系统" :value="2"></el-option>
+                    <el-option label="计算机组成原理" :value="3"></el-option>
+                    <el-option label="数据结构" :value="4"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="附加图片" prop="image">
+                <el-upload
+                        :multiple="false"
+                        ref="xiugaiImg"
+                        :auto-upload="false"
+                        :on-change="handleFuJiaImgupload"
+                        class="avatar-uploader"
+                        action="/common/upload"
+                        :show-file-list="false"
+                        :on-success="handleUpdateSuccess">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar additional figures">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <img v-else th:src="@{/img/img.png}" class="additionalfigures">
+                </el-upload>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="success" @click="updateQue">提交</el-button>
+                <a th:href="@{/user/page}">
+                    <el-button type="success" plain>取消</el-button>
+                </a>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+    <!--添加数据对话框表单-->
+    <el-dialog
+            top="0"
+            title="图片上传错题"
+            :visible.sync="dialogUpdate1"
+            width="30%">
+        <el-form
+                size="small"
+                v-loading="uploading"
+                element-loading-text="别急，我拿命在上传..."
+                element-loading-spinner="el-icon-loading"
+                ref="form" :rules="rules" :model="exam" label-width="80px">
+            <el-form-item label="图片识别" prop="image2">
+                <el-upload
+                        :multiple="false"
+                        :auto-upload="false"
+                        ref="upload"
+                        class="avatar-uploader2"
+                        action="/common/upload"
+                        :show-file-list="false"
+                        :on-change="handleupload"
+                        @mousedown.native="cancelblur"
+                >
+                    <img v-if="imageUrl2" :src="imageUrl2" class="avatar2">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+            <el-form-item label="题目" prop="title">
+                <el-input type="textarea" v-model="exam.title"
+                          @focus="onMyFocus" @blur="onMyBlur"
+                          id="exam-title" :autosize="{ minRows: 2, maxRows: 4}"
+                          placeholder="请输入题目"></el-input>
+            </el-form-item>
+            <el-form-item label="选项A" prop="optiona">
+                <el-input type="textarea" v-model="exam.optiona" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            </el-form-item>
+            <el-form-item label="选项B" prop="optionb">
+                <el-input type="textarea" v-model="exam.optionb" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            </el-form-item>
+            <el-form-item label="选项C" prop="optionc">
+                <el-input type="textarea" v-model="exam.optionc" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            </el-form-item>
+            <el-form-item label="选项D" prop="optiond">
+                <el-input type="textarea" v-model="exam.optiond" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            </el-form-item>
+            <el-form-item label="答案" prop="answer">
+                <el-input type="textarea" v-model="exam.answer" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            </el-form-item>
+            <el-form-item label="科目类型" prop="types">
+                <el-select v-model="exam.types" placeholder="请选择科目类型">
+                    <el-option label="计算机网络" value="1"></el-option>
+                    <el-option label="操作系统" value="2"></el-option>
+                    <el-option label="计算机组成原理" value="3"></el-option>
+                    <el-option label="数据结构" value="4"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="附加图片" v-model="exam.image">
+                <el-upload
+                        :multiple="false"
+                        :auto-upload="false"
+                        ref="fujiaImg"
+                        class="avatar-uploader"
+                        action="/common/upload"
+                        :on-change="handleFuJiaImgupload"
+                        :show-file-list="false"
+                        :on-success="handleUploadSuccess"
+                >
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="success" @click="addQue">提交</el-button>
+                <el-button type="success" plain @click="dialogUpdate1 = false,exam.title='',exam.types=''">取消
+                </el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+    <!--添加数据对话框表单-->
+    <el-dialog
+            top="0"
+            title="语音上传错题"
+            :visible.sync="dialogUpdate2"
+            width="30%">
+        <el-form
+                size="small"
+                v-loading="uploading"
+                element-loading-text="别急，我拿命在上传..."
+                element-loading-spinner="el-icon-loading"
+                ref="form" :rules="rules" :model="exam" label-width="80px">
+            <el-form-item label="题目" prop="title">
+                <el-input type="textarea"
+                          :autosize="{ minRows: 2, maxRows: 4}"
+
+                          @focus="onMyFocus" @blur="onMyBlur"
+                          placeholder="请输入题目" v-model="exam.title" id="speech-exam-title"></el-input>
+            </el-form-item>
+            <el-form-item label="选项A" prop="optiona">
+                <el-input type="textarea" v-model="exam.optiona" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            </el-form-item>
+            <el-form-item label="选项B" prop="optionb">
+                <el-input type="textarea" v-model="exam.optionb" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            </el-form-item>
+            <el-form-item label="选项C" prop="optionc">
+                <el-input type="textarea" v-model="exam.optionc" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            </el-form-item>
+            <el-form-item label="选项D" prop="optiond">
+                <el-input type="textarea" v-model="exam.optiond" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            </el-form-item>
+            <el-form-item label="答案" prop="answer">
+                <el-input type="textarea" v-model="exam.answer" @focus="onMyFocus" @blur="onMyBlur"
+                          :autosize="{ minRows: 1, maxRows: 4}"></el-input>
+            </el-form-item>
+            <el-form-item label="科目类型" prop="types">
+                <el-select v-model="exam.types" placeholder="请选择科目类型">
+                    <el-option label="计算机网络" value="1"></el-option>
+                    <el-option label="操作系统" value="2"></el-option>
+                    <el-option label="计算机组成原理" value="3"></el-option>
+                    <el-option label="数据结构" value="4"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="附加图片" prop="image">
+                <el-upload
+                        :multiple="false"
+                        :auto-upload="false"
+                        :on-change="handleFuJiaImgupload"
+                        ref="yuyinImg"
+                        class="avatar-uploader"
+                        action="/common/upload"
+                        :show-file-list="false"
+                        :on-success="handleUploadSuccess"
+                >
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
+                <el-button type="success" @click="speech" id="startSpeech" @mousedown.native="cancelblur">开始识别
+                </el-button>
+            </el-form-item>
+
+
+            <el-form-item>
+                <el-button type="success" @click="speechAddQue">提交</el-button>
+                <el-button type="success" plain @click="dialogUpdate2 = false,exam.title='',exam.types=''">取消
+                </el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+</div>
+<script th:src="@{/js/vue.js}"></script>
+<script th:src="@{/js/elementui/index.js}"></script>
+<link rel="stylesheet" th:href="@{/css/elementui/index.css}">
+<script th:src="@{/js/axios.js}"></script>
+<script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/js/recorder.js}"></script>
+
+<script>
+
+    //录音对象
+    var recorder = new Recorder({
+        sampleRate: 16000, //采样频率，默认为44100Hz(标准MP3采样率)
+        bitRate: 16, //比特率，默认为128kbps(标准MP3质量)
+        success: function () { //成功回调函数
+            // start.disabled = false;
+        },
+        error: function (msg) { //失败回调函数
+            alert(msg);
+        },
+        fix: function (msg) { //不支持H5录音回调函数
+            alert(msg);
+        }
+    });
+
+
+    new Vue({
+        el: "#app",
+        data() {
+            return {
+                tableData: [],
+                exam: {
+                    id: "",
+                    title: "",
+                    optiona: "",
+                    optionb: "",
+                    optionc: "",
+                    optiond: "",
+                    answer: "",
+                    types: "",
+                    image: "",
+                    image2: "",
+                    remark: "",
+                    rank: ""
+                },
+                dialogEdit: false,
+                dialogUpdate1: false,
+                dialogUpdate2: false,
+                pageSize: 10,
+                page: 1,
+                total: 0,//总记录数
+                rules: {
+                    title: [
+                        {required: true, message: "请输入题目",}
+                    ]
+                },
+                imageUrl: '',
+                imageUrl2: '',
+                fileList: [],
+                //语音识别判断当前是否正在录音
+                isRecoding: false,
+                //判断当前是否正在上传图片
+                uploading: false,
+
+                //判断当前表单是否修改过
+                isChange: false,
+                //判断当前题目附图是否修改过
+                isChangeImg: false,
+                oldExam: {
+                    title: "",
+                    optiona: "",
+                    optionb: "",
+                    optionc: "",
+                    optiond: "",
+                    answer: "",
+                    types: "",
+                    remark: "",
+                    rank: ""
+                },
+                texts: ['陌生', '懵懂', '熟悉'],
+                showExcelImport: false,
+                importExcelloading: false,
+                importBtnDisabled: false,
+            };
+        },
+        created() {
+            this.getAll();
+        },
+
+        watch: {
+            //监听表单是否修改过
+            exam: {
+                handler: function (newVal) {
+                    //修改的时候才会触发
+                    if (this.dialogEdit) {
+                        console.log(newVal.rank, this.oldExam.rank)
+                        if (newVal.title != this.oldExam.title || newVal.optiona != this.oldExam.optiona || newVal.optionb != this.oldExam.optionb || newVal.optionc != this.oldExam.optionc || newVal.optiond != this.oldExam.optiond || newVal.answer != this.oldExam.answer || newVal.remark != this.oldExam.remark || newVal.types != this.oldExam.types || newVal.rank != this.oldExam.rank) {
+                            console.log('表单修改过');
+                            this.isChange = true;
+                        } else {
+                            console.log('表单没有修改过');
+                            this.isChange = false;
+                        }
+                    }
+                },
+                deep: true
+            },
+            //监听图片是否修改过
+            imageUrl: function (newVal) {
+                //修改的时候才会触发
+                if (this.dialogEdit) {
+                    var theOld = "/api/img/" + this.exam.image;
+                    if (newVal != theOld) {
+                        console.log(newVal, theOld, '图片修改过');
+                        this.isChangeImg = true;
+                    } else {
+                        console.log(newVal, theOld, '图片没有修改过');
+                        this.isChangeImg = false;
+                    }
+                }
+            },
+        },
+        methods: {
+
+
+            //点击按钮上传文件到接口里面
+            submitUpload() {
+                //判断是否有文件
+                if (this.$refs.upload.uploadFiles.length != 0) {
+                    this.importBtnDisabled = true;
+                    this.importExcelloading = true;
+                    this.$refs.upload.submit();
+                } else {
+                    this.$message({
+                        type: "error",
+                        message: "您还未选择文件哦！",
+                    });
+                }
+            },
+            //上传成功的回调
+            fileUploadSuccess() {
+                this.importExcelloading = false;
+                this.$message({
+                    type: "success",
+                    message: "批量添加成功！",
+                });
+                // 上传成功之后清除历史记录;否则只能上传一次
+                this.$refs.upload.clearFiles();
+            },
+
+            //上传失败的回调
+            fileUploadError() {
+                this.importExcelloading = false;
+                this.$message({
+                    type: "error",
+                    message: "批量添加失败",
+                });
+                // 上传成功之后清除历史记录;否则只能上传一次
+                this.$refs.upload.clearFiles();
+            },
+            //页面展示给予颜色分层
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex === 1) {
+                    return 'warning-row';
+                } else if (rowIndex === 3) {
+                    return 'success-row';
+                }
+                return '';
+            },
+            //查询方法
+            onSubmit() {
+                this.getAll();
+            },
+            getAll() {
+                var param = "?title=" + this.exam.title;
+                param += "&types=" + this.exam.types;
+                param += "&rank=" + this.exam.rank;
+                axios.get("/question/" + this.page + "/" + this.pageSize + param).then(res => {
+                    console.log(res);
+                    this.total = res.data.total;
+                    this.tableData = res.data.records;
+                });
+            },
+            getImage(image) {
+                // return `/common/download?name=${image}`
+                return `/api/img/${image}`
+            },
+
+            publicHandle(id) {
+                this.$confirm('确定把题目分享给有缘人吗', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    //一天只能改变一次
+                    var v = this.getCookie('questionStatus' + id);
+                    //判断是否有cookie
+                    if (!v) {
+                        axios.post("/question/public/" + id).then(resp => {
+                            if (resp) {
+                                this.getAll();
+                                this.$message({
+                                    type: 'success',
+                                    duration: 1000,
+                                    message: '题目已分享到逛一逛!'
+                                });
+                            }
+                        });
+                        //获取第二天凌晨到当前时间的秒数
+                        var tim_sec = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                        this.setCookie('questionStatus' + id, "1", tim_sec);
+                    } else if (v >= 1) { //判断是否超过修改次数
+                        this.$message({
+                            type: 'warning',
+                            duration: 1000,
+                            message: '今日已不能更改题目状态哦!'
+                        });
+                    } else {
+                        axios.post("/question/public/" + id).then(resp => {
+                            if (resp) {
+                                this.getAll();
+                                this.$message({
+                                    type: 'success',
+                                    duration: 1000,
+                                    message: '题目已分享到逛一逛!'
+                                });
+                            }
+                        });
+                        //修改次数+1,满3次后不再修改
+                        var avatartimeout = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                        var value = this.getCookie('questionStatus' + id);
+                        this.setCookie('questionStatus' + id, parseInt(value) + 1, avatartimeout);
+                    }
+                }).catch(() => {
+                    //用户点击取消按钮
+                    this.$message({
+                        type: 'info',
+                        duration: 1000,
+                        message: '已取消分享'
+                    });
+                });
+            },
+
+            privateHandle(id) {
+                this.$confirm('确定把题目设为私有吗', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+
+                    //一天只能改变一次
+                    var v = this.getCookie('questionStatus' + id);
+                    //判断是否有cookie
+                    if (!v) {
+                        axios.post("/question/public/" + id).then(resp => {
+                            if (resp) {
+                                this.getAll();
+                                this.$message({
+                                    type: 'success',
+                                    duration: 1000,
+                                    message: '题目已设为私有!'
+                                });
+                            }
+                        });
+                        //获取第二天凌晨到当前时间的秒数
+                        var tim_sec = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                        this.setCookie('questionStatus' + id, "1", tim_sec);
+                    } else if (v >= 1) { //判断是否超过修改次数
+                        this.$message({
+                            type: 'warning',
+                            duration: 1000,
+                            message: '今日已不能更改题目状态哦!'
+                        });
+                    } else {
+                        axios.post("/question/public/" + id).then(resp => {
+                            if (resp) {
+                                this.getAll();
+                                this.$message({
+                                    type: 'success',
+                                    duration: 1000,
+                                    message: '题目已设为私有!'
+                                });
+                            }
+                        });
+                        //修改次数+1,满3次后不再修改
+                        var avatartimeout = 24 * 60 * 60 - (new Date().getHours() * 60 * 60 + new Date().getMinutes() * 60 + new Date().getSeconds());
+                        var value = this.getCookie('questionStatus' + id);
+                        this.setCookie('questionStatus' + id, parseInt(value) + 1, avatartimeout);
+                    }
+
+
+                }).catch(() => {
+                    //用户点击取消按钮
+                    this.$message({
+                        type: 'info',
+                        duration: 1000,
+                        message: '已取消题目设为私有'
+                    });
+                });
+            },
+
+            setCookie(name, value, second) {
+                if (!second) {
+                    second = 7 * 24 * 60 * 60;//默认7天
+                }
+                var exp = new Date();
+                exp.setTime(exp.getTime() + second * 1000);
+                document.cookie = name + "=" + encodeURI(value) + ";expires=" + exp.toGMTString() + ";path=/";
+            }
+            ,
+            getCookie(name) {
+                if (document.cookie.length > 0) {
+                    c_start = document.cookie.indexOf(name + "=");//获取字符串的起点
+                    if (c_start != -1) {
+                        c_start = c_start + name.length + 1;//获取值的起点
+                        c_end = document.cookie.indexOf(";", c_start);//获取结尾处
+                        if (c_end == -1) c_end = document.cookie.length;//如果是最后一个，结尾就是cookie字符串的结尾
+                        return decodeURI(document.cookie.substring(c_start, c_end));//截取字符串返回
+                    }
+                }
+                return "";
+            },
+
+            deleteHandle(id) {
+                this.$confirm('确定删除题目吗', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.delete("/question/" + id).then(resp => {
+                        if (resp) {
+                            this.getAll();
+                            this.$message({
+                                type: 'success',
+                                duration: 1000,
+                                message: '删除成功!'
+                            });
+                        }
+                    });
+                }).catch(() => {
+                    //用户点击取消按钮
+                    this.$message({
+                        type: 'info',
+                        duration: 1000,
+                        message: '已取消删除'
+                    });
+                });
+            },
+            //处理页码大小和当前页变动时候触发的事件
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.getAll();
+            },
+            handleCurrentChange(val) {
+                this.page = val;
+                this.getAll();
+            },
+
+
+            //图片识别的图片展示chanage
+            handleupload(file, fileList) {
+                //获取上传的图片用于展示
+                var img = file.raw;
+                console.log(img);
+                //展示图片
+                var reader = new FileReader();
+                reader.readAsDataURL(img);
+                //改为箭头函数，不然this指向的是reader
+                reader.onload = (e) => {
+                    if (reader.readyState == 2) {
+                        // console.log(e.target.result);
+                        // alert("我运行了")
+                        // alert(this.imageUrl2)//undefined
+                        // alert(this);
+                        this.imageUrl2 = e.target.result;
+                    }
+                };
+
+                //图片识别
+                // var img = fileList[0].raw;
+                // console.log(img);
+                //这里做图片大小限制
+                if (img.size / 1024 > 1024 * 10) {
+                    alert('上传图片不能大于10M');
+                    return;
+                }
+                var formData = new FormData();
+                formData.append("file", img);
+                //调用接口
+                axios({
+                    // url: "/eduMap",//试卷版接口，次数有限
+                    url: "/highPrecision",//基础高精度版接口
+                    // url: "/basic",//基础通用版接口
+                    method: "post",
+                    data: formData,
+                    headers: {'Content-Type': 'multipart/form-data'}
+                }).then(function (response) {
+                    // console.log(response);
+                    // console.log(response.data);
+                    let string = response.data;
+                    // var result = document.getElementById("exam-title");
+                    var result = document.getElementsByClassName('getMessage')[0];
+                    // alert(result);
+                    // 处理成功情况
+                    result.value = string;
+                    //
+                    result.dispatchEvent(new Event('input'));
+                    // this.exam.title = string;
+                }).catch(function (error) {
+                    // 处理失败情况
+                    alert("接口不可用！");
+                    console.log(error.message)
+                });
+
+            },
+
+
+            //附加图片或修改图片的展示change
+            handleFuJiaImgupload(file, fileList) {
+                //获取上传的图片用于展示
+                var img = file.raw;
+                //展示图片
+                var reader = new FileReader();
+                reader.readAsDataURL(img);
+                //改为箭头函数，不然this指向的是reader
+                reader.onload = (e) => {
+                    if (reader.readyState == 2) {
+                        // console.log(e.target.result);
+                        // alert("我运行了")
+                        // alert(this.imageUrl2)//undefined
+                        // alert(this);
+                        this.imageUrl = e.target.result;
+                        // console.log(this.imageUrl)
+                    }
+                };
+            },
+
+            //处理修改时候的图片展示
+            handleImgShow(res) {
+                this.exam.image = res;
+                this.imageUrl = `/api/img/${res}`;
+            },
+
+
+            //处理修改图片成功后的回调
+            handleUpdateSuccess(res) {
+                this.exam.image = res;
+                console.log(this.exam.image);
+                console.log("用于附加或者修改的图片上传成功！");
+                // this.imageUrl = `/common/download?name=${res}`;
+                this.imageUrl = `/api/img/${res}`;
+
+                //等待上传完毕后，再进行添加或者修改
+                axios.put("/question", this.exam).then((resp) => {
+                    if (resp) {
+                        this.dialogEdit = false;
+                        this.imageUrl = '';
+                        this.exam.title = '';
+                        this.exam.types = '';
+                        this.getAll();
+                        this.$message({
+                            type: 'success',
+                            duration: 1000,
+                            message: '修改成功!'
+                        });
+                    }
+                });
+                //加载动画关闭
+                this.uploading = false;
+            },
+
+            //处理添加题目的图片上传成功后的回调
+            handleUploadSuccess(res) {
+                this.exam.image = res;
+                console.log(this.exam.image);
+                console.log("用于附加或者修改的图片上传成功！");
+                // this.imageUrl = `/common/download?name=${res}`;
+                this.imageUrl = `/api/img/${res}`;
+
+                //等待上传完毕后，再进行添加或者修改
+                axios.post("/question", this.exam).then((resp) => {
+                    console.log(resp);
+                    if (resp) {
+                        this.dialogUpdate1 = false;
+                        this.dialogUpdate2 = false;
+                        this.imageUrl = '';
+                        this.imageUrl2 = '';
+                        this.exam.title = '';
+                        this.exam.types = '';
+                        this.exam.rank = '';
+                        this.getAll();
+                        this.$message({
+                            type: 'success',
+                            duration: 1000,
+                            message: '添加题目成功!'
+                        });
+                    }
+                });
+                //加载动画关闭
+                this.uploading = false;
+            },
+
+            //语音添加
+            speechAddQue() {
+                //点击提交展示加载中
+                this.uploading = true;
+                //判断是否有图片
+                if (this.imageUrl) {
+                    //有图片
+                    this.$refs.yuyinImg.submit();
+                } else {
+                    //没有图片
+                    axios.post("/question", this.exam).then((resp) => {
+                        if (resp) {
+                            this.dialogUpdate1 = false;
+                            this.dialogUpdate2 = false;
+                            this.imageUrl = '';
+                            this.imageUrl2 = '';
+                            this.exam.title = '';
+                            this.exam.types = '';
+                            this.exam.rank = '';
+                            this.getAll();
+                            this.$message({
+                                type: 'success',
+                                duration: 1000,
+                                message: '添加题目成功!'
+                            });
+                        }
+                    });
+                    //加载动画关闭
+                    this.uploading = false;
+                }
+                // this.$refs.yuyinImg.submit();
+            },
+
+
+            //图片添加
+            addQue() {
+                //点击提交展示加载中
+                this.uploading = true;
+                //点击提交把图片进行上传
+                // this.$refs.upload.submit();//这个识别的图片不需要上传
+                //判断是否有图片
+                if (this.imageUrl) {
+                    //有图片
+                    this.$refs.fujiaImg.submit();
+                } else {
+                    //没有图片
+                    axios.post("/question", this.exam).then((resp) => {
+                        if (resp) {
+                            this.dialogUpdate1 = false;
+                            this.dialogUpdate2 = false;
+                            this.imageUrl = '';
+                            this.imageUrl2 = '';
+                            this.exam.title = '';
+                            this.exam.types = '';
+                            this.exam.rank = '';
+                            this.getAll();
+                            this.$message({
+                                type: 'success',
+                                duration: 1000,
+                                message: '添加题目成功!'
+                            });
+                        }
+                    });
+                    //加载动画关闭
+                    this.uploading = false;
+                }
+
+
+                // this.$refs.fujiaImg.submit();
+            },
+            //表单修改
+            updateQue() {
+                //点击提交展示加载中
+                this.uploading = true;
+                //点击提交把图片进行上传
+                //判断表单是否更改过
+                if (this.isChange) {
+                    //表单更改过
+                    console.log("表单更改过");
+                    //判断是否更改了图片
+                    if (this.isChangeImg) {
+                        //表单更改过也更改了图片
+                        this.$refs.xiugaiImg.submit();
+                    } else {
+                        //没有更改图片但是更改了表单
+                        //不需要上传图片直接进行修改
+                        axios.put("/question", this.exam).then((resp) => {
+                            if (resp) {
+                                this.dialogEdit = false;
+                                this.imageUrl = '';
+                                this.exam.title = '';
+                                this.exam.types = '';
+                                this.exam.rank = '';
+                                this.getAll();
+                                this.$message({
+                                    type: 'success',
+                                    duration: 1000,
+                                    message: '修改成功!'
+                                });
+                            }
+                        });
+                        //加载动画关闭
+                        this.uploading = false;
+                    }
+                } else {
+                    //表单没有更改过
+                    //判断是否更改了图片
+                    if (this.isChangeImg) {
+                        //没有更改表单但是更改了图片
+                        this.$refs.xiugaiImg.submit();
+                    } else {
+                        //没有更改图片也没有更改表单
+                        //直接关闭弹窗
+                        this.dialogEdit = true;
+                        this.$message({
+                            type: 'info',
+                            duration: 1000,
+                            message: '您未做任何修改!'
+                        });
+                        //加载动画关闭
+                        this.uploading = false;
+                    }
+                }
+            },
+            //语音识别
+            speech(e) {
+
+
+                console.log(recorder, "已经初始化");
+                //判断当前是否正在录音
+                if (!this.isRecoding) {
+                    timer = setTimeout(function () {
+                        e.target.innerHTML = "再次点击结束录音";
+                        recorder.start();
+                    }, 100);
+                } else {
+                    console.log("结束录音");
+                    recorder.stop();
+                    recorder.getBlob(function (blob) {
+                        console.log(blob);
+                        // 这么写是因为文件转换是异步任务
+                        transToFile = async (blob, fileName, fileType) => {
+                            return new window.File(blob, fileName, {type: fileType});
+                        }
+                        let textContain = transToFile([blob], ["yuyin.mp3"], ["auto/mp3"])
+                        // 转换完成后可以将file对象传给接口
+                        textContain.then((res) => {
+                            let file = res;
+                            console.log(file);
+                            var formData = new FormData();
+                            formData.append("file", file);
+                            axios({
+                                // 请求方法
+                                method: 'POST',
+                                url: '/speechRecognition',
+                                // url参数
+                                data: formData,
+                                headers: {'Content-Type': 'multipart/form-data'}
+
+                            }).then(function (response) {
+
+                                console.log(response.data);
+                                let string = response.data;
+                                // var result = document.getElementById('speech-exam-title');
+                                var result = document.getElementsByClassName('getMessage')[0];
+                                // 处理成功情况
+                                result.value = string;
+                                result.dispatchEvent(new Event('input'));
+                            });
+                        });
+                    });
+                    e.target.innerHTML = "开始";
+                    clearTimeout(timer);
+                }
+                this.isRecoding = !this.isRecoding;
+            },
+
+            //修改熟悉度
+            changeRank(ee) {
+                axios.put("/question", ee).then((resp) => {
+                    if (resp) {
+                        this.$message({
+                            type: 'success',
+                            duration: 1000,
+                            message: '修改熟悉度成功!'
+                        });
+                    }
+                })
+            },
+
+            //监听输入框
+            onMyBlur(e) {
+                console.log('输入框失去焦点');
+                $(e.target).removeClass("getMessage");
+            },
+            onMyFocus(e) {
+                console.log('输入框获取焦点');
+                $(e.target).addClass("getMessage");
+            },
+
+            //取消输入框失去焦点
+            cancelblur(e) {
+                // alert(e);
+                e.preventDefault();
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>

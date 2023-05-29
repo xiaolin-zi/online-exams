@@ -1,0 +1,156 @@
+@font-face {
+    font-family: "iconfont"; /* Project id 3976993 */
+    /* Color fonts */
+    src:
+            url('//at.alicdn.com/t/c/font_3976993_7i19c89wd17.woff2?t=1685020131037') format('woff2'),
+            url('//at.alicdn.com/t/c/font_3976993_7i19c89wd17.woff?t=1685020131037') format('woff'),
+            url('//at.alicdn.com/t/c/font_3976993_7i19c89wd17.ttf?t=1685020131037') format('truetype');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-quanping_o:before {
+    content: "\eb99";
+}
+
+.icon-suoxiao:before {
+    content: "\e604";
+}
+
+.icon-jiangbei:before {
+    content: "\e693";
+}
+
+.icon-weibiaoti-_huabanfuben:before {
+    content: "\e616";
+}
+
+.icon-guangguang:before {
+    content: "\e615";
+}
+
+.icon-chakan:before {
+    content: "\e63e";
+}
+
+.icon-yuyin:before {
+    content: "\e687";
+}
+
+.icon-ceshi:before {
+    content: "\e61a";
+}
+
+.icon-chakan1:before {
+    content: "\e60a";
+}
+
+.icon-yuyin1:before {
+    content: "\e613";
+}
+
+.icon-zhongxinpingjuan:before {
+    content: "\e669";
+}
+
+.icon-shangchuan:before {
+    content: "\e61b";
+}
+
+.icon-shangchuan1:before {
+    content: "\e65c";
+}
+
+.icon-tuichudenglu:before {
+    content: "\e61f";
+}
+
+.icon-tuichudenglu1:before {
+    content: "\e614";
+}
+
+.icon-icon-test:before {
+    content: "\e665";
+}
+
+.icon-icon-test1:before {
+    content: "\e668";
+}
+
+.icon-qq-copy:before {
+    content: "\e656";
+}
+
+.icon-youxiang:before {
+    content: "\e60c";
+}
+
+.icon-QQ:before {
+    content: "\e882";
+}
+
+.icon-github:before {
+    content: "\e811";
+}
+
+.icon-weixin:before {
+    content: "\e60d";
+}
+
+.icon-gitee:before {
+    content: "\e60e";
+}
+
+.icon-QQ-copy:before {
+    content: "\e883";
+}
+
+.icon-gitee-copy:before {
+    content: "\e884";
+}
+
+.icon-wxbsousuotuiguang:before {
+    content: "\e621";
+}
+
+.icon-shipin:before {
+    content: "\e63b";
+}
+
+.icon-fenleiorguangchangorqita:before {
+    content: "\e64f";
+}
+
+.icon-liuyan:before {
+    content: "\e680";
+}
+
+.icon-xiangce:before {
+    content: "\e61e";
+}
+
+.icon-yinle:before {
+    content: "\e620";
+}
+
+.icon-biaoqian:before {
+    content: "\e653";
+}
+
+.icon-boke:before {
+    content: "\e666";
+}
+
+.icon-shejiaotubiao-02:before {
+    content: "\e641";
+}
+
+.icon-lianjie:before {
+    content: "\e640";
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+    <title>错题测试</title>
+</head>
+<body>
+    <h1>错题测试</h1>
+</body>
+<script>
+    function A(x) {
+        this.x = x;
+    }
+        A.prototype.x = 1;
+        function B(x) {
+            this.x = x;
+        }
+        B.prototype = new A();
+        const b = new B(3);
+        delete b.x;
+        console.log(b.x);
+</script>
+</html>
