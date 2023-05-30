@@ -34,7 +34,7 @@ public class MapController {
         String url = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic";//高精度
 
         //压缩图片到指定120K以内,不管你的图片有多少兆,都不会超过120kb,精度还算可以,不会模糊
-        byte[] bytes = PicUtils.compressPicForScale(file.getBytes(), 120);
+        byte[] bytes = PicUtils.compressPicForScale(file.getBytes(), 240);
 
 
         //file转base64
@@ -67,7 +67,7 @@ public class MapController {
             String result0 = "";
 
             for(int i = 0;i<str.length();i++) {//遍历
-                result0+=((JSONObject)str.get(i)).get("words")+"\n";//必须进行强转，因为str1.get(i)返回的是Object对象，是最顶层的父类。get("words")只返回value值
+                result0+=((JSONObject)str.get(i)).get("words");//必须进行强转，因为str1.get(i)返回的是Object对象，是最顶层的父类。get("words")只返回value值
             }
             return result0;
         } catch (Exception e) {

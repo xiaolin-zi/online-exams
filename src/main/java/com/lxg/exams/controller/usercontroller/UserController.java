@@ -32,6 +32,12 @@ public class UserController {
     private QuestionService questionService;
 
 
+    @GetMapping("/examDetail/{eid}")
+    public String examDetail(@PathVariable int eid, HttpServletRequest request) {
+        return "user/examDetail";
+    }
+
+
     @ResponseBody
     @GetMapping("/getUser")
     public User getUser(HttpSession session) {

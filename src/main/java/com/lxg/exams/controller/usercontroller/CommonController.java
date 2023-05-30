@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -65,7 +67,37 @@ public class CommonController {
 
         return fileName;
     }
+    @PostMapping("/editorupload")
+    public Map<String,Object> editorupload(MultipartFile file) throws IOException {
 
+        //压缩图片到指定120K以内,不管你的图片有多少兆,都不会超过120kb,精度还算可以,不会模糊
+        byte[] bytes = PicUtils.compressPicForScale(file.getBytes(), 120);
+
+
+        //获取原始文件名
+        String originalFilename = file.getOriginalFilename();
+        //获取原始文件名的后缀
+        String substring = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+        //为了防止重名发生覆盖，采取随机生成文件名的方式UUID
+        //创建一个目录对象
+//        File dir = new File(basePath);
+        //目录不存在，需要创建
+//        if (!dir.exists()){
+//            dir.mkdirs();
+//        }
+        String fileName = UUID.randomUUID().toString() + substring;
+        // 创建目录名+文件名的文件对象，表示保存的图片文件
+//        File dest = new File(dir, fileName);
+        // 执行保存文件，把参数file的数据写入到这个空文件中
+//        file.transferTo(dest);
+
+        FileUtil.byteArrayToFile(bytes, basePath + fileName);//直接把压缩后的字节数组转成文件存起来了
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("fileName", fileName);
+        return map;
+    }
 
     /**
      * 文件下载

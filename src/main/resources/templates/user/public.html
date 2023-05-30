@@ -69,35 +69,61 @@
         <el-table-column type="expand">
             <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
-                    <el-form-item label="题目">
-                        <span>{{ props.row.title }}</span>
-                    </el-form-item>
-                    <el-form-item label="选项A">
-                        <span>{{ props.row.optiona }}</span>
-                    </el-form-item>
-                    <el-form-item label="选项B">
-                        <span>{{ props.row.optionb }}</span>
-                    </el-form-item>
-                    <el-form-item label="选项C">
-                        <span>{{ props.row.optionc }}</span>
-                    </el-form-item>
-                    <el-form-item label="选项D">
-                        <span>{{ props.row.optiond }}</span>
-                    </el-form-item>
-                    <el-form-item label="答案">
-                        <span>{{ props.row.answer }}</span>
-                    </el-form-item>
-                    <el-form-item label="附图">
-                        <div v-if="props.row.image">
-                            <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
-                                      :src="getImage(props.row.image)"
-                                      :preview-src-list="[ `/api/img/${props.row.image}` ]">
-                            </el-image>
-                        </div>
-                        <div v-else>
-                            <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
-                        </div>
-                    </el-form-item>
+                    <div>
+                        <el-form-item label="题目">
+                            <div v-html="props.row.title"></div>
+                        </el-form-item>
+                    </div>
+
+                    <div>
+                        <el-form-item label="选项A">
+                            <span>{{ props.row.optiona }}</span>
+                        </el-form-item>
+                    </div>
+                    <div>
+                        <el-form-item label="选项B">
+                            <span>{{ props.row.optionb }}</span>
+                        </el-form-item>
+                    </div>
+
+                    <div>
+                        <el-form-item label="选项C">
+                            <span>{{ props.row.optionc }}</span>
+                        </el-form-item>
+                    </div>
+
+                    <div>
+                        <el-form-item label="选项D">
+                            <span>{{ props.row.optiond }}</span>
+                        </el-form-item>
+                    </div>
+
+                   <div>
+                       <el-form-item label="答案">
+                           <span>{{ props.row.answer }}</span>
+                       </el-form-item>
+                   </div>
+
+                    <div>
+                        <el-form-item label="附图">
+                            <div v-if="props.row.image">
+                                <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
+                                          :src="getImage(props.row.image)"
+                                          :preview-src-list="[ `/api/img/${props.row.image}` ]">
+                                </el-image>
+                            </div>
+                            <div v-else>
+                                <img th:src="@{/img/img.png}" style="width: 00px; height: 100px; border:none;">
+                            </div>
+                        </el-form-item>
+                    </div>
+
+                    <div>
+                        <el-form-item label="作者笔记">
+                            <span>{{ props.row.remark }}</span>
+                        </el-form-item>
+                    </div>
+
                 </el-form>
             </template>
         </el-table-column>
@@ -124,9 +150,10 @@
                     prop="typesName"
             >
             </el-table-column>
-            <el-table-column
-                    label="题目"
-                    prop="title">
+            <el-table-column label="题目">
+                <template slot-scope="props">
+                    <div  v-html="props.row.title"></div>
+                </template>
             </el-table-column>
             <el-table-column
                     label="更新时间"
