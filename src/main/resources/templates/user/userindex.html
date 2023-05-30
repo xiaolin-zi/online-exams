@@ -355,14 +355,14 @@
                     },
                     {
                         id: '3',
-                        name: 'ChatGPT',
+                        name: 'ChatGPT-极简',
                         class: 'icon-jiqiren iconfont',
                         url: 'https://bot.lookforward.top/',
                     },
                     {
                         id: '4',
-                        name: 'ChatGPT2',
-                        class: 'icon-jiqiren iconfont',
+                        name: 'ChatGPT-丰富',
+                        class: 'icon-c170jiqiren iconfont',
                         url: 'https://gpt.lookforward.top/',
                     },
                     {
@@ -604,6 +604,12 @@
             ,
 
             menuHandle(item, goBackFlag) {
+                if(item.name=='ChatGPT-丰富'){
+                    this.$message({
+                        type: 'success',
+                        message: '如要使用聊天功能，请在设置中填写密码:666666'
+                    });
+                }
                 if(item.name == '退出登录'){
                     this.logout();
                 }else{
