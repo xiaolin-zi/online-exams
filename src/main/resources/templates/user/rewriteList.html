@@ -33,22 +33,22 @@
 <div id="app">
     <!--表单-->
     <el-row>
-        <el-form :inline="true" :model="exam" ref="form" class="demo-form-inline">
+        <el-form :inline="true" :model="examQuery" ref="form" class="demo-form-inline">
 
             <el-form-item label="题目相关词">
-                <el-input v-model="exam.title" placeholder="题目相关词"></el-input>
+                <el-input v-model="examQuery.title" placeholder="题目相关词"></el-input>
             </el-form-item>
 
             <el-form-item label="熟悉度">
-                <el-select v-model="exam.rank" placeholder="熟悉度" clearable>
-                    <el-option label="不熟悉" value="1"></el-option>
+                <el-select v-model="examQuery.rank" placeholder="熟悉度" clearable>
+                    <el-option label="陌生" value="1"></el-option>
                     <el-option label="模糊" value="2"></el-option>
                     <el-option label="熟悉" value="3"></el-option>
                 </el-select>
             </el-form-item>
 
             <el-form-item label="科目">
-                <el-select v-model="exam.types" placeholder="科目" clearable>
+                <el-select v-model="examQuery.types" placeholder="科目" clearable>
                     <el-option label="计算机网络" value="1"></el-option>
                     <el-option label="操作系统" value="2"></el-option>
                     <el-option label="计算机组成原理" value="3"></el-option>
@@ -71,58 +71,90 @@
         <el-table-column type="expand">
             <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
-                    <el-form-item label="题目">
-                        <span>{{ props.row.title }}</span>
-                    </el-form-item>
-                    <el-form-item label="选项A">
-                        <span>{{ props.row.optiona }}</span>
-                    </el-form-item>
-                    <el-form-item label="选项B">
-                        <span>{{ props.row.optionb }}</span>
-                    </el-form-item>
-                    <el-form-item label="选项C">
-                        <span>{{ props.row.optionc }}</span>
-                    </el-form-item>
-                    <el-form-item label="选项D">
-                        <span>{{ props.row.optiond }}</span>
-                    </el-form-item>
-                    <el-form-item label="答案">
-                        <span>{{ props.row.answer }}</span>
-                    </el-form-item>
-                    <el-form-item label="科目类型">
-                        <span v-if="props.row.types == 1">计算机网络</span>
-                        <span v-if="props.row.types == 2">操作系统</span>
-                        <span v-if="props.row.types == 3">计算机组成原理</span>
-                        <span v-if="props.row.types == 4">数据结构</span>
-                    </el-form-item>
-                    <el-form-item label="图片" aline="center">
-                        <div v-if="props.row.image">
-                            <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
-                                      :src="getImage(props.row.image)"
-                                      :preview-src-list="[ `/api/img/${props.row.image}` ]">
-                            </el-image>
-                        </div>
-                        <!--          <div v-else>
+                    <div>
+                        <el-form-item label="题目">
+                            <div v-html="props.row.title"></div>
+                        </el-form-item>
+                    </div>
 
-                                  </div>-->
-                    </el-form-item>
+                    <div>
+                        <el-form-item label="选项A">
+                            <span>{{ props.row.optiona }}</span>
+                        </el-form-item>
+                    </div>
 
-                    <el-form-item>
-                        <el-rate
-                                v-model="props.row.rank"
-                                show-text
-                                :texts="texts"
-                                :max="3"
-                                @change="changeRank(props.row)">
-                        </el-rate>
-                    </el-form-item>
+                    <div>
+                        <el-form-item label="选项B">
+                            <span>{{ props.row.optionb }}</span>
+                        </el-form-item>
+                    </div>
+
+                    <div>
+                        <el-form-item label="选项C">
+                            <span>{{ props.row.optionc }}</span>
+                        </el-form-item>
+                    </div>
+
+                    <div>
+                        <el-form-item label="选项D">
+                            <span>{{ props.row.optiond }}</span>
+                        </el-form-item>
+                    </div>
+
+                    <div>
+                        <el-form-item label="答案">
+                            <span>{{ props.row.answer }}</span>
+                        </el-form-item>
+                    </div>
+
+                   <div>
+                       <el-form-item label="科目类型">
+                           <span v-if="props.row.types == 1">计算机网络</span>
+                           <span v-if="props.row.types == 2">操作系统</span>
+                           <span v-if="props.row.types == 3">计算机组成原理</span>
+                           <span v-if="props.row.types == 4">数据结构</span>
+                       </el-form-item>
+                   </div>
+
+                   <div>
+                       <el-form-item label="附图" aline="center">
+                           <div v-if="props.row.image">
+                               <el-image style="width: 100px; height: 100px; border:none;cursor: pointer;"
+                                         :src="getImage(props.row.image)"
+                                         :preview-src-list="[ `/api/img/${props.row.image}` ]">
+                               </el-image>
+                           </div>
+                       </el-form-item>
+                   </div>
+
+
+                    <div>
+                        <el-form-item label="笔记">
+                            <span>{{ props.row.remark }}</span>
+                        </el-form-item>
+                    </div>
+
+                    <div>
+                        <el-form-item label="熟悉度">
+                            <el-rate
+                                    style="display: inline-block;line-height: 100%"
+                                    v-model="props.row.rank"
+                                    show-text
+                                    :texts="texts"
+                                    :max="3"
+                                    @change="changeRank(props.row)">
+                            </el-rate>
+                        </el-form-item>
+                    </div>
                 </el-form>
             </template>
         </el-table-column>
-        <el-table-column
-                prop="title"
-                label="题目"
-        >
+
+
+        <el-table-column label="题目">
+            <template slot-scope="props">
+                <div  v-html="props.row.title"></div>
+            </template>
         </el-table-column>
         <el-table-column
                 prop="optiona"
@@ -184,6 +216,12 @@
                     answer: "",
                     types: "",
                     image: "",
+                    remark: "",
+                    rank: ""
+                },
+                examQuery:{
+                    title: "",
+                    types: "",
                     rank: ""
                 },
                 pageSize: 10,
@@ -276,9 +314,9 @@
                 this.getAll();
             },
             getAll() {
-                var param = "?title=" + this.exam.title;
-                param += "&types=" + this.exam.types;
-                param += "&rank=" + this.exam.rank;
+                var param = "?title=" + this.examQuery.title;
+                param += "&types=" + this.examQuery.types;
+                param += "&rank=" + this.examQuery.rank;
                 axios.get("/question/" + this.page + "/" + this.pageSize + param).then(res => {
                     this.total = res.data.total;
                     this.tableData = res.data.records;
