@@ -32,7 +32,7 @@
 <body>
 <div id="app">
     <!--表单-->
-    <el-row>
+    <el-row style="height:8vh" >
         <el-form :inline="true" :model="examQuery" ref="form" class="demo-form-inline">
 
             <el-form-item label="题目相关词">
@@ -66,8 +66,8 @@
             :data="tableData"
             style="width: 100%;
             overflow: scroll;
-            max-height: 550px;
-            min-height: 550px;">
+            max-height: 80vh;
+            min-height: 80vh;">
         <el-table-column type="expand">
             <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
@@ -186,6 +186,7 @@
         </el-table-column>
     </el-table>
     <el-pagination
+            style="margin-top:20px;height:6vh;"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="page"
