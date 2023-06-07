@@ -79,14 +79,14 @@
 
         .c_iframe {
             background-color: white;
-            height: 685px;
+            height:calc(100vh - 150px);
             width: 100%;
             padding-top: 1%;
             color: black;
         }
 
         .menu {
-            height: 685px;
+            height: calc(100vh - 150px);
             color: black;
         }
 
@@ -354,13 +354,25 @@
                         url: '/user/rewrite',
                     },
                     {
+                        id: '3',
+                        name: 'ChatGPT-极简',
+                        class: 'icon-jiqiren iconfont',
+                        url: 'https://bot.lookforward.top/',
+                    },
+                    {
                         id: '4',
+                        name: 'ChatGPT-丰富',
+                        class: 'icon-c170jiqiren iconfont',
+                        url: 'https://gpt.lookforward.top/',
+                    },
+                    {
+                        id: '5',
                         name: '逛一逛',
                         class: 'icon-guangguang iconfont',
                         url: '/user/public',
                     },
                     {
-                        id: '5',
+                        id: '6',
                         name: '退出登录',
                         class: 'icon-tuichudenglu1 iconfont',
                         url: '/user/logout',
@@ -592,6 +604,12 @@
             ,
 
             menuHandle(item, goBackFlag) {
+                if(item.name=='ChatGPT-丰富'){
+                    this.$message({
+                        type: 'success',
+                        message: '如要使用聊天功能，请在设置中填写密码:666666'
+                    });
+                }
                 if(item.name == '退出登录'){
                     this.logout();
                 }else{

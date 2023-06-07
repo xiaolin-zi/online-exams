@@ -21,7 +21,7 @@
         <el-row :gutter="20">
 
             <el-col :span="6" :xs="24">
-                <el-card style="height: 650px;" shadow="hover">
+                <el-card style="height: 95vh" shadow="hover">
                     <div slot="header" class="clearfix">
                         <span>个人资料</span>
                     </div>
@@ -80,7 +80,7 @@
 
             <el-col :span="18" :xs="24">
                 <el-row>
-                    <el-card style="height:270px" shadow="hover">
+                    <el-card style="height:40vh" shadow="hover">
                         <el-form>
                             <el-form-item label="用户名">
                                 <el-input v-model.trim="user.username"/>
@@ -97,14 +97,14 @@
                 </el-row>
                 <el-row style="margin-top:10px">
                     <el-col :span="12">
-                        <el-card shadow="hover" style="height:370px">
-                            <div id="dailyAddition" style="width: 450px;height:350px;"></div>
+                        <el-card shadow="hover" style="height:53vh">
+                            <div id="dailyAddition" style="width: 35vw;height:50vh;"></div>
                         </el-card>
                     </el-col>
                     <el-col :span="12">
-                        <el-card shadow="hover" style="height:370px">
+                        <el-card shadow="hover" style="height:53vh">
                             <h3 style="width: 100%;text-align: center;">公开错题数</h3>
-                            <div id="publicQuestion" style="width: 440px;height:320px;"></div>
+                            <div id="publicQuestion" style="width: 35vw;height:48vh;"></div>
                         </el-card>
                     </el-col>
 

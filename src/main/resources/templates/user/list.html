@@ -153,7 +153,7 @@
 <body>
 <div id="app">
     <!--表单-->
-    <el-row>
+    <el-row style="height:8vh">
         <el-form :inline="true" :model="examQuery" ref="form" class="demo-form-inline">
 
             <el-form-item label="题目相关词">
@@ -186,7 +186,7 @@
             </el-row>
         </el-form>
     </el-row>
-    <el-table :data="tableData" stripe class="tableBox" :row-class-name="tableRowClassName" height="550" border
+    <el-table :data="tableData" stripe class="tableBox" :row-class-name="tableRowClassName" height="80vh" border
               highlight-current-row>
 
         <el-table-column label="序号" width="70" align="center">
@@ -271,7 +271,7 @@
             </template>
         </el-table-column>
     </el-table>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
+    <el-pagination style="margin-top:20px;height:6vh;" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
                    :page-sizes="[10, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
                    :total="total" background color="#67c23a">
     </el-pagination>
