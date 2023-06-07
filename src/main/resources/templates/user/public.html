@@ -74,7 +74,7 @@
 <body>
 <div id="app">
     <h1 style="text-align: center">逛逛吧</h1>
-    <el-form style="height: 8vh" :inline="true" :model="examQuery" ref="form" class="demo-form-inline">
+    <el-form style="height: 10vh" :inline="true" :model="examQuery" ref="form" class="demo-form-inline">
 
         <el-form-item label="题目相关词">
             <el-input v-model="examQuery.title" placeholder="题目相关词"></el-input>
@@ -99,8 +99,8 @@
             :data="tableData"
             style="width: 100%;
             overflow: scroll;
-            max-height:78vh;
-            min-height: 78vh;">
+            max-height:70vh;
+            min-height: 70vh;">
         <el-table-column type="expand">
             <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
