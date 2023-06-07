@@ -34,6 +34,41 @@
         .el-icon-arrow-right:before {
             color: black;
         }
+        /*多行超出*/
+        .wrap {
+
+            /*让纯数字也可以换行显示*/
+            word-break: break-all;
+
+
+            /*将div变成弹性伸缩盒子模型
+			  display:box为display:flex的前身
+			  需要加浏览器私有属性来支持
+			*/
+            display: -webkit-box;
+            /*设置或检索伸缩盒的子元素的排列方式
+			  目前所有主流浏览器都不支持box-orient属性。
+			  Firefox通过私有属性- MOZ-box-orient支持。
+			  Safari, Opera, 和 Chrome通过
+			  私有属性 -webkit-box-orient 支持.
+			*/
+            /*值为vertical表示从顶部向底部垂直布置子元素*/
+            -webkit-box-orient: vertical;
+            /*设置要出现省略号的行数
+			  下面的3表示第三行出现省略号
+			*/
+            -webkit-line-clamp: 3;
+            /*设置一个行高，更容易控制行数
+			  行高/元素高度=设置出现省略号的行数
+			  然后超出的部分隐藏起来
+			*/
+            line-height: 30px;
+            /*超出高度的部分都隐藏起来
+			  目的主要是将设置了省略号那一行后面的内容都隐藏起来
+			*/
+            overflow-y: hidden;
+
+        }
     </style>
 </head>
 <body>
@@ -152,7 +187,7 @@
             </el-table-column>
             <el-table-column label="题目">
                 <template slot-scope="props">
-                    <div  v-html="props.row.title"></div>
+                    <div  v-html="props.row.title" class="wrap"></div>
                 </template>
             </el-table-column>
             <el-table-column
